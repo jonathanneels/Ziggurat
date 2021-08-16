@@ -1,0 +1,264 @@
+
+	<div id="wrapper">
+    <div id="first">  
+		<div id="delay-options" style="background-color: rgb(121, 240, 212);">
+      <h2>Delay</h2> 	  	   <button class="btnBackgroundColorS" id="btnBackgroundColorDelay">⛶</button> 
+
+			  <br><br>
+
+      <label for="delay-time-control">Delay Time</label><br>
+      <input id="delay-time-control" type="range" min="0" max="1" step="0.05" value="0"><br>
+      <label for="feedback-control">Delay Feedback</label><br>
+      <input id="feedback-control" type="range" min="0" max=".9" step="0.05" value="0"><br>
+      <label for="delay-reverb-control">Reverb</label><br>
+      <input id="delay-reverb-control" type="range" min="0" max=".9" step="0.05" value="0.45">
+    </div>
+
+</div>
+    <div id="second"> 
+	<div id="oscillator-options" style="background-color: rgb(128, 138, 209);">
+      <h2>Main Osc</h2> 	
+	  	  	  	   <button class="btnBackgroundColorS" id="btnBackgroundColorMain">⛶</button> 
+
+	  <span id="sMainOscMute">  <label id="lblMainMute" for="chMainMute">🔇</label> <input type="checkbox" id="chMainMute"> </span> 
+
+
+ 	  <input type="text" id="txtProjectName" name="txtProjectName" value="Missing The Sea" autocomplete="off" ondblclick="this.value=''" style="background-color: rgb(128, 138, 209);"> 
+ 
+ 
+			  <br> 
+
+	  <div style="order-style: dotted dashed solid double;">
+ 		<span style="float:right; text-align:right;">
+
+		<span style="display:table;margin:0 auto;float:right;  ">
+	<select name="custom-patch-select" id="custom-patch-select">
+	  <option value="" selected=""> </option>
+ <option value="accordeon.ptch">accordeon.ptch</option><option value="alien.ptch">alien.ptch</option><option value="ambientofthesky.ptch">ambientofthesky.ptch</option><option value="aroundtheworld.ptch">aroundtheworld.ptch</option><option value="cowbell.ptch">cowbell.ptch</option><option value="dirtyduck.ptch">dirtyduck.ptch</option><option value="distopiancity.ptch">distopiancity.ptch</option><option value="dungeontime.ptch">dungeontime.ptch</option><option value="electricguitar.ptch">electricguitar.ptch</option><option value="endhasarrived.ptch">endhasarrived.ptch</option><option value="firecrackers.ptch">firecrackers.ptch</option><option value="heroquest.ptch">heroquest.ptch</option><option value="jumpyspring.ptch">jumpyspring.ptch</option><option value="kalimba.ptch">kalimba.ptch</option><option value="laggyghosts.ptch">laggyghosts.ptch</option><option value="monobass.ptch">monobass.ptch</option><option value="nightmare.ptch">nightmare.ptch</option><option value="oboe.ptch">oboe.ptch</option><option value="retrokombat.ptch">retrokombat.ptch</option><option value="rubbingtheballoon.ptch">rubbingtheballoon.ptch</option><option value="saltysax.ptch">saltysax.ptch</option><option value="simpledrum.ptch">simpledrum.ptch</option><option value="sinebass.ptch">sinebass.ptch</option><option value="somethingwild.ptch">somethingwild.ptch</option><option value="spacesignal.ptch">spacesignal.ptch</option><option value="strangethings.ptch">strangethings.ptch</option><option value="unmotivatedmosquito.ptch">unmotivatedmosquito.ptch</option><option value="vaderenters.ptch">vaderenters.ptch</option><option value="warpcore.ptch">warpcore.ptch</option><option value="wawafiles.ptch">wawafiles.ptch</option></select>  <br><br>
+
+    <button id="start-button" class="btnPlay">ᐅ   </button>
+    <button id="stop-button" class="btnStop">⬛ </button>	
+	
+	</span><br> 
+
+ 			   	     <canvas id="imgOscilloscope"></canvas> <br>
+					 <span id="spanOverloadInfo">
+   	 <label for="chIgnoreOverload">Ignore Overload</label> <input type="checkbox" id="chIgnoreOverload" checked="checked">   
+ <label for="lblOverloadCheck">Overload %</label> <br>
+
+		       <label id="lblOverloadCheck"></label> 
+				</span>
+
+				</span>
+ 
+	      <label for="volume-control">Master Volume</label><br>
+    <input type="range" id="volume-control" min="0" max="1" step="0.01" value="0.15"><br>
+				 
+
+
+
+	       <label for="chnoiseFreq">Noise</label> <input type="checkbox" id="chnoiseFreq" checked="checked">  <br>
+		   	       <label for="chLowpass">Lowpass</label> <input type="checkbox" id="chLowpass" checked="checked"> <br> 
+		   	       <label for="chPinkFilter">Pink filter</label> <input type="checkbox" id="chPinkFilter">   <br> 
+      
+	  	       <label for="chBitcrusher">Bit crusher</label> <input type="checkbox" id="chBitcrusher">  <br>
+	       <label for="chMoogfilter">Moog filter</label> <input type="checkbox" id="chMoogfilter">  
+
+	  </div>
+	  <hr>
+ 	  	  			  			  	        <label for="pitch-amount-control">Pitch</label><br>
+			  <input type="range" id="pitch-amount-control" min="-100" value="0" max="100" step="1">
+<hr>
+      <input type="radio" id="sin-wave" name="waveform" value="sine">
+      <label for="sin-wave">∿</label> 
+      <input type="radio" id="square-wave" name="waveform" value="square">
+      <label for="square-wave"> ⬚</label> 
+      <br><input type="radio" id="triangle-wave" name="waveform" value="triangle">
+      <label for="triangle-wave">△</label> 
+      <input type="radio" id="sawtooth-wave" name="waveform" value="sawtooth">
+      <label for="sawtooth-wave"> ◿</label> 
+      <br><input type="radio" id="custom-wave" name="waveform" value="custom" checked="checked">
+      <label for="custom-wave">Custom bank</label>
+	  <!-- <input hidden type="number" id="custom-wave-1" value="0.0" min="0" max="1" step="0.1">
+	   	   <input type="number" id="custom-wave-2" value="0.0" min="0" max="1" step="0.1">
+	   <input type="number" id="custom-wave-3" value="0.0" min="0" max="1" step="0.1">
+	   <input type="number" id="custom-wave-4" value="1.0" min="0" max="1" step="0.1">
+	   <input type="number" id="custom-wave-5" value="1.0" min="0" max="1" step="0.1">-->
+	   
+<select name="custom-wave-select" id="custom-wave-select">
+ <option value="Bass">Bass</option><option value="Bass_Amp360">Bass_Amp360</option><option value="Bass_Fuzz">Bass_Fuzz</option><option value="Bass_Fuzz_2">Bass_Fuzz_2</option><option value="Bass_Sub_Dub">Bass_Sub_Dub</option><option value="Bass_Sub_Dub_2">Bass_Sub_Dub_2</option><option value="Brass">Brass</option><option value="Brit_Blues">Brit_Blues</option><option value="Brit_Blues_Driven">Brit_Blues_Driven</option><option value="Buzzy_1">Buzzy_1</option><option value="Buzzy_2">Buzzy_2</option><option value="Celeste">Celeste</option><option value="Chorus_Strings">Chorus_Strings</option><option value="Dissonant_1">Dissonant_1</option><option value="Dissonant_2">Dissonant_2</option><option value="Dissonant_Piano">Dissonant_Piano</option><option value="Dyna_EP_Bright">Dyna_EP_Bright</option><option value="Dyna_EP_Med">Dyna_EP_Med</option><option value="Ethnic_33">Ethnic_33</option><option value="Full_1">Full_1</option><option value="Full_2">Full_2</option><option value="Guitar_Fuzz">Guitar_Fuzz</option><option value="harmonica">harmonica</option><option value="Harsh">Harsh</option><option value="kalimba">kalimba</option><option value="Mkl_Hard">Mkl_Hard</option><option value="Ocarina">Ocarina</option><option value="Organ_2">Organ_2</option><option value="Organ_3">Organ_3</option><option value="Otamatone">Otamatone</option><option value="Phoneme_ah">Phoneme_ah</option><option value="Phoneme_bah">Phoneme_bah</option><option value="Phoneme_ee">Phoneme_ee</option><option value="Phoneme_o">Phoneme_o</option><option value="Phoneme_ooh">Phoneme_ooh</option><option value="Phoneme_pop_ahhhs">Phoneme_pop_ahhhs</option><option value="Piano">Piano</option><option value="Putney_Wavering" selected="">Putney_Wavering</option><option value="Throaty">Throaty</option><option value="Trombone">Trombone</option><option value="Twelve_OpTines">Twelve_OpTines</option><option value="Twelve_String_Guitar">Twelve_String_Guitar</option><option value="Wurlitzer">Wurlitzer</option><option value="Wurlitzer_2">Wurlitzer_2</option></select>
+ 
+
+    </div>	
+	</div>
+	    <div id="third">  
+			<div id="envelope-options" style="background-color: rgb(30, 247, 215);">
+      <h2>Envelope</h2>
+	  	   <button class="btnBackgroundColorS" id="btnBackgroundColorEnvelope">⛶</button> 
+
+			  <br><br>
+
+      <label for="attack-control">Attack Time</label><br>
+      <input type="range" id="attack-control" value="0.28" min="0" max="1" step="0.01"><br> 
+	        <label for="sustain-control">Sustain Time</label><br>
+      <input type="range" id="sustain-control" value="0.56" min="0" max="1" step="0.01"><br> 
+      <label for="release-control">Release Time</label><br> 
+      <input type="range" id="release-control" value="0.66" min="0" max="1" step="0.01"><br>
+     </div>
+		</div>
+
+
+</div>
+   <div id="wrapper2">
+    <div id="first2">    
+	<div id="vibrato-options" style="background-color: rgb(10, 179, 188);">
+      <h2>Effects</h2>
+	   <button class="btnBackgroundColorS" id="btnBackgroundColorEffects">⛶</button> 
+
+			  <br><br>
+
+	  	  <label for="chVibLFO1">🔗 OSC 2</label> <input type="checkbox" id="chVibLFO1"> <br>
+	  <label for="chVibLFO2">🔗 OSC 3</label> <input type="checkbox" id="chVibLFO2"><hr> 
+
+      <label for="vibrato-amount-control">Vibrato Amount</label><br>
+      <input type="range" id="vibrato-amount-control" value="0" min="0" max="99" step="0.5"><br>
+      <label for="vibrato-speed-control">Vibrato Speed</label><br>
+      <input type="range" id="vibrato-speed-control" value="10" min="0" max="99" step="0.5"><hr> 
+	        <label for="detune-amount-control">Detune amount</label><br>
+      <input id="detune-amount-control" type="range" min="-35" max="35" step="1" value="0">
+
+    </div>
+
+</div>
+    <div id="second2">   
+		    <div id="filter-options" style="background-color: rgb(41, 148, 129);">
+			      <h2>Filter</h2>
+
+ <button class="btnBackgroundColorS" id="btnBackgroundColorFilter">⛶</button> 
+
+			  <br><br>
+	  	  <label for="chOsc1On">OSC 2</label> <input type="checkbox" id="chOsc1On"> 
+		  	  	  <label for="chlfo1On">LFO</label> <input type="checkbox" id="chlfo1On"> <br>
+	  	  <label for="chlfo1Pulse"> Pulse&nbsp;&nbsp;</label> <input type="checkbox" id="chlfo1Pulse">  
+
+  <br> 
+	  <ul id="LFO1-control">
+ 	  <li> 
+	        <label for="lfo1-pitch-control">Pitch</label>
+       <input id="lfo1-pitch-control" type="range" min="-100" value="0" max="100" step="1">
+	  		  </li> 
+  	  <li> 
+	        <label for="lfo1-freq-control">Freq.</label>
+       <input id="lfo1-freq-control" type="range" min="20" max="800" step="10" value="440">
+	   <br>
+	   			   <label for="chNoteAsInMainOscFilt1">Freq. as main Osc</label> <input type="checkbox" id="chNoteAsInMainOscFilt1"> 
+
+	  		  </li> 
+			   
+  	  	</ul>
+
+	<hr><span id="lfo1-oscillator-options">
+       <input type="radio" id="lfo1-sin-wave" name="osc1-waveform" value="sine" checked="checked">
+      <label for="lfo1-sin-wave">∿</label> 
+      <input type="radio" id="lfo1-square-wave" name="osc1-waveform" value="square">
+      <label for="lfo1-square-wave"> ⬚</label> 
+      <br><input type="radio" id="lfo1-triangle-wave" name="osc1-waveform" value="triangle">
+      <label for="lfo1-triangle-wave">△</label> 
+      <input type="radio" id="lfo1-sawtooth-wave" name="osc1-waveform" value="sawtooth">
+      <label for="lfo1-sawtooth-wave"> ◿</label> 
+    </span>	
+
+	</div> 
+</div>
+    <div id="third2">     
+	    <div id="filter2-options">
+		      <h2>Filter 2</h2>
+ <button class="btnBackgroundColorS" id="btnBackgroundColorFilter2">⛶</button> 
+
+			  <br><br>
+	  <label for="chOsc2On">OSC 3</label> <input type="checkbox" id="chOsc2On">  
+	  	  <label for="chlfo2On">LFO</label> <input type="checkbox" id="chlfo2On">   <br>
+	  	  <label for="chlfo2Pulse"> Pulse&nbsp;&nbsp; </label> <input type="checkbox" id="chlfo2Pulse">  
+
+ 	  <ul id="LFO2-control">
+ 	  <li> 
+	        <label for="lfo2-pitch-control">Pitch</label>
+       <input id="lfo2-pitch-control" type="range" min="-100" value="0" max="100" step="1">
+	  		  </li> 
+			   	  <li> 
+	        <label for="lfo2-freq-control">Freq.</label>
+       <input id="lfo2-freq-control" type="range" min="20" max="800" step="10" value="440"><br>
+	   	   			   <label for="chNoteAsInMainOscFilt2">Freq. as main Osc</label> <input type="checkbox" id="chNoteAsInMainOscFilt2"> 
+
+	  		  </li> 
+			   
+ 	</ul> 
+
+ 	<hr><span id="lfo2-oscillator-options">
+       <input type="radio" id="lfo2-sin-wave" name="osc2-waveform" value="sine" checked="checked">
+      <label for="lfo2-sin-wave">∿</label> 
+      <input type="radio" id="lfo2-square-wave" name="osc2-waveform" value="square">
+      <label for="lfo2-square-wave"> ⬚</label> 
+      <br><input type="radio" id="lfo2-triangle-wave" name="osc2-waveform" value="triangle">
+      <label for="lfo2-triangle-wave">△</label> 
+      <input type="radio" id="lfo2-sawtooth-wave" name="osc2-waveform" value="sawtooth">
+      <label for="lfo2-sawtooth-wave"> ◿</label>  
+    </span>	
+	</div>
+</div>
+    <div id="fourth2" style="height: 531.7px; background-color: rgb(6, 205, 196);">     
+		      <h2>Edit</h2>
+			  		    	<button class="btnBackgroundColorS" id="btnBackgroundColorEdit">⛶</button> 
+
+			  <br><br>
+
+ 	<span style="display:table;margin:0 auto;">
+
+    <button id="btnLoad" class="btnBackgroundColorS" onclick="document.getElementById('inputfile').click()">⇑
+			    <input hidden="" type="file" name="inputfile" id="inputfile">
+
+	</button>  
+	    <button id="btnSavePatch" class="btnBackgroundColorS" onclick="download()">⇓</button>
+
+      <button onclick="stopRecordAudio()" class="btnBackgroundColorS" id="stoprecord-button" style="visibility: hidden;">🟩</button>
+	     <button onclick="startRecordAudio()" class="btnBackgroundColorS" id="record-button">🔴</button>
+
+	</span>
+
+    <label for="tempo-control">Tempo</label><br>
+    <input type="range" id="tempo-control" min="1" max="300" step="1" value="21"><br>
+	    <label for="blocks-control">Sequence blocks</label><br>
+    <input type="range" id="blocks-control" min="1" max="26" step="1" value="8"><br>
+      <label for="note-length-control">Note Length</label><br>
+      <input type="range" id="note-length-control" value="3" min="0.5" max="100" step="0.5"> 
+
+
+
+</div>
+
+</div>
+    <div id="note-selects-div" style="background-color: rgb(83, 139, 213);">
+	<span style="right: 0px; position: absolute; margin-right: 15px; z-index: 1; background-color: rgb(83, 139, 213);" id="note-selects-span"> 
+		<label for="chPiano" id="lblChPiano">🖐 </label> <input type="checkbox" id="chPiano" checked="checked">
+	 <button class="btnBackgroundColorS" id="btnBackgroundColorNotes">⛶</button>
+
+	</span>
+
+      <h2 id="h2Notes">Notes</h2> 
+	  	<span style=" z-index:1; position:absolute;" id="lock-span"> 
+ 		<label for="chLockPianoNotes" id="lblLockPianoNotes">🔓</label>
+		<input type="checkbox" id="chLockPianoNotes"> 
+	</span>
+
+    <div id="note-selects-divDeepest"><span id="sButtonAndNote" style="width: 80px; display: inline-block;"><button id="btnnote 1_G4" class="pianoMode btnBackgroundColorS" onmousedown="isBroken=false;handleKeyboardTouch('note 1_G4','391.99543598174927')" onmouseenter="if(mouseDown>=1){isBroken=false; handleKeyboardTouch('note 1_G4','391.99543598174927');}" style="visibility: visible; width: 85px; height: 55px; background: lightgray;">G4</button><br><select id="note 1_G4" class="creationMode btnBackgroundColorS" style="height: 0px; width: 0px; background: lightgray; visibility: hidden;"><option value="-1"></option><option value="0">C0</option><option value="1">C#0</option><option value="2">D0</option><option value="3">D#0</option><option value="4">E0</option><option value="5">F0</option><option value="6">F#0</option><option value="7">G0</option><option value="8">G#0</option><option value="9">A0</option><option value="10">A#0</option><option value="11">B0</option><option value="12">C1</option><option value="13">C#1</option><option value="14">D1</option><option value="15">D#1</option><option value="16">E1</option><option value="17">F1</option><option value="18">F#1</option><option value="19">G1</option><option value="20">G#1</option><option value="21">A1</option><option value="22">A#1</option><option value="23">B1</option><option value="24">C2</option><option value="25">C#2</option><option value="26">D2</option><option value="27">D#2</option><option value="28">E2</option><option value="29">F2</option><option value="30">F#2</option><option value="31">G2</option><option value="32">G#2</option><option value="33">A2</option><option value="34">A#2</option><option value="35">B2</option><option value="36">C3</option><option value="37">C#3</option><option value="38">D3</option><option value="39">D#3</option><option value="40">E3</option><option value="41">F3</option><option value="42">F#3</option><option value="43">G3</option><option value="44">G#3</option><option value="45">A3</option><option value="46">A#3</option><option value="47">B3</option><option value="48">C4</option><option value="49">C#4</option><option value="50">D4</option><option value="51">D#4</option><option value="52">E4</option><option value="53">F4</option><option value="54">F#4</option><option value="55">G4</option><option value="56">G#4</option><option value="57">A4</option><option value="58">A#4</option><option value="59">B4</option><option value="60">C5</option><option value="61">C#5</option><option value="62">D5</option><option value="63">D#5</option><option value="64">E5</option><option value="65">F5</option><option value="66">F#5</option><option value="67">G5</option><option value="68">G#5</option><option value="69">A5</option><option value="70">A#5</option><option value="71">B5</option><option value="72">C6</option><option value="73">C#6</option><option value="74">D6</option><option value="75">D#6</option><option value="76">E6</option><option value="77">F6</option><option value="78">F#6</option><option value="79">G6</option><option value="80">G#6</option><option value="81">A6</option><option value="82">A#6</option><option value="83">B6</option><option value="84">C7</option><option value="85">C#7</option><option value="86">D7</option><option value="87">D#7</option><option value="88">E7</option><option value="89">F7</option><option value="90">F#7</option><option value="91">G7</option><option value="92">G#7</option><option value="93">A7</option><option value="94">A#7</option><option value="95">B7</option></select></span><span id="sButtonAndNote" style="width: 80px; display: inline-block;"><button id="btnnote 2_E3" class="pianoMode btnBackgroundColorS" onmousedown="isBroken=false;handleKeyboardTouch('note 2_E3','164.81377845643496')" onmouseenter="if(mouseDown>=1){isBroken=false; handleKeyboardTouch('note 2_E3','164.81377845643496');}" style="visibility: visible; width: 85px; height: 55px; background: lightgray;">E3</button><br><select id="note 2_E3" class="creationMode btnBackgroundColorS" style="height: 0px; width: 0px; background: lightgray; visibility: hidden;"><option value="-1"></option><option value="0">C0</option><option value="1">C#0</option><option value="2">D0</option><option value="3">D#0</option><option value="4">E0</option><option value="5">F0</option><option value="6">F#0</option><option value="7">G0</option><option value="8">G#0</option><option value="9">A0</option><option value="10">A#0</option><option value="11">B0</option><option value="12">C1</option><option value="13">C#1</option><option value="14">D1</option><option value="15">D#1</option><option value="16">E1</option><option value="17">F1</option><option value="18">F#1</option><option value="19">G1</option><option value="20">G#1</option><option value="21">A1</option><option value="22">A#1</option><option value="23">B1</option><option value="24">C2</option><option value="25">C#2</option><option value="26">D2</option><option value="27">D#2</option><option value="28">E2</option><option value="29">F2</option><option value="30">F#2</option><option value="31">G2</option><option value="32">G#2</option><option value="33">A2</option><option value="34">A#2</option><option value="35">B2</option><option value="36">C3</option><option value="37">C#3</option><option value="38">D3</option><option value="39">D#3</option><option value="40">E3</option><option value="41">F3</option><option value="42">F#3</option><option value="43">G3</option><option value="44">G#3</option><option value="45">A3</option><option value="46">A#3</option><option value="47">B3</option><option value="48">C4</option><option value="49">C#4</option><option value="50">D4</option><option value="51">D#4</option><option value="52">E4</option><option value="53">F4</option><option value="54">F#4</option><option value="55">G4</option><option value="56">G#4</option><option value="57">A4</option><option value="58">A#4</option><option value="59">B4</option><option value="60">C5</option><option value="61">C#5</option><option value="62">D5</option><option value="63">D#5</option><option value="64">E5</option><option value="65">F5</option><option value="66">F#5</option><option value="67">G5</option><option value="68">G#5</option><option value="69">A5</option><option value="70">A#5</option><option value="71">B5</option><option value="72">C6</option><option value="73">C#6</option><option value="74">D6</option><option value="75">D#6</option><option value="76">E6</option><option value="77">F6</option><option value="78">F#6</option><option value="79">G6</option><option value="80">G#6</option><option value="81">A6</option><option value="82">A#6</option><option value="83">B6</option><option value="84">C7</option><option value="85">C#7</option><option value="86">D7</option><option value="87">D#7</option><option value="88">E7</option><option value="89">F7</option><option value="90">F#7</option><option value="91">G7</option><option value="92">G#7</option><option value="93">A7</option><option value="94">A#7</option><option value="95">B7</option></select></span><span id="sButtonAndNote" style="width: 80px; display: inline-block;"><button id="btnnote 3_D#4" class="pianoMode btnBackgroundColorS" onmousedown="isBroken=false;handleKeyboardTouch('note 3_D#4','311.12698372208087')" onmouseenter="if(mouseDown>=1){isBroken=false; handleKeyboardTouch('note 3_D#4','311.12698372208087');}" style="visibility: visible; width: 85px; height: 55px; background: slategrey;">D#4</button><br><select id="note 3_D#4" class="creationMode btnBackgroundColorS" style="height: 0px; width: 0px; background: slategrey; visibility: hidden;"><option value="-1"></option><option value="0">C0</option><option value="1">C#0</option><option value="2">D0</option><option value="3">D#0</option><option value="4">E0</option><option value="5">F0</option><option value="6">F#0</option><option value="7">G0</option><option value="8">G#0</option><option value="9">A0</option><option value="10">A#0</option><option value="11">B0</option><option value="12">C1</option><option value="13">C#1</option><option value="14">D1</option><option value="15">D#1</option><option value="16">E1</option><option value="17">F1</option><option value="18">F#1</option><option value="19">G1</option><option value="20">G#1</option><option value="21">A1</option><option value="22">A#1</option><option value="23">B1</option><option value="24">C2</option><option value="25">C#2</option><option value="26">D2</option><option value="27">D#2</option><option value="28">E2</option><option value="29">F2</option><option value="30">F#2</option><option value="31">G2</option><option value="32">G#2</option><option value="33">A2</option><option value="34">A#2</option><option value="35">B2</option><option value="36">C3</option><option value="37">C#3</option><option value="38">D3</option><option value="39">D#3</option><option value="40">E3</option><option value="41">F3</option><option value="42">F#3</option><option value="43">G3</option><option value="44">G#3</option><option value="45">A3</option><option value="46">A#3</option><option value="47">B3</option><option value="48">C4</option><option value="49">C#4</option><option value="50">D4</option><option value="51">D#4</option><option value="52">E4</option><option value="53">F4</option><option value="54">F#4</option><option value="55">G4</option><option value="56">G#4</option><option value="57">A4</option><option value="58">A#4</option><option value="59">B4</option><option value="60">C5</option><option value="61">C#5</option><option value="62">D5</option><option value="63">D#5</option><option value="64">E5</option><option value="65">F5</option><option value="66">F#5</option><option value="67">G5</option><option value="68">G#5</option><option value="69">A5</option><option value="70">A#5</option><option value="71">B5</option><option value="72">C6</option><option value="73">C#6</option><option value="74">D6</option><option value="75">D#6</option><option value="76">E6</option><option value="77">F6</option><option value="78">F#6</option><option value="79">G6</option><option value="80">G#6</option><option value="81">A6</option><option value="82">A#6</option><option value="83">B6</option><option value="84">C7</option><option value="85">C#7</option><option value="86">D7</option><option value="87">D#7</option><option value="88">E7</option><option value="89">F7</option><option value="90">F#7</option><option value="91">G7</option><option value="92">G#7</option><option value="93">A7</option><option value="94">A#7</option><option value="95">B7</option></select></span><span id="sButtonAndNote" style="width: 80px; display: inline-block;"><button id="btnnote 4_C5" class="pianoMode btnBackgroundColorS" onmousedown="isBroken=false;handleKeyboardTouch('note 4_C5','523.2511306011972')" onmouseenter="if(mouseDown>=1){isBroken=false; handleKeyboardTouch('note 4_C5','523.2511306011972');}" style="visibility: visible; width: 85px; height: 55px; background: lightgray;">C5</button><br><select id="note 4_C5" class="creationMode btnBackgroundColorS" style="height: 0px; width: 0px; background: lightgray; visibility: hidden;"><option value="-1"></option><option value="0">C0</option><option value="1">C#0</option><option value="2">D0</option><option value="3">D#0</option><option value="4">E0</option><option value="5">F0</option><option value="6">F#0</option><option value="7">G0</option><option value="8">G#0</option><option value="9">A0</option><option value="10">A#0</option><option value="11">B0</option><option value="12">C1</option><option value="13">C#1</option><option value="14">D1</option><option value="15">D#1</option><option value="16">E1</option><option value="17">F1</option><option value="18">F#1</option><option value="19">G1</option><option value="20">G#1</option><option value="21">A1</option><option value="22">A#1</option><option value="23">B1</option><option value="24">C2</option><option value="25">C#2</option><option value="26">D2</option><option value="27">D#2</option><option value="28">E2</option><option value="29">F2</option><option value="30">F#2</option><option value="31">G2</option><option value="32">G#2</option><option value="33">A2</option><option value="34">A#2</option><option value="35">B2</option><option value="36">C3</option><option value="37">C#3</option><option value="38">D3</option><option value="39">D#3</option><option value="40">E3</option><option value="41">F3</option><option value="42">F#3</option><option value="43">G3</option><option value="44">G#3</option><option value="45">A3</option><option value="46">A#3</option><option value="47">B3</option><option value="48">C4</option><option value="49">C#4</option><option value="50">D4</option><option value="51">D#4</option><option value="52">E4</option><option value="53">F4</option><option value="54">F#4</option><option value="55">G4</option><option value="56">G#4</option><option value="57">A4</option><option value="58">A#4</option><option value="59">B4</option><option value="60">C5</option><option value="61">C#5</option><option value="62">D5</option><option value="63">D#5</option><option value="64">E5</option><option value="65">F5</option><option value="66">F#5</option><option value="67">G5</option><option value="68">G#5</option><option value="69">A5</option><option value="70">A#5</option><option value="71">B5</option><option value="72">C6</option><option value="73">C#6</option><option value="74">D6</option><option value="75">D#6</option><option value="76">E6</option><option value="77">F6</option><option value="78">F#6</option><option value="79">G6</option><option value="80">G#6</option><option value="81">A6</option><option value="82">A#6</option><option value="83">B6</option><option value="84">C7</option><option value="85">C#7</option><option value="86">D7</option><option value="87">D#7</option><option value="88">E7</option><option value="89">F7</option><option value="90">F#7</option><option value="91">G7</option><option value="92">G#7</option><option value="93">A7</option><option value="94">A#7</option><option value="95">B7</option></select></span><span id="sButtonAndNote" style="width: 80px; display: inline-block;"><button id="btnnote 5_G4" class="pianoMode btnBackgroundColorS" onmousedown="isBroken=false;handleKeyboardTouch('note 5_G4','391.99543598174927')" onmouseenter="if(mouseDown>=1){isBroken=false; handleKeyboardTouch('note 5_G4','391.99543598174927');}" style="visibility: visible; width: 85px; height: 55px; background: lightgray;">G4</button><br><select id="note 5_G4" class="creationMode btnBackgroundColorS" style="height: 0px; width: 0px; background: lightgray; visibility: hidden;"><option value="-1"></option><option value="0">C0</option><option value="1">C#0</option><option value="2">D0</option><option value="3">D#0</option><option value="4">E0</option><option value="5">F0</option><option value="6">F#0</option><option value="7">G0</option><option value="8">G#0</option><option value="9">A0</option><option value="10">A#0</option><option value="11">B0</option><option value="12">C1</option><option value="13">C#1</option><option value="14">D1</option><option value="15">D#1</option><option value="16">E1</option><option value="17">F1</option><option value="18">F#1</option><option value="19">G1</option><option value="20">G#1</option><option value="21">A1</option><option value="22">A#1</option><option value="23">B1</option><option value="24">C2</option><option value="25">C#2</option><option value="26">D2</option><option value="27">D#2</option><option value="28">E2</option><option value="29">F2</option><option value="30">F#2</option><option value="31">G2</option><option value="32">G#2</option><option value="33">A2</option><option value="34">A#2</option><option value="35">B2</option><option value="36">C3</option><option value="37">C#3</option><option value="38">D3</option><option value="39">D#3</option><option value="40">E3</option><option value="41">F3</option><option value="42">F#3</option><option value="43">G3</option><option value="44">G#3</option><option value="45">A3</option><option value="46">A#3</option><option value="47">B3</option><option value="48">C4</option><option value="49">C#4</option><option value="50">D4</option><option value="51">D#4</option><option value="52">E4</option><option value="53">F4</option><option value="54">F#4</option><option value="55">G4</option><option value="56">G#4</option><option value="57">A4</option><option value="58">A#4</option><option value="59">B4</option><option value="60">C5</option><option value="61">C#5</option><option value="62">D5</option><option value="63">D#5</option><option value="64">E5</option><option value="65">F5</option><option value="66">F#5</option><option value="67">G5</option><option value="68">G#5</option><option value="69">A5</option><option value="70">A#5</option><option value="71">B5</option><option value="72">C6</option><option value="73">C#6</option><option value="74">D6</option><option value="75">D#6</option><option value="76">E6</option><option value="77">F6</option><option value="78">F#6</option><option value="79">G6</option><option value="80">G#6</option><option value="81">A6</option><option value="82">A#6</option><option value="83">B6</option><option value="84">C7</option><option value="85">C#7</option><option value="86">D7</option><option value="87">D#7</option><option value="88">E7</option><option value="89">F7</option><option value="90">F#7</option><option value="91">G7</option><option value="92">G#7</option><option value="93">A7</option><option value="94">A#7</option><option value="95">B7</option></select></span><span id="sButtonAndNote" style="width: 80px; display: inline-block;"><button id="btnnote 6_A#4" class="pianoMode btnBackgroundColorS" onmousedown="isBroken=false;handleKeyboardTouch('note 6_A#4','466.1637615180899')" onmouseenter="if(mouseDown>=1){isBroken=false; handleKeyboardTouch('note 6_A#4','466.1637615180899');}" style="visibility: visible; width: 85px; height: 55px; background: slategrey;">A#4</button><br><select id="note 6_A#4" class="creationMode btnBackgroundColorS" style="height: 0px; width: 0px; background: slategrey; visibility: hidden;"><option value="-1"></option><option value="0">C0</option><option value="1">C#0</option><option value="2">D0</option><option value="3">D#0</option><option value="4">E0</option><option value="5">F0</option><option value="6">F#0</option><option value="7">G0</option><option value="8">G#0</option><option value="9">A0</option><option value="10">A#0</option><option value="11">B0</option><option value="12">C1</option><option value="13">C#1</option><option value="14">D1</option><option value="15">D#1</option><option value="16">E1</option><option value="17">F1</option><option value="18">F#1</option><option value="19">G1</option><option value="20">G#1</option><option value="21">A1</option><option value="22">A#1</option><option value="23">B1</option><option value="24">C2</option><option value="25">C#2</option><option value="26">D2</option><option value="27">D#2</option><option value="28">E2</option><option value="29">F2</option><option value="30">F#2</option><option value="31">G2</option><option value="32">G#2</option><option value="33">A2</option><option value="34">A#2</option><option value="35">B2</option><option value="36">C3</option><option value="37">C#3</option><option value="38">D3</option><option value="39">D#3</option><option value="40">E3</option><option value="41">F3</option><option value="42">F#3</option><option value="43">G3</option><option value="44">G#3</option><option value="45">A3</option><option value="46">A#3</option><option value="47">B3</option><option value="48">C4</option><option value="49">C#4</option><option value="50">D4</option><option value="51">D#4</option><option value="52">E4</option><option value="53">F4</option><option value="54">F#4</option><option value="55">G4</option><option value="56">G#4</option><option value="57">A4</option><option value="58">A#4</option><option value="59">B4</option><option value="60">C5</option><option value="61">C#5</option><option value="62">D5</option><option value="63">D#5</option><option value="64">E5</option><option value="65">F5</option><option value="66">F#5</option><option value="67">G5</option><option value="68">G#5</option><option value="69">A5</option><option value="70">A#5</option><option value="71">B5</option><option value="72">C6</option><option value="73">C#6</option><option value="74">D6</option><option value="75">D#6</option><option value="76">E6</option><option value="77">F6</option><option value="78">F#6</option><option value="79">G6</option><option value="80">G#6</option><option value="81">A6</option><option value="82">A#6</option><option value="83">B6</option><option value="84">C7</option><option value="85">C#7</option><option value="86">D7</option><option value="87">D#7</option><option value="88">E7</option><option value="89">F7</option><option value="90">F#7</option><option value="91">G7</option><option value="92">G#7</option><option value="93">A7</option><option value="94">A#7</option><option value="95">B7</option></select></span><span id="sButtonAndNote" style="width: 80px; display: inline-block;"><button id="btnnote 7_D#4" class="pianoMode btnBackgroundColorS" onmousedown="isBroken=false;handleKeyboardTouch('note 7_D#4','311.12698372208087')" onmouseenter="if(mouseDown>=1){isBroken=false; handleKeyboardTouch('note 7_D#4','311.12698372208087');}" style="visibility: visible; width: 85px; height: 55px; background: slategrey;">D#4</button><br><select id="note 7_D#4" class="creationMode btnBackgroundColorS" style="height: 0px; width: 0px; background: slategrey; visibility: hidden;"><option value="-1"></option><option value="0">C0</option><option value="1">C#0</option><option value="2">D0</option><option value="3">D#0</option><option value="4">E0</option><option value="5">F0</option><option value="6">F#0</option><option value="7">G0</option><option value="8">G#0</option><option value="9">A0</option><option value="10">A#0</option><option value="11">B0</option><option value="12">C1</option><option value="13">C#1</option><option value="14">D1</option><option value="15">D#1</option><option value="16">E1</option><option value="17">F1</option><option value="18">F#1</option><option value="19">G1</option><option value="20">G#1</option><option value="21">A1</option><option value="22">A#1</option><option value="23">B1</option><option value="24">C2</option><option value="25">C#2</option><option value="26">D2</option><option value="27">D#2</option><option value="28">E2</option><option value="29">F2</option><option value="30">F#2</option><option value="31">G2</option><option value="32">G#2</option><option value="33">A2</option><option value="34">A#2</option><option value="35">B2</option><option value="36">C3</option><option value="37">C#3</option><option value="38">D3</option><option value="39">D#3</option><option value="40">E3</option><option value="41">F3</option><option value="42">F#3</option><option value="43">G3</option><option value="44">G#3</option><option value="45">A3</option><option value="46">A#3</option><option value="47">B3</option><option value="48">C4</option><option value="49">C#4</option><option value="50">D4</option><option value="51">D#4</option><option value="52">E4</option><option value="53">F4</option><option value="54">F#4</option><option value="55">G4</option><option value="56">G#4</option><option value="57">A4</option><option value="58">A#4</option><option value="59">B4</option><option value="60">C5</option><option value="61">C#5</option><option value="62">D5</option><option value="63">D#5</option><option value="64">E5</option><option value="65">F5</option><option value="66">F#5</option><option value="67">G5</option><option value="68">G#5</option><option value="69">A5</option><option value="70">A#5</option><option value="71">B5</option><option value="72">C6</option><option value="73">C#6</option><option value="74">D6</option><option value="75">D#6</option><option value="76">E6</option><option value="77">F6</option><option value="78">F#6</option><option value="79">G6</option><option value="80">G#6</option><option value="81">A6</option><option value="82">A#6</option><option value="83">B6</option><option value="84">C7</option><option value="85">C#7</option><option value="86">D7</option><option value="87">D#7</option><option value="88">E7</option><option value="89">F7</option><option value="90">F#7</option><option value="91">G7</option><option value="92">G#7</option><option value="93">A7</option><option value="94">A#7</option><option value="95">B7</option></select></span><span id="sButtonAndNote" style="width: 80px; display: inline-block;"><button id="btnnote 8_F4" class="pianoMode btnBackgroundColorS" onmousedown="isBroken=false;handleKeyboardTouch('note 8_F4','349.2282314330039')" onmouseenter="if(mouseDown>=1){isBroken=false; handleKeyboardTouch('note 8_F4','349.2282314330039');}" style="visibility: visible; width: 85px; height: 55px; background: yellow;">F4</button><br><select id="note 8_F4" class="creationMode btnBackgroundColorS" style="height: 0px; width: 0px; background: yellow; visibility: hidden;"><option value="-1"></option><option value="0">C0</option><option value="1">C#0</option><option value="2">D0</option><option value="3">D#0</option><option value="4">E0</option><option value="5">F0</option><option value="6">F#0</option><option value="7">G0</option><option value="8">G#0</option><option value="9">A0</option><option value="10">A#0</option><option value="11">B0</option><option value="12">C1</option><option value="13">C#1</option><option value="14">D1</option><option value="15">D#1</option><option value="16">E1</option><option value="17">F1</option><option value="18">F#1</option><option value="19">G1</option><option value="20">G#1</option><option value="21">A1</option><option value="22">A#1</option><option value="23">B1</option><option value="24">C2</option><option value="25">C#2</option><option value="26">D2</option><option value="27">D#2</option><option value="28">E2</option><option value="29">F2</option><option value="30">F#2</option><option value="31">G2</option><option value="32">G#2</option><option value="33">A2</option><option value="34">A#2</option><option value="35">B2</option><option value="36">C3</option><option value="37">C#3</option><option value="38">D3</option><option value="39">D#3</option><option value="40">E3</option><option value="41">F3</option><option value="42">F#3</option><option value="43">G3</option><option value="44">G#3</option><option value="45">A3</option><option value="46">A#3</option><option value="47">B3</option><option value="48">C4</option><option value="49">C#4</option><option value="50">D4</option><option value="51">D#4</option><option value="52">E4</option><option value="53">F4</option><option value="54">F#4</option><option value="55">G4</option><option value="56">G#4</option><option value="57">A4</option><option value="58">A#4</option><option value="59">B4</option><option value="60">C5</option><option value="61">C#5</option><option value="62">D5</option><option value="63">D#5</option><option value="64">E5</option><option value="65">F5</option><option value="66">F#5</option><option value="67">G5</option><option value="68">G#5</option><option value="69">A5</option><option value="70">A#5</option><option value="71">B5</option><option value="72">C6</option><option value="73">C#6</option><option value="74">D6</option><option value="75">D#6</option><option value="76">E6</option><option value="77">F6</option><option value="78">F#6</option><option value="79">G6</option><option value="80">G#6</option><option value="81">A6</option><option value="82">A#6</option><option value="83">B6</option><option value="84">C7</option><option value="85">C#7</option><option value="86">D7</option><option value="87">D#7</option><option value="88">E7</option><option value="89">F7</option><option value="90">F#7</option><option value="91">G7</option><option value="92">G#7</option><option value="93">A7</option><option value="94">A#7</option><option value="95">B7</option></select></span></div>
+	<span id="sScaleSet">
+		 <button class="btnBackgroundColorS" id="btnClassicKeyboard">🎹</button> 
+		 <button class="btnBackgroundColorS" id="btnScaleUp">+</button> 
+		 <button class="btnBackgroundColorS" id="btnScaleDown">-</button> 
+		 <button class="btnBackgroundColorS" id="btnRandomChord">🎲</button> 
+		</span>
+    </div>
+	
+	<textarea id="idPlayNotes" name="idPlayNotes" rows="4" cols="50" hidden="">55,40,51,60,55,58,51,53,72,72,72,72</textarea>
+
+	    
