@@ -1,5 +1,5 @@
 {
-  "name": "Ziggurat - Synthesizer",
+  "name": "zigguratsynth",
   "version": "0.2.0",
   "description": "Ziggurat is a creative take on analog synthesizers. Create, load and save custom patches using a wide variety of waveforms and manipulators.",
   "main": "index.js",
