@@ -714,7 +714,7 @@ continue;
     var opt = customPatches[i] ;
     var el = document.createElement("option");
     el.textContent = opt.replace(/\s/g, '').trim().toLowerCase();
-    el.value = opt.replace(/\s/g, '').trim().toLowerCase();
+    el.value = opt.replace(/\s/g, '');//.trim().toLowerCase();
     select.appendChild(el);
 }
 }
