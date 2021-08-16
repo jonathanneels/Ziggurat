@@ -3249,6 +3249,19 @@ patchUrl = window.location.href.split("?")[1];
 
 window.onload = modifyInputs; 
   
+  
+  var node = document.createElement("small");                   
+var textnode = document.createTextNode("Fumetsujo Studio - https://zigguratsynth.herokuapp.com - 2021");          
+node.appendChild(textnode);                  
+//node.style.cssFloat="right";  
+node.style.bottom=0;    
+node.style.right=0;          
+node.style.position = 'absolute';
+node.style.marginTop  = '15px';
+node.style.marginRight = '15px';
+
+document.getElementById("note-selects-div").appendChild(node);    
+
 setTimeout(function(){ switchToSynthField();}, 2000);
 });
 
