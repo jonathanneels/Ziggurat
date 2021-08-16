@@ -1,0 +1,22 @@
+{
+  "name": "Ziggurat - Synthesizer",
+  "version": "0.2.0",
+  "description": "Ziggurat is a creative take on analog synthesizers. Create, load and save custom patches using a wide variety of waveforms and manipulators.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index_HEROKU.js"
+  },
+  "engines": {
+    "node": "14.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jonathanneels/Ziggurat"
+  },
+  "keywords": [
+    "node",
+    "heroku"
+  ],
+  "author": "Jonathan F.M. Neels",
+  "license": "MIT"
+}
