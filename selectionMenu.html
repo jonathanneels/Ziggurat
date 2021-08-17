@@ -1,0 +1,59 @@
+<html>  
+<head>
+<meta name="viewport" content="user-scalable=no,initial-scale=1.0, maximum-scale=1.0" />
+<link rel="icon" href="/static/images/logo/logo_transparent_colorB.png" type="image/svg+xml">
+<style>
+div {
+    text-align: justify;
+	margin-top:15vh;
+}
+
+div img {
+    display: inline-block;
+   // width: 100px;
+   // height: 100px;
+	width:30vw;
+	height:30vw;
+}
+
+div:after {
+    content: '';
+    display: inline-block;
+    width: 100%;
+}
+label{position:absolute;margin-left:10px;margin-top:-20px;}
+
+.footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background-color: white;
+   color: black;
+   text-align: center;
+   border: 1px solid black; opacity: 0.7;
+}
+
+</style>
+    <script src="static/lib/jquery_slim_341.js"></script>
+
+</head>
+<body>
+<div>
+<label>Synthesizer</label> <img src="static/images/logo/logo_transparent_colorB.png" onclick="window.location.href = '/'" /> 
+ <label>Drum Machine</label> <img src="static/images/logo/logo_transparent_color_drumMachine.png" onclick="window.location.href = '/static/drumMachine/index.html'" /> 
+ <label>Mixer</label> <img src="static/images/logo/logo_transparent_colorA_mixer.png" onclick="window.location.href = '/combinedMixer.html'"/>
+</div>
+
+<div class="footer">
+<button style="margin-top:2px; background-color:#0cc230;" onclick="$('#sFooterInfo').toggle()">Dev info</button>
+<span id="sFooterInfo" hidden>
+  <p>Jonathan F.M. Neels - Fumetsujo Studio <br>
+   Contact information: <a href="mailto:jonathanneels@hotmail.com">
+  jonathanneels@hotmail.com</a>. <br>
+     Site: <a href="https://fumetsujo.pythonanywhere.com">
+  https://fumetsujo.pythonanywhere.com/</a>.</p></span>
+  </div>
+
+</body>
+</html>
