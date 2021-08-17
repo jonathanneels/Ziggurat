@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Ziggurat - drumMachine</title>
+
+<link rel="stylesheet" href="pure-min.css">
+<meta name="viewport" content="user-scalable=no,initial-scale=0.7, maximum-scale=0.7" />
+<link rel="icon" href="/static/images/logo/logo_transparent_color_drumMachine.png" type="image/svg+xml">
+<style>
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+#tracker-parent{
+  border:1px solid black;
+
+}  
+#tracker-controls{
+  border:1px solid black;
+
+}  
+
+@media (max-width:500px) {
+#tracker-parent{
+  width: 60vw !important;
+
+}  
+#tracker-controls { 
+  width: 15vw !important;
+overflow-x:hidden !important;
+   }
+} 
+</style>
+</head>
+
+<body class="noselect">
+    <link rel="stylesheet" type="text/css" href="main.css" />
+    <script src="/static/lib/jquery_slim_341.js"></script>
+
+    <div id="app-message"></div>
+
+    <div id="tracker-container">
+        <div id="tracker-parent" style="height:500px; max-height:500px;width:50vw; max-width:50vw; overflow:auto;"></div>
+        <div id="tracker-controls" style="position:absolute;right:0;height:500px; max-height:500px;width:30vw; max-width:30vw; overflow:auto;"> 
+            <button id="play" class="synthButton">&#5125;</button>
+            <button id="pause" class="synthButton">&#5125; &#9612;</button>
+            <button id="stop" class="synthButton">&#11035;</button>
+			            <button id="btnRecord" onclick="startRecordAudio()" class="synthButton">&#128308;</button>
+            <button id="btnStopRecord" onclick="stopRecordAudio()" class="synthButton">&#129001;</button>
+
+            <br />
+            <form class="pure-form" id="trackerControls" >
+                <select hidden name="sampleSet" class="base" id="sampleSet">
+                <option value="DRUMS/sampled.instrument.json">Pearl Master Studio Alt</option>
+            </select>
+
+                <br />
+
+              Measures  <input onchange="" type="number" class="base" name="measureLength" id="measureLength" style="width: 55px;text-align:right; margin-left:5px;" value="8">   
+               <!--Adsr<input hidden type="number" class="base" name="adsrInterval" id="adsrInterval" style="width: 55px;text-align:right; margin-left:5px;" value="0.1" step="0.1">-->  
+
+                <hr />
+
+                 <label for="detune">Detune</label> <br /> <input class="base input-knob"  data-diameter="45" data-src="/static/images/knob70Alt2.png"  data-sprites="100" name="detune" id="detune" type="range" max="1200" min="-1200" step="10" value="0"><br> 
+                <label for="bpm">bpm</label> <br /> <input class="base input-knob"  data-diameter="45" data-src="/static/images/knob70Alt2.png"  data-sprites="100" name="bpm" id="bpm" type="range" max="1000" min="20" step="1" value="460"  >                <br> 
+
+                <hr />
+
+               Amp <input class="base input-switch" data-diameter="25" data-src="/static/images/switch_offoncolor.png" name="gainEnabled" type="checkbox" id="gainEnabled" value="gain"><br />
+<br>
+             <label for="attackAmp">Attack</label>  <br />   <input class="base input-knob"  data-diameter="45" data-src="/static/images/knob70Alt2.png"  data-sprites="100" name="attackAmp" id="attackAmp" type="range" max="2" min="0" step="0.1" value="0.1"><br />
+             <label for="sustainAmp">Sustain</label>  <br />   <input class="base input-knob"  data-diameter="45" data-src="/static/images/knob70Alt2.png"  data-sprites="100" name="sustainAmp" id="sustainAmp" type="range" max="1" min="0" step="0.1" value="0.9"> <br>
+              <label for="decayAmp">Decay</label>   <br />   <input class="base input-knob"  data-diameter="45" data-src="/static/images/knob70Alt2.png"  data-sprites="100" name="decayAmp" id="decayAmp" type="range" max="1" min="0" step="0.1" value="0.9"> <br />
+            <label for="releaseAmp">Release</label>   <br />   <input class="base input-knob"  data-diameter="45" data-src="/static/images/knob70Alt2.png"  data-sprites="100" name="releaseAmp" id="releaseAmp" type="range" max="1" min="0" step="0.1" value="0.9"> <br>
+           <label for="attackTime">Attack Time</label>     <br />  <input class="base input-knob"  data-diameter="45" data-src="/static/images/knob70Alt2.png"  data-sprites="100" name="attackTime" id="attackTime" type="range" max="1" min="0" step="0.01" value="0.08"><br />
+              <label for="decayTime">Decay Time</label>     <br /><input class="base input-knob"  data-diameter="45" data-src="/static/images/knob70Alt2.png"  data-sprites="100" name="decayTime" id="decayTime" type="range" max="1" min="0" step="0.01" value="0.08"><br>
+             <label for="sustainTime">Sustain Time</label><br />  <input class="base input-knob"  data-diameter="45" data-src="/static/images/knob70Alt2.png"  data-sprites="100" name="sustainTime" id="sustainTime" type="range" max="2" min="0" step="0.1" value="0.1"><br />
+                 <label for="releaseTime">Release Time</label><br /> <input class="base input-knob"  data-diameter="45" data-src="/static/images/knob70Alt2.png"  data-sprites="100" name="releaseTime" id="releaseTime" type="range" max="5" min="0" step="0.1" value="2"><br /> 
+
+
+                <hr />
+
+              Delay   <input class="base input-switch"   data-diameter="25" data-src="/static/images/switch_offoncolor.png" name="delayEnabled" type="checkbox" id="delayEnabled" value="delay">
+                <br /><br>
+             <label for="delay">Time</label> <br /> <input class="base input-knob"  data-diameter="45" data-src="/static/images/knob70Alt2.png"  data-sprites="100" name="delay" id="delay" type="range" max="1" min="0" step="0.01" value="0.01"> <br />
+              <label for="filter">filter</label><br />    <input class="base input-knob"  data-diameter="45" data-src="/static/images/knob70Alt2.png"  data-sprites="100" name="filter" id="filter" type="range" max="10000" min="20" step="0.1" value="1000">    <br />
+
+            </form>
+            <form class="pure-form"  id="localStorageActions" >
+			            <hr  />
+
+                <input type="text" id="filename" autocomplete="off"><br />
+                <button id="save">Save as </button><button id="saveAsJson" hidden>Get JSON</button> <br /><!-- hidden the saveasjson, no load json yet implemented, not too hard though -->
+
+                <span id="load-storage"></span>
+                <button id="delete">Delete selected</button>
+            </form>
+        </div>
+    </div>
+    <script src="bundle.js"></script>
+<script src='../lib/cutom-input-knobs.js'></script>
+<script>
+setTimeout(function(){
+document.getElementById("sampleSet").selectedIndex = "0";
+    var evt = document.createEvent("HTMLEvents");
+    evt.initEvent("change", false, true);
+    document.getElementById("sampleSet").dispatchEvent(evt);
+
+ }, 300);
+
+
+
+var recorder;
+function startRecordAudio(isSkipClick)//REF: https://hacks.mozilla.org/2016/04/record-almost-everything-in-the-browser-with-mediarecorder/
+{
+
+//removeAudioSources();=> happens headless based on combinedmixer
+//var filter = audioContext.createBiquadFilter();
+	var streamDestination = ctx.createMediaStreamDestination();
+ 
+   masterVolume.connect(streamDestination);
+ recorder = new MediaRecorder(streamDestination.stream);
+	
+	recorder.addEventListener('dataavailable', function(e) {
+		//console.log(e.data);
+			 if(document.body.contains( document.querySelector("#aRecordingUrl")))
+	 {document.querySelector("#aRecordingUrl").remove();}
+
+ 	    var a = document.createElement("a"); //REF: https://gist.github.com/philipstanislaus/c7de1f43b52531001412
+   		a.id= "aRecordingUrl" 
+   document.body.appendChild(a);
+    a.style = "display: none";
+    
+        var url = window.URL.createObjectURL(e.data);
+        a.href = url;
+		if(!isSkipClick){     
+        a.download = "Recording.webm";
+	 a.click();
+        window.URL.revokeObjectURL(url);}
+ 
+});
+
+ recorder.start(); 
+ 
+ 			 				            document.getElementById("btnStopRecord").style.visibility = 'visible';
+			 				            document.getElementById("btnRecord").style.visibility = 'hidden';
+			 				            document.getElementById("pause").style.visibility = 'hidden';
+			 				            document.getElementById("play").style.visibility = 'hidden';
+			 				            document.getElementById("stop").style.visibility = 'hidden';
+
+}
+function stopRecordAudio()
+{
+	if(typeof recorder !== "undefined" && recorder.state != 'inactive'){
+	recorder.stop();
+	 			 				            document.getElementById("btnStopRecord").style.visibility = 'hidden';
+			 				            document.getElementById("btnRecord").style.visibility = 'visible';
+			 				            document.getElementById("pause").style.visibility = 'visible';
+			 				            document.getElementById("play").style.visibility = 'visible';
+			 				            document.getElementById("stop").style.visibility = 'visible';
+
+ 	}
+}
+
+  function modifyOffset() {
+
+var labels = document.getElementsByTagName('LABEL');//https://stackoverflow.com/questions/285522/find-html-label-associated-with-a-given-input
+for (var i = 0; i < labels.length; i++) {
+    if (labels[i].htmlFor != '') {
+         var elem = document.getElementById(labels[i].htmlFor);
+         if (elem)
+            elem.label = labels[i];         
+    }
+}
+
+if(typeof elem.label.innerHTML != "undefined"){
+try{
+document.getElementById(this.id).label.innerHTML = document.getElementById(this.id).label.innerHTML.split(':')[0] + ": " +document.getElementById(this.id).value ;
+}
+catch(err)
+{
+//document.getElementById(this.id).label.innerHTML = document.getElementById(this.id).label.innerHTML   ;
+
+}
+ }
+}
+function modifyInputs() {
+	var inputs = document.getElementsByTagName("input");
+	for (var i = 0; i < inputs.length; i++) {
+		if (inputs[i].getAttribute("type") == "range") {
+			inputs[i].onchange = modifyOffset;
+				//		inputs[i].input = modifyOffset
+		// inputs[i].onchange = modifyOffset;
+			inputs[i].onmousemove = modifyOffset
+			inputs[i].ontouchmove = modifyOffset
+			inputs[i].touchstart = modifyOffset
+
+			// the following taken from http://stackoverflow.com/questions/2856513/trigger-onchange-event-manually
+			if ("fireEvent" in inputs[i]) {
+			    inputs[i].fireEvent("onchange");
+			} else {
+			    var evt = document.createEvent("HTMLEvents");
+			    evt.initEvent("change", false, true);
+			    inputs[i].dispatchEvent(evt);
+			}
+		}
+	}
+}
+
+
+
+
+	 			 				            document.getElementById("btnStopRecord").style.visibility = 'hidden';
+			 				            document.getElementById("pause").style.visibility = 'hidden';
+			 				            document.getElementById("stop").style.visibility = 'hidden';
+										document.getElementById("localStorageActions").style.visibility = 'hidden';
+ 
+setTimeout(function(){ 
+//startRecordAudio(false);setTimeout(function(){ 	  document.getElementById("stop").click();;stopRecordAudio()}, 10000);
+modifyInputs();
+
+
+    try {//REF: https://stackoverflow.com/questions/326069/how-to-identify-if-a-webpage-is-being-loaded-inside-an-iframe-or-directly-into-t
+	var iFrameDetection = (window === window.parent) ? false : true;
+
+        if(  !iFrameDetection)
+		{
+		 document.getElementById("localStorageActions").style.visibility = 'visible';
+		}
+		else
+		{
+		document.getElementById("localStorageActions").style.visibility = 'hidden';
+		}
+		
+    } catch (e) {
+				 				            document.getElementById("localStorageActions").style.visibility = 'hidden';
+
+        return true;
+    }
+
+
+}, 3000); 
+</script>
+</body>
+
+</html>

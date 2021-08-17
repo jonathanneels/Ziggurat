@@ -1,0 +1,100 @@
+@import url(https://fonts.googleapis.com/css?family=Merriweather:400,700);
+.merriweather {
+    font-family: 'Merriweather';
+}
+
+/*
+#controls {
+    font-family: 'Merriweather';
+    font-size: 10px;
+}*/
+
+body{overflow-x:hidden;}
+a {
+    color: black;
+}
+
+#tracker-container {
+    background-color: #d9d9d9;
+    width: 100%;
+    padding: 20px;
+    background-color: #grey;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#tracker-controls {
+    margin-left: 20px;
+    padding: 20px;
+    background-color: grey;
+}
+
+#tracker-parent {
+    padding: 20px;
+    flex-basis: auto;
+    background-color: slategrey;
+    /*overflow-x: visible;*/
+	
+}
+
+.tracker-cell,
+.tracker-first-cell,
+.tracker-cell-header {
+    height: 20px;
+    min-width: 20px;
+    border: black;
+    border-color: black;
+    background-color: #d9d9d9;
+    border-style: solid;
+    border-width: 1px;
+    font-size: 75%;
+    padding: 2px;
+    /*background-color: pink;*/
+}
+
+.tracker-enabled {
+    background: orange;
+}
+
+.tracker-current {
+    background: grey;
+}
+#tracker-table{    font-size:25px;
+}
+
+#app-message {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background-color: peru;
+    margin: 10px;
+    padding: 10px;
+    display: none;
+}
+
+.synthButton {
+	/*box-shadow:inset 0px 1px 0px 0px #000000;*/
+  	background-color:#434a40;
+ 	/*border-radius:41px;*/
+		border:5px solid #fc9003;/*border:9px solid #54381e;*/
+	/*display:inline-block;*/
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	/*font-size:12px;
+	padding:13px 13px;*/
+	text-decoration:none;
+	height:50px;
+		width:60px;
+
+    text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+}
+.synthButton:hover, .synthButton:active {
+	background-color:#98ff12;
+	color:black;
+		    text-shadow: 1px 0 0 #ffffff, 0 -1px 0 #ffffff, 0 1px 0 #ffffff, -1px 0 0 #ffffff;
+}
+.synthButton:active {
+	position:relative;
+	top:1px;
+}
