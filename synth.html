@@ -1646,7 +1646,8 @@ document.getElementById('chLockPianoNotes').addEventListener('change', (event) =
 	  scaleDownButton.style.visibility= "hidden";
 	       classicKeyboardButton.style.visibility= "hidden";
    randomChordButton.style.visibility= "hidden";
-document.getElementById("note-selects-divDeepest").style.overflow = 'hidden';
+//document.getElementById("note-selects-divDeepest").style.overflow = 'hidden';
+document.getElementById("note-selects-divDeepest").style.setProperty("overflow", "hidden", "important")
 
   } else {
 
@@ -1655,7 +1656,9 @@ document.getElementById("note-selects-divDeepest").style.overflow = 'hidden';
 	  scaleDownButton.style.visibility= "visible";
 	       classicKeyboardButton.style.visibility= "visible";
    randomChordButton.style.visibility= "visible";
-document.getElementById("note-selects-divDeepest").style.overflow = 'auto';
+//document.getElementById("note-selects-divDeepest").style.overflow = 'auto';
+document.getElementById("note-selects-divDeepest").style.setProperty("overflow", "auto", "important")
+
   }
 
 
