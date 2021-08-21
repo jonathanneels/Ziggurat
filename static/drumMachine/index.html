@@ -39,15 +39,15 @@ overflow-x:hidden !important;
 </style>
 </head>
 
-<body class="noselect">
+<body class="noselect" id="body" onclick="openFullscreen()">
     <link rel="stylesheet" type="text/css" href="main.css" />
     <script src="/static/lib/jquery_slim_341.js"></script>
 
     <div id="app-message"></div>
 
     <div id="tracker-container">
-        <div id="tracker-parent" style="height:500px; max-height:500px;width:50vw; max-width:50vw; overflow:auto;"></div>
-        <div id="tracker-controls" style="position:absolute;right:0;height:500px; max-height:500px;width:30vw; max-width:30vw; overflow:auto;"> 
+        <div id="tracker-parent" style="height:70vh; max-height:70vh;width:50vw; max-width:50vw; overflow:auto;"></div>
+        <div id="tracker-controls" style="position:absolute;right:0;height:70vh; max-height:70vh;width:30vw; max-width:30vw; overflow:auto;"> 
             <button id="play" class="synthButton">&#5125;</button>
             <button id="pause" class="synthButton">&#5125; &#9612;</button>
             <button id="stop" class="synthButton">&#11035;</button>
@@ -103,9 +103,14 @@ overflow-x:hidden !important;
             </form>
         </div>
     </div>
+	
+	<small id="smallInfo" style="  position: fixed;  left: 0;  bottom: 0; margin-left: auto;margin-right: auto;left: 0;right: 0;text-align: center;"> For Chrome & Firefox - Fumetsujo Studio - 2021</small>
+
     <script src="bundle.js"></script>
 <script src='../lib/cutom-input-knobs.js'></script>
 <script>
+var iFrameDetection=true;
+
 setTimeout(function(){
 document.getElementById("sampleSet").selectedIndex = "0";
     var evt = document.createEvent("HTMLEvents");
@@ -227,15 +232,20 @@ modifyInputs();
 
 
     try {//REF: https://stackoverflow.com/questions/326069/how-to-identify-if-a-webpage-is-being-loaded-inside-an-iframe-or-directly-into-t
-	var iFrameDetection = (window === window.parent) ? false : true;
+	  iFrameDetection = (window === window.parent) ? false : true;
 
         if(  !iFrameDetection)
 		{
 		 document.getElementById("localStorageActions").style.visibility = 'visible';
+		 				document.getElementById("smallInfo").style.visibility = 'visible';
+
 		}
 		else
 		{
 		document.getElementById("localStorageActions").style.visibility = 'hidden';
+				document.getElementById("smallInfo").style.visibility = 'hidden';
+
+		
 		}
 		
     } catch (e) {
@@ -245,8 +255,28 @@ modifyInputs();
     }
 
 
-}, 3000); 
+}, 1000); 
 </script>
+
+ 		<script>
+/* Get the element you want displayed in fullscreen mode (a video in this example): */
+var elem = document.getElementById("body");
+
+/* When the openFullscreen() function is executed, open the video in fullscreen.
+Note that we must include prefixes for different browsers, as they don't support the requestFullscreen method yet */
+function openFullscreen() {
+if(!iFrameDetection){
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) { /* Safari */
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { /* IE11 */
+    elem.msRequestFullscreen();
+  }
+}
+}
+</script>
+
 </body>
 
 </html>
