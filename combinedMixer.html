@@ -147,7 +147,7 @@ resize: both;
 
  <br>
   	    <button id="btnSavePatchAll" class="save synthButton" onclick="downloadAll()">&dArr;</button> 
-    <button id="btnLoadAll" class="save synthButton" onclick="document.getElementById('inputfileAll').click()">&uArr;
+    <button id="btnLoadAll" class="save synthButton" onclick="if (document.fullscreenElement) {    document.exitFullscreen();}	document.getElementById('inputfileAll').click()">&uArr;
 			    <input hidden type="file" name="inputfileAll"   id="inputfileAll"/> 
 	</button>   
 
@@ -1288,13 +1288,15 @@ var elem = document.getElementById("body");
 /* When the openFullscreen() function is executed, open the video in fullscreen.
 Note that we must include prefixes for different browsers, as they don't support the requestFullscreen method yet */
 function openFullscreen() {
+  if (!document.fullscreenElement) {
+
   if (elem.requestFullscreen) {
     elem.requestFullscreen();
   } else if (elem.webkitRequestFullscreen) { /* Safari */
     elem.webkitRequestFullscreen();
   } else if (elem.msRequestFullscreen) { /* IE11 */
     elem.msRequestFullscreen();
-  }
+  }}
 }
 </script>
 </body>

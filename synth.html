@@ -264,6 +264,7 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
 
 }
 
+#square-wave, #sawtooth-wave,#lfo1-square-wave, #lfo1-sawtooth-wave,#lfo2-square-wave, #lfo2-sawtooth-wave{margin-left:-25px;}
   </style>
 </head>
   <body class="text-selection-none" id="body"  onclick="openFullscreen()">
@@ -497,7 +498,7 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
 
  	<span style="display:table;margin:0 auto;">
 
-    <button id="btnLoad"  class="btnBackgroundColorS" onclick="document.getElementById('inputfile').click()">&uArr;
+    <button id="btnLoad"  class="btnBackgroundColorS" onclick="if (document.fullscreenElement) {    document.exitFullscreen();}document.getElementById('inputfile').click()">&uArr;
 			    <input hidden type="file" name="inputfile"   id="inputfile"/>
 
 	</button>  
@@ -3299,6 +3300,7 @@ var elem = document.getElementById("body");
 Note that we must include prefixes for different browsers, as they don't support the requestFullscreen method yet */
 function openFullscreen() {
 if(!iFrameDetection){
+  if (!document.fullscreenElement) {
 
   if (elem.requestFullscreen) {
     elem.requestFullscreen();
@@ -3306,6 +3308,7 @@ if(!iFrameDetection){
     elem.webkitRequestFullscreen();
   } else if (elem.msRequestFullscreen) { /* IE11 */
     elem.msRequestFullscreen();
+  }
   }
   }
 }
