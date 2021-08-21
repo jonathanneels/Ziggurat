@@ -4,7 +4,8 @@
 <link rel="icon" href="/static/images/logo/logo_transparent_colorB.png" type="image/svg+xml">
 
 <style>
-body{background-color:grey;overflow-x:hidden;overflow-y:hidden;
+
+ html,body{background-color:grey;overflow-x:hidden;overflow-y:hidden;
 
     	      border-style: none!important;     padding: 0px !important;
     margin:  0px !important; 
@@ -265,7 +266,7 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
 
   </style>
 </head>
-  <body class="text-selection-none" id="body"  onclick="/*openFullscreen()*/">
+  <body class="text-selection-none" id="body"  onclick="openFullscreen()">
   <span id='sMainContainer' hidden>
 
  <button  class="btnBackgroundColorS" hidden id="btnBackgroundColorHeader" >&#x26F6;</button>
@@ -550,7 +551,7 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
 	    </span>
 
 <img src="static/images/logo/logo_loading.gif" id="imgLoadScreen">
-<small style="position:absolute;margin-left: auto;margin-right: auto;left: 0;right: 0;text-align: center;"> Fumetsujo Studio - https://zigguratsynth.herokuapp.com - 2021</small>
+<small style="background-color:black; position:absolute;margin-left: auto;margin-right: auto;left: 0;right: 0;text-align: center;">For Chrome & Firefox - Fumetsujo Studio - https://zigguratsynth.herokuapp.com - 2021</small>
 
 <script src='static/lib/cutom-input-knobs.js'></script><!-- REF: https://github.com/g200kg/input-knobs & https://g200kg.github.io/input-knobs/ -->
 <script>
@@ -3251,7 +3252,7 @@ else if(isRisk ||filterLimitsCheck())
 
 }
 
-
+var iFrameDetection=true;
 document.addEventListener("DOMContentLoaded", function(event) {
    preStartActions();
 
@@ -3283,7 +3284,10 @@ node.style.marginRight = '15px';
 
 document.getElementById("note-selects-div").appendChild(node);    */
 
-setTimeout(function(){ switchToSynthField();}, 2000);
+setTimeout(function(){ 
+iFrameDetection = (window === window.parent) ? false : true;
+switchToSynthField();
+}, 2000);
 });
 
  </script>
@@ -3294,12 +3298,15 @@ var elem = document.getElementById("body");
 /* When the openFullscreen() function is executed, open the video in fullscreen.
 Note that we must include prefixes for different browsers, as they don't support the requestFullscreen method yet */
 function openFullscreen() {
+if(!iFrameDetection){
+
   if (elem.requestFullscreen) {
     elem.requestFullscreen();
   } else if (elem.webkitRequestFullscreen) { /* Safari */
     elem.webkitRequestFullscreen();
   } else if (elem.msRequestFullscreen) { /* IE11 */
     elem.msRequestFullscreen();
+  }
   }
 }
 </script>

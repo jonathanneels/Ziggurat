@@ -3,6 +3,10 @@
 <meta name="viewport" content="user-scalable=no,initial-scale=1.0, maximum-scale=1.0" />
 <link rel="icon" href="/static/images/logo/logo_transparent_colorB.png" type="image/svg+xml">
 <style>
+html,body{
+   background-color: white;
+
+}
 div {
     text-align: justify;
 	margin-top:15vh;
@@ -38,12 +42,13 @@ label{position:absolute;margin-left:10px;margin-top:-20px;}
     <script src="static/lib/jquery_slim_341.js"></script>
 
 </head>
-<body>
+<body  id="body" onclick="openFullscreen()">
 <div>
 <label>Synthesizer</label> <img src="static/images/logo/logo_transparent_colorB.png" onclick="window.location.href = '/'" /> 
  <label>Drum Machine</label> <img src="static/images/logo/logo_transparent_color_drumMachine.png" onclick="window.location.href = '/static/drumMachine/index.html'" /> 
  <label>Mixer</label> <img src="static/images/logo/logo_transparent_colorA_mixer.png" onclick="window.location.href = '/combinedMixer.html'"/>
-</div>
+</div><br>
+<p style="position:absolute;margin-left: auto;margin-right: auto;left: 0;right: 0;text-align: center;"> Ziggurat is compatible with Chrome & Firefox.</p>
 
 <div class="footer">
 <button style="margin-top:2px; background-color:#0cc230;" onclick="$('#sFooterInfo').toggle()">Dev info</button>
@@ -54,6 +59,25 @@ label{position:absolute;margin-left:10px;margin-top:-20px;}
      Site: <a href="https://fumetsujo.pythonanywhere.com">
   https://fumetsujo.pythonanywhere.com/</a>.</p></span>
   </div>
+
+ 		<script>
+/* Get the element you want displayed in fullscreen mode (a video in this example): */
+var elem = document.getElementById("body");
+
+/* When the openFullscreen() function is executed, open the video in fullscreen.
+Note that we must include prefixes for different browsers, as they don't support the requestFullscreen method yet */
+function openFullscreen() {
+ 
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) { /* Safari */
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { /* IE11 */
+    elem.msRequestFullscreen();
+   
+  }
+}
+</script>
 
 </body>
 </html>
