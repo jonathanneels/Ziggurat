@@ -266,12 +266,15 @@ var elem = document.getElementById("body");
 Note that we must include prefixes for different browsers, as they don't support the requestFullscreen method yet */
 function openFullscreen() {
 if(!iFrameDetection){
+  if (!document.fullscreenElement) {
+
   if (elem.requestFullscreen) {
     elem.requestFullscreen();
   } else if (elem.webkitRequestFullscreen) { /* Safari */
     elem.webkitRequestFullscreen();
   } else if (elem.msRequestFullscreen) { /* IE11 */
     elem.msRequestFullscreen();
+  }
   }
 }
 }
