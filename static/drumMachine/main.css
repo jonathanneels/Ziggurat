@@ -8,17 +8,20 @@
     font-family: 'Merriweather';
     font-size: 10px;
 }*/
-
-body{overflow-x:hidden;}
+html{	    background-color: #d9d9d9;
+}
+body{overflow-x:hidden; 	    background-color: #d9d9d9;
+}
 a {
     color: black;
+	
 }
 
 #tracker-container {
     background-color: #d9d9d9;
     width: 100%;
     padding: 20px;
-    background-color: #grey;
+   // background-color: #grey;
     display: flex;
     flex-wrap: wrap;
 }
