@@ -522,7 +522,7 @@ document["isAllPlaying"]=true;
 if(!isSkipDrum){
  var dMachine = document.querySelector("#iDrumMachine");
  var innerDocDMachine = dMachine.contentDocument || dMachine.contentWindow.document;
-  dMachine.contentWindow.stopRecordAudio(); 
+  //dMachine.contentWindow.stopRecordAudio(); 
 							 innerDocDMachine.getElementById("play").click();
 							 }
 
@@ -548,8 +548,14 @@ delete document["isAllPlaying"];
 if(!isSkipDrum){
  var dMachine = document.querySelector("#iDrumMachine");
  var innerDocDMachine = dMachine.contentDocument || dMachine.contentWindow.document;
-  dMachine.contentWindow.stopRecordAudio(); 
-							 innerDocDMachine.getElementById("stop").click();
+  //dMachine.contentWindow.stopRecordAudio(); 
+  
+  if( btnStopLoopAll.style.background=='orange')
+  {
+  innerDocDMachine.getElementById("pause").click();
+ 	  }
+	  else{
+							 innerDocDMachine.getElementById("stop").click();}
 }
 
 var classList=document.querySelectorAll('.iframeSynth'); 
