@@ -296,7 +296,7 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
       <h2 >Main Osc</h2> 	
 	  	  	  	   <button  class="btnBackgroundColorS" id="btnBackgroundColorMain" >&#x26F6;</button> 
 
-	  <span id="sMainOscMute">  <label  id="lblMainMute" for="chMainMute">&#128263;</label> <input type="checkbox" id="chMainMute"> </span> 
+	  <span id="sMainOscMute">  <label  id="lblMainMute" for="chMainMute">&#128263;</label> <input type="checkbox" id="chMainMute" onclick="setTimeout(function(){disableFiltersIfMainIsOff();}, 300);"> </span> 
 
 
  	  <input type="text" id="txtProjectName" name="txtProjectName" value='new Project' autocomplete="off" ondblclick="this.value=''"> 
@@ -2253,11 +2253,13 @@ return noise;
 }
 
  
-function playCurrentNote(customFrequency) {
+function playCurrentNote(customFrequency) { 
 
 delete document["mainOscFreqAtTime"];
  
 if(masterVolume.gain.value <0.009){return;}// otherwise pulse wave will pulse (bugfix req. ?)
+
+
 
 if( (typeof customFrequency == "undefined"  ) && (typeof Object.values(notes)[`${currentNotes[currentNoteIndex]}`] === "undefined")){return;}
 //console.log( Object.values(notes)[`${currentNotes[currentNoteIndex]}`])
@@ -2344,6 +2346,51 @@ return;
     noteGain.connect(masterVolume);
     noteGain.connect(delay);
 	
+		if(document.getElementById("chOsc1On").checked || document.getElementById("chlfo1On").checked ){	
+		var freqAmountOsc2=lfo1FreqAmount; 
+		var freqAmountOsc2LFO=30;
+	if(  document.getElementById("chNoteAsInMainOscFilt1").checked)
+	{
+		freqAmountOsc2 = (document["mainOscFreqAtTime"] +parseFloat(lfo1PitchAmount)) ;
+	freqAmountOsc2LFO = (document["mainOscFreqAtTime"] +parseFloat(lfo1PitchAmount))/10;
+	//lfo1PitchAmount= parseFloat(pitchAmount)
+	}
+  var osc2=playOtherOscWithWithoutPulse(context.currentTime,noteLength,0.1, freqAmountOsc2,freqAmountOsc2LFO,waveformLfo1,lfoGain,noteGain,document.getElementById("chVibLFO1").checked,document.getElementById("chlfo1On").checked,sustainlfo1Level,0.05,0.05, document.getElementById('chlfo1Pulse').checked);//https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Advanced_techniques
+ 
+if(document.getElementById("chVibLFO1").checked){
+osc2.detune.value = detuneAmount;
+ }
+ //if(!document.getElementById("chNoteAsInMainOscFilt1").checked)
+//	{
+       // osc2.frequency.value = osc2.frequency.value + parseFloat(lfo1PitchAmount)
+//}
+     osc2.stop(context.currentTime + noteLength);
+	 
+ }
+	if(document.getElementById("chOsc2On" ).checked || document.getElementById("chlfo2On").checked){	
+	var freqAmountOsc3=lfo2FreqAmount;
+			var freqAmountOsc3LFO=30;
+
+	if( document.getElementById("chNoteAsInMainOscFilt2").checked)
+	{
+	freqAmountOsc3 = (document["mainOscFreqAtTime"] +parseFloat(lfo2PitchAmount));
+	freqAmountOsc3LFO = (document["mainOscFreqAtTime"] +parseFloat(lfo2PitchAmount))/10;
+	}
+	
+ 	var osc3=playOtherOscWithWithoutPulse(context.currentTime,noteLength,0.1, freqAmountOsc3,freqAmountOsc3LFO,waveformLfo2,lfoGain,noteGain,document.getElementById("chVibLFO2").checked,document.getElementById("chlfo2On").checked,sustainlfo2Level,0.05,0.05, document.getElementById('chlfo2Pulse').checked);//https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Advanced_techniques
+	if(document.getElementById("chVibLFO2").checked){	
+osc3.detune.value = detuneAmount;
+}
+//if(!document.getElementById("chNoteAsInMainOscFilt2").checked)
+	//{
+  //      osc3.frequency.value = osc3.frequency.value  + parseFloat(lfo2PitchAmount)
+//}
+    osc3.stop(context.currentTime + noteLength);
+		 
+}
+	
+	
+	
 if(document.getElementById("chPinkFilter").checked  ){	//REF: https://noisehack.com/custom-audio-effects-javascript-web-audio-api/
 
 var bufferSize = 2048;//4096;
@@ -2416,6 +2463,7 @@ osc.connect(effect);
 effect.connect(noteGain);// master audio => instead of effect.connect(context.destination)
 
 }
+
 if(document.getElementById("chMoogfilter").checked  ){	//REF: https://noisehack.com/custom-audio-effects-javascript-web-audio-api/
 
 var bufferSize =  2048;//4096;
@@ -2598,48 +2646,7 @@ osc.connect(whiteNoise);//whiteNoise.connect(context.destination);
 whiteNoise.connect(noteGain);
 
 }
-	if(document.getElementById("chOsc1On").checked || document.getElementById("chlfo1On").checked ){	
-		var freqAmountOsc2=lfo1FreqAmount; 
-		var freqAmountOsc2LFO=30;
-	if(  document.getElementById("chNoteAsInMainOscFilt1").checked)
-	{
-		freqAmountOsc2 = (document["mainOscFreqAtTime"] +parseFloat(lfo1PitchAmount)) ;
-	freqAmountOsc2LFO = (document["mainOscFreqAtTime"] +parseFloat(lfo1PitchAmount))/10;
-	//lfo1PitchAmount= parseFloat(pitchAmount)
-	}
-  var osc2=playOtherOscWithWithoutPulse(context.currentTime,noteLength,0.1, freqAmountOsc2,freqAmountOsc2LFO,waveformLfo1,lfoGain,noteGain,document.getElementById("chVibLFO1").checked,document.getElementById("chlfo1On").checked,sustainlfo1Level,0.05,0.05, document.getElementById('chlfo1Pulse').checked);//https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Advanced_techniques
- 
-if(document.getElementById("chVibLFO1").checked){
-osc2.detune.value = detuneAmount;
- }
- //if(!document.getElementById("chNoteAsInMainOscFilt1").checked)
-//	{
-       // osc2.frequency.value = osc2.frequency.value + parseFloat(lfo1PitchAmount)
-//}
-     osc2.stop(context.currentTime + noteLength);
-	 
- }
-	if(document.getElementById("chOsc2On" ).checked || document.getElementById("chlfo2On").checked){	
-	var freqAmountOsc3=lfo2FreqAmount;
-			var freqAmountOsc3LFO=30;
 
-	if( document.getElementById("chNoteAsInMainOscFilt2").checked)
-	{
-	freqAmountOsc3 = (document["mainOscFreqAtTime"] +parseFloat(lfo2PitchAmount));
-	freqAmountOsc3LFO = (document["mainOscFreqAtTime"] +parseFloat(lfo2PitchAmount))/10;
-	}
-	
- 	var osc3=playOtherOscWithWithoutPulse(context.currentTime,noteLength,0.1, freqAmountOsc3,freqAmountOsc3LFO,waveformLfo2,lfoGain,noteGain,document.getElementById("chVibLFO2").checked,document.getElementById("chlfo2On").checked,sustainlfo2Level,0.05,0.05, document.getElementById('chlfo2Pulse').checked);//https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Advanced_techniques
-	if(document.getElementById("chVibLFO2").checked){	
-osc3.detune.value = detuneAmount;
-}
-//if(!document.getElementById("chNoteAsInMainOscFilt2").checked)
-	//{
-  //      osc3.frequency.value = osc3.frequency.value  + parseFloat(lfo2PitchAmount)
-//}
-    osc3.stop(context.currentTime + noteLength);
-		 
-}
 
 	
 }
@@ -3141,7 +3148,24 @@ removeAudioSources();
 
 </script>
  <script>
+ function disableFiltersIfMainIsOff() // might be disabled later if compatibility with other oscs is possible.
+ {
  
+ if (document.getElementById("chMainMute").checked) {
+ 
+ if(document.getElementById("chnoiseFreq").checked ||  document.getElementById("chPinkFilter").checked || document.getElementById("chLowpass").checked || document.getElementById("chBitcrusher").checked ||document.getElementById("chMoogfilter").checked){
+document.getElementById("chPinkFilter").checked=false;
+document.getElementById("chLowpass").checked=false;
+document.getElementById("chBitcrusher").checked=false;
+document.getElementById("chMoogfilter").checked=false;
+document.getElementById("chnoiseFreq").checked=false;// => this would work atm (but for the sake of logics).
+ //note; noise is ok;
+ 
+ 	document.getElementById("lblOverloadCheck").innerHTML="<span style='color:yellow;'>Auto-off filters<br>Main Osc out</span>"; 
+}
+}
+
+ }
 
         // draw an oscilloscope of the current audio source
         function draw() {
@@ -3274,6 +3298,7 @@ if(limitRefresh <= currentRefreshCounterId){
 	else{isRisk=false;		isBroken=false;}
 	}
 	
+
 	         draw();
 			 currentRefreshCounterId=0;
 }
@@ -3288,9 +3313,11 @@ if(limitRefresh <= currentRefreshCounterId){
 else if(isRisk ||filterLimitsCheck())  
    
 {
-	document.getElementById("lblOverloadCheck").innerHTML="<span style='color:orange;'>TENSION!<br>Limit filter count.</span>"
+	document.getElementById("lblOverloadCheck").innerHTML="<span style='color:orange;'>TENSION!<br>Limit switches on.</span>"
 
 }
+	disableFiltersIfMainIsOff();
+
 }
 
 }
