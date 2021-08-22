@@ -184,7 +184,8 @@ background-color:tan;
 
 
 }
- .creationMode {margin-top:-20px;}
+ .creationMode {margin-top:-20px; z-index:100;}
+ .pianoMode { z-index:100;}
 
 
 #note-selects-divDeepest{
@@ -235,7 +236,9 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
   #spanOverloadInfo{display:block;margin-top:-14px; }
     #lblOverloadCheck{ margin-top:-1px; }
    label{max-width:140px;min-width:140px; width:140px;    display: inline-block; overflow:auto;}
-    #lblChPiano,#lblLockPianoNotes{text-align:right;width: 40px important!;} 
+    #lblChPiano,#lblLockPianoNotes{text-align:right;width: 40px !important;max-width: 40px !important; z-index:0;} 
+	    #lblChPiano{ min-width: 40px !important; } 
+
 	#chLockPianoNotes{margin-left:- 5px;}
 		#lblLockPianoNotes{margin-left:-55px;}
 
@@ -243,13 +246,13 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
 	#sScaleSet{        display: flex;   justify-content: center;  }
 		#sScaleSet button{       width:80px; }
  @media (max-width:600px) {  
- 	#sScaleSet{         margin-top:25px;}
+ 	#sScaleSet{         margin-top:5px;}
  
  } 
   @media (max-width:960px) and (min-width:600px){  
-   	#sScaleSet{         margin-top: 20px;}
+   	#sScaleSet{         margin-top: 10px;}
 
-  #note-selects-divDeepest{width:60vw;  margin: auto; max-height:40px;}
+  #note-selects-divDeepest{width:61vw;  margin: auto; max-height:40px;}
 
 
 }
@@ -1720,7 +1723,9 @@ var timeOutTempo;
 	 }
 	 	 if(typeof timeOutTempo =="undefined"){
 
-	 stopButton.click()
+	 stopButton.click();
+	  stopButton.style.background='orange';// pause, not stop!
+
 		timeOutTempo=	setTimeout(function(){ 
 			if (!isPlaying){
         isPlaying = true;
@@ -1742,7 +1747,9 @@ var timeOutTempo;
 	 }
 	 
 	 if(typeof timeOutTempo =="undefined"){
-stopButton.click()
+stopButton.click();
+ stopButton.style.background='orange';// pause, not stop!
+ 
 		timeOutTempo=	setTimeout(function(){ 
 			if (!isPlaying){
         isPlaying = true;
