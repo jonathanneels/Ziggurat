@@ -1337,7 +1337,7 @@ var  scaleDownButton=document.querySelector('#btnScaleDown');
 var idPianoNotes=document.querySelector('#idPlayNotes');
 var tempoControl = document.querySelector('#tempo-control');
 var tempo = document.querySelector('#tempo-control').value;//120.0;
-let currentNoteIndex = 0;
+var currentNoteIndex = 0;
 var isPlaying = false; 
 var playLoopTimeout;
 var waveformsLfo1 = document.getElementsByName('osc1-waveform');
@@ -1618,6 +1618,8 @@ tempoControl.addEventListener('input', function() {
 
 if( event.target.id == startButton.id ) {//startButton.addEventListener('click', function() {
     if (!isPlaying){
+ stopButton.style.background='orange';
+
 	//	context.resume(); 
 		isBroken=false;
         isPlaying = true;
@@ -1630,7 +1632,34 @@ if( event.target.id == stopButton.id ) {//stopButton.addEventListener('click', f
     isPlaying = false;
 	clearTimeout(playLoopTimeout);
 	//context.suspend();
-	removeAudioSources()
+	removeAudioSources();
+	
+	if(stopButton.style.background !='orange')
+	{
+	
+	if(currentNoteIndex-1 >-1){
+	  if(typeof Object.keys(notes)[noteSelects[currentNoteIndex-1].value] === "undefined" || Object.keys(notes)[noteSelects[currentNoteIndex-1].value].indexOf('#') >-1){																				  		  
+																				  window[("btn"+noteSelects[currentNoteIndex-1].id).trim()].style.backgroundColor = "slategrey";
+																				  	    window[(noteSelects[currentNoteIndex-1].id).trim()].style.backgroundColor = "slategrey";
+
+																				  }
+																				  else{
+																				  		  window[("btn"+noteSelects[currentNoteIndex-1].id).trim()].style.backgroundColor = "lightgray";
+																				  	   window[(noteSelects[currentNoteIndex-1].id).trim()].style.backgroundColor = "lightgray";
+																						   
+																				  }
+																				  }
+
+	currentNoteIndex=0;
+
+ stopButton.style.background='orange';
+
+	}
+	else
+	{
+		stopButton.style.background='red';
+ 
+}
 
 }//)
 
@@ -2875,8 +2904,7 @@ patchName="newProject";
 }
 
 function restoreDOMElements()
-{
-
+{ 
 colorChangedKeyboard={};
 
    attackTime = Number( document.querySelector('#attack-control').value);//0.3;
@@ -2912,6 +2940,9 @@ colorChangedKeyboard={};
 
      startButton = document.querySelector('#start-button');
   stopButton = document.querySelector('#stop-button');
+
+stopButton.style.background='orange';
+
 //startButton.click(); // 1x activating
 					
 			  document.getElementById("custom-patch-select").options.length = 1;
@@ -2983,6 +3014,7 @@ removeAudioSources();
  removeLabelSliderValueReferences();
  
   // added for the AsAnalogSynth visuals (otherwise not necessary)
+  	 var previousIndex = currentNoteIndex;//=> this is not required, just good to keep the index intact.
  var previousState=document.querySelector("#divOscillator").innerHTML;
    removeDomElementsAsAnalogSynth();
 //////////////////////////////////////////
@@ -3005,6 +3037,9 @@ removeAudioSources();
 
 				restoreDOMElements();
   modifyInputs(); 
+
+ // added for the AsAnalogSynth visuals (otherwise not necessary) => this is not required, just good to keep the index intact.
+ currentNoteIndex=previousIndex;
 
 }
 
@@ -3255,6 +3290,10 @@ else if(isRisk ||filterLimitsCheck())
 
 var iFrameDetection=true;
 document.addEventListener("DOMContentLoaded", function(event) {
+
+
+stopButton.style.background='orange';
+
    preStartActions();
 
 if(window.location.href.includes("?"))

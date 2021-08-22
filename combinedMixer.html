@@ -349,6 +349,8 @@ catch(err){console.log(err);}
 
 function setCheckBoxStates()
 {
+//stopLoopAll(true,true);
+
 var classList=document.querySelectorAll('.iframeSynth');// document.getElementsByClassName("btnPlay") ;
 
  for (let i = 0; i < classList.length; i++) {
@@ -368,22 +370,24 @@ innerDoc.querySelector("#blocks-control").setAttribute("max",999);
      classList[i].contentWindow.generateSequencer();  
 	 
 	 //// added for 'bugfix' analog lay-out. Altering max makes the knob invisible///
+	 var previousIndex = classList[i].contentWindow.currentNoteIndex;
 	  var previousState=innerDoc.querySelector("#divOscillator").innerHTML;
    classList[i].contentWindow.removeDomElementsAsAnalogSynth();
   innerDoc.querySelector("#divOscillator").innerHTML=  previousState;
 				classList[i].contentWindow.restoreDOMElements();
+				classList[i].contentWindow.currentNoteIndex=previousIndex;
 if(typeof  classList[i].contentWindow.modifyInputs() != "undefined"){   
 	   classList[i].contentWindow.modifyInputs();  
 	   }		//////  
 
 	 
 
-}
+
 if(typeof classList[i] != "undefined" && typeof classList[i].contentWindow != "undefined" && typeof  classList[i].contentWindow.modifyInputs() != "undefined"){   
 	   classList[i].contentWindow.modifyInputs();  
 	   }
-
 }
+
 
 if(innerDoc.body.contains( innerDoc.querySelector("#tempo-control"))){   
 if(document.querySelector("#chTempLength").checked)
@@ -400,6 +404,14 @@ if(typeof classList[i] != "undefined" && typeof  classList[i].contentWindow.modi
 if(document.querySelector("#chReqVoice").checked)
 {
 }
+ 
+ 
+}
+}
+if(typeof document["isAllPlaying"] != "undefined") // somewhat a bugfix; where playing synths might stop through the above method execution/check.
+{
+playLoopAll(true);
+
 }
 }
 var synthList=[];
@@ -498,16 +510,21 @@ fillRemoveSynthList();
 
 setCheckBoxStates();
 }
-function playLoopAll()
+function playLoopAll(isSkipDrum)
 {
+
+ btnStopLoopAll.style.background='orange';
+
+document["isAllPlaying"]=true;
 //setCheckBoxStates();
  				            document.getElementById("btnStopLoopAll").style.visibility = 'visible';
  				            document.getElementById("btnPlayLoopAll").style.visibility = 'hidden';
-
+if(!isSkipDrum){
  var dMachine = document.querySelector("#iDrumMachine");
  var innerDocDMachine = dMachine.contentDocument || dMachine.contentWindow.document;
   dMachine.contentWindow.stopRecordAudio(); 
 							 innerDocDMachine.getElementById("play").click();
+							 }
 
 
 var classList=document.querySelectorAll('.iframeSynth');// document.getElementsByClassName("btnPlay") ;
@@ -522,13 +539,18 @@ try{
 
 }
 }
-function stopLoopAll()
+function stopLoopAll(isSkipDrum, isSkipDeleteAllPlaying)
 {
+if(!isSkipDeleteAllPlaying){
+delete document["isAllPlaying"];
+}
 
+if(!isSkipDrum){
  var dMachine = document.querySelector("#iDrumMachine");
  var innerDocDMachine = dMachine.contentDocument || dMachine.contentWindow.document;
   dMachine.contentWindow.stopRecordAudio(); 
 							 innerDocDMachine.getElementById("stop").click();
+}
 
 var classList=document.querySelectorAll('.iframeSynth'); 
 
@@ -536,13 +558,28 @@ for (let i = 0; i < classList.length; i++) {
 var innerDoc = classList[i].contentDocument || classList[i].contentWindow.document;   
 try{
   innerDoc.getElementById("stop-button").click();
+ 
  }
  catch(err){
  console.log(err);// prolly non-existing
  }
 
 }
- 				            document.getElementById("btnStopLoopAll").style.visibility = 'hidden';
+console.log(btnStopLoopAll.style.background)
+  if( btnStopLoopAll.style.background=='orange')
+  {
+  btnStopLoopAll.style.background='red';
+  }
+  else 
+  {
+    btnStopLoopAll.style.background='orange';
+	 				            document.getElementById("btnStopLoopAll").style.visibility = 'hidden';
+
+
+  }
+  console.log(btnStopLoopAll.style.background)
+
+ 
  				            document.getElementById("btnPlayLoopAll").style.visibility = 'visible';
 
 }
@@ -1179,6 +1216,8 @@ stopRecordAudioAll(true);  }
   
 document.addEventListener("DOMContentLoaded", function(event) {
 
+ btnStopLoopAll.style.background='orange';
+
 customPatchesCombinedFiller();
 //recordVoice();
 
@@ -1223,9 +1262,11 @@ var intervalTimer = 0;
 		  {
 		  randomFeed =  0;
 		  }
+		  if(randomFeed != 0){
 		  document.getElementById('txtTempLength').value= parseInt(document.getElementById('txtTempLength').value)+randomFeed;
 		   document.getElementById('txtTempLength').defaultValue= parseInt(document.getElementById('txtTempLength').value);
 			setCheckBoxStates();
+			}
 		  }
 			}
 			
@@ -1246,6 +1287,8 @@ var intervalTimer = 0;
 						  {
 						  randomFeed =  0;
 						  }
+						  
+						  if(randomFeed != 0){
 						
  							   var classList=document.querySelectorAll('.iframeSynth');;
 
@@ -1267,7 +1310,7 @@ var intervalTimer = 0;
 
  							}
 						
-						
+						}
 
 							}
 						  
