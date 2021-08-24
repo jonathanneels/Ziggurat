@@ -268,6 +268,10 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
 }
 
 #square-wave, #sawtooth-wave,#lfo1-square-wave, #lfo1-sawtooth-wave,#lfo2-square-wave, #lfo2-sawtooth-wave{margin-left:-105px;}
+
+ #chlfo1On,#chlfo2On,#chOsc1On,#chOsc2On,#chlfo1Pulse,#chlfo2Pulse
+{margin-left:-40px;}
+
   </style>
 </head>
   <body class="text-selection-none" id="body"  onclick="openFullscreen()">
@@ -2426,9 +2430,15 @@ var effect = (function() {
     }
     return node;
 })();
+/*
 osc.connect(effect);
 //effect.connect(context.destination);
 effect.connect(noteGain);// master audio => instead of effect.connect(context.destination)
+
+*/
+    noteGain.connect( effect );
+   // effect.connect( context.destination ); 
+effect.connect(masterVolume);
 
 }
 if(document.getElementById("chLowpass").checked  ){	//REF: https://noisehack.com/custom-audio-effects-javascript-web-audio-api/
@@ -2457,10 +2467,14 @@ var effect = (function() {
 
     }
     return node;
-})();
+})();/*
 osc.connect(effect);
 //effect.connect(context.destination);
 effect.connect(noteGain);// master audio => instead of effect.connect(context.destination)
+*/
+    noteGain.connect( effect );
+   // effect.connect( context.destination ); 
+effect.connect(masterVolume);
 
 }
 
@@ -2505,9 +2519,15 @@ var effect = (function() {
     }
     return node;
 })();
+/*
 osc.connect(effect);
 //effect.connect(context.destination);
 effect.connect(noteGain);// master audio => instead of effect.connect(context.destination)
+
+*/
+    noteGain.connect( effect );
+   // effect.connect( context.destination ); 
+effect.connect(masterVolume);
 
 }
 if(document.getElementById("chBitcrusher").checked  ){	
@@ -2542,10 +2562,15 @@ var effect = (function() {
     };
     return node;
 })();
-
+/*
 osc.connect(effect);
 //effect.connect(context.destination);
 effect.connect(noteGain);// master audio => instead of effect.connect(context.destination)
+
+*/
+    noteGain.connect( effect );
+   // effect.connect( context.destination ); 
+effect.connect(masterVolume);
 
 }
 
@@ -2641,9 +2666,13 @@ whiteNoise.onaudioprocess = function(e) {
 		},  (noteLength*1000)-((noteLength*1000)/10) ); // -((noteLength*1000)/10)  is the time less to stop. Increases performance (every sound 10% less processing required).
 
 }
-
+/*
 osc.connect(whiteNoise);//whiteNoise.connect(context.destination);
 whiteNoise.connect(noteGain);
+*/
+    noteGain.connect( whiteNoise );
+   // effect.connect( context.destination ); 
+whiteNoise.connect(masterVolume);
 
 }
 
@@ -3151,7 +3180,7 @@ removeAudioSources();
  function disableFiltersIfMainIsOff() // might be disabled later if compatibility with other oscs is possible.
  {
  
- if (document.getElementById("chMainMute").checked) {
+ /*if (document.getElementById("chMainMute").checked) { => fixed it (and works with disableFiltersIfMainIsOff()). DO note: might reactivate later, because this might be a feature (boolean).
  
  if(document.getElementById("chnoiseFreq").checked ||  document.getElementById("chPinkFilter").checked || document.getElementById("chLowpass").checked || document.getElementById("chBitcrusher").checked ||document.getElementById("chMoogfilter").checked){
 document.getElementById("chPinkFilter").checked=false;
@@ -3163,7 +3192,7 @@ document.getElementById("chnoiseFreq").checked=false;// => this would work atm (
  
  	document.getElementById("lblOverloadCheck").innerHTML="<span style='color:yellow;'>Auto-off filters<br>Main Osc out</span>"; 
 }
-}
+}*/
 
  }
 
@@ -3316,7 +3345,7 @@ else if(isRisk ||filterLimitsCheck())
 	document.getElementById("lblOverloadCheck").innerHTML="<span style='color:orange;'>TENSION!<br>Limit switches on.</span>"
 
 }
-	disableFiltersIfMainIsOff();
+	//disableFiltersIfMainIsOff();
 
 }
 
