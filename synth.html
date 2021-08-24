@@ -234,7 +234,8 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
   .input-switch{}
   #imgOscilloscope{   width:200px; height:130px; margin-top:-3px;}
   #spanOverloadInfo{display:block;margin-top:-14px; }
-    #lblOverloadCheck{ margin-top:-1px; }
+    #lblOverloadCheck{ margin-top:-1px; min-width:140px; max-width:140px; width:140px;}
+ 
    label{max-width:140px;min-width:140px; width:140px;    display: inline-block; overflow:auto;}
     #lblChPiano,#lblLockPianoNotes{text-align:right;width: 40px !important;max-width: 40px !important; z-index:0;} 
 	    #lblChPiano{ min-width: 40px !important; } 
@@ -271,7 +272,7 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
 
  #chlfo1On,#chlfo2On,#chOsc1On,#chOsc2On,#chlfo1Pulse,#chlfo2Pulse
 {margin-left:-40px;}
-
+#h3SignalsMainInfo{text-decoration: underline;}
   </style>
 </head>
   <body class="text-selection-none" id="body"  onclick="openFullscreen()">
@@ -336,7 +337,7 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
 				 
 
 
-
+<h3 id="h3SignalsMainInfo"  >Signals</h3> 
 	       <label   for="chnoiseFreq">Noise</label> <input type="checkbox" id="chnoiseFreq">  <br>
 		   	       <label   for="chLowpass">Lowpass</label> <input type="checkbox" id="chLowpass"> <br> 
 		   	       <label   for="chPinkFilter">Pink filter</label> <input type="checkbox" id="chPinkFilter">   <br> 
@@ -433,6 +434,8 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
        <input id='lfo1-freq-control' type="range" min = "20" max = "800" step='10' value='440'>
 	   <br>
 	   			   <label   for="chNoteAsInMainOscFilt1">Freq. as main Osc</label> <input type="checkbox" id="chNoteAsInMainOscFilt1"> 
+<br>
+	   	   			   <label   for="chNoLinkToOtherSignals1">&#128279; Signals Osc 1</label> <input  type="checkbox" id="chNoLinkToOtherSignals1"> 
 
 	  		  </li> 
 			  <li id="lilfo1-sustain-control">
@@ -475,7 +478,9 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
 	        <label for="lfo2-freq-control">Freq.</label>
        <input id='lfo2-freq-control' type="range" min = "20" max = "800" step='10' value='440'><br>
 	   	   			   <label   for="chNoteAsInMainOscFilt2">Freq. as main Osc</label> <input type="checkbox" id="chNoteAsInMainOscFilt2"> 
-
+<br>
+	   	   			   <label   for="chNoLinkToOtherSignals2">&#128279; Signals Osc 1</label> <input   type="checkbox" id="chNoLinkToOtherSignals2"> 
+ 
 	  		  </li> 
 			  <li id="lilfo2-sustain-control">
 			  	        <label id="lbllfo2-sustain-control" for="lfo2-sustain-control">Sustain</label> 
@@ -1372,6 +1377,17 @@ var pitchAmount =document.querySelector('#pitch-amount-control').value;
 var waveforms = document.getElementsByName('waveform');
 let waveform =  document.getElementsByName('waveform').value;
 
+var chNoLinkToOtherSignals1 ;
+var chNoLinkToOtherSignals2 ;
+
+
+if( document.getElementById("chNoLinkToOtherSignals1")  ){
+  chNoLinkToOtherSignals1 =document.querySelector('#chNoLinkToOtherSignals1');
+} 
+if( document.getElementById("chNoLinkToOtherSignals2")  ){
+
+  chNoLinkToOtherSignals2 =document.querySelector('#chNoLinkToOtherSignals2');
+} 
 var defaultPatch="";
 
 ///	onaudioproces////////////////
@@ -1397,6 +1413,20 @@ showEditMode()
   }
 } 
 
+function alterLinkedToOther() // limit for now (both on not individually), might alter later.
+{
+   if( document.getElementById("chNoLinkToOtherSignals1")  && document.getElementById("chNoLinkToOtherSignals2") ){
+
+      if( !document.getElementById("chNoLinkToOtherSignals1").checked  && !document.getElementById("chNoLinkToOtherSignals2").checked  ){
+document.getElementById("chNoLinkToOtherSignals1").checked=true;
+ document.getElementById("chNoLinkToOtherSignals2").checked=true;
+}        else  {
+document.getElementById("chNoLinkToOtherSignals1").checked=false;
+ document.getElementById("chNoLinkToOtherSignals2").checked=false;
+}
+
+   }
+}
 // CONTEXT AND MASTER VOLUME
 document.body.addEventListener( 'click', function ( event ) {//REF: https://stackoverflow.com/questions/34896106/attach-event-to-dynamic-elements-in-javascript
 
@@ -1818,6 +1848,20 @@ noteLengthControl.addEventListener('change', function() {
 	kbdEditFollowUpFunctions();
 
 })
+
+if( document.getElementById("chNoLinkToOtherSignals1")  ){
+  chNoLinkToOtherSignals1.addEventListener('input', function() { 
+alterLinkedToOther();
+});
+} 
+if( document.getElementById("chNoLinkToOtherSignals2")  ){
+
+  chNoLinkToOtherSignals2.addEventListener('input', function() { 
+alterLinkedToOther();
+
+});
+} 
+
 /*
 noteLengthControl.addEventListener('mouseup', function() {
     this.defaultValue = parseFloat(this.value);
@@ -2272,6 +2316,10 @@ if( (typeof customFrequency == "undefined"  ) && (typeof Object.values(notes)[`$
 //	if(typeof customFrequency == "undefined" && currentNotes[currentNoteIndex] == -1){return; } => osc 1 [aka 2] & osc 2 [aka 3] are independent
 	//else if(typeof customFrequency != "undefined" && customFrequency == -1){return; }
 
+var isOtherOscsLinkedToMainOsc =true;
+   if( document.getElementById("chNoLinkToOtherSignals1")  && document.getElementById("chNoLinkToOtherSignals2") ){
+  isOtherOscsLinkedToMainOsc = document.getElementById("chNoLinkToOtherSignals1").checked  || document.getElementById("chNoLinkToOtherSignals2").checked
+}
  	var osc = context.createOscillator();
  audioContextSources.push(osc); 
 			  osc.onended = function() { 
@@ -2430,16 +2478,18 @@ var effect = (function() {
     }
     return node;
 })();
-/*
+ 
+if(isOtherOscsLinkedToMainOsc){
+    noteGain.connect( effect );
+   // effect.connect( context.destination ); 
+effect.connect(masterVolume);
+}
+else{
 osc.connect(effect);
 //effect.connect(context.destination);
 effect.connect(noteGain);// master audio => instead of effect.connect(context.destination)
 
-*/
-    noteGain.connect( effect );
-   // effect.connect( context.destination ); 
-effect.connect(masterVolume);
-
+}
 }
 if(document.getElementById("chLowpass").checked  ){	//REF: https://noisehack.com/custom-audio-effects-javascript-web-audio-api/
 
@@ -2467,15 +2517,18 @@ var effect = (function() {
 
     }
     return node;
-})();/*
-osc.connect(effect);
-//effect.connect(context.destination);
-effect.connect(noteGain);// master audio => instead of effect.connect(context.destination)
-*/
+})(); 
+if(isOtherOscsLinkedToMainOsc){ 
     noteGain.connect( effect );
    // effect.connect( context.destination ); 
 effect.connect(masterVolume);
+}
+else{
+osc.connect(effect);
+//effect.connect(context.destination);
+effect.connect(noteGain);// master audio => instead of effect.connect(context.destination)
 
+}
 }
 
 if(document.getElementById("chMoogfilter").checked  ){	//REF: https://noisehack.com/custom-audio-effects-javascript-web-audio-api/
@@ -2519,15 +2572,19 @@ var effect = (function() {
     }
     return node;
 })();
-/*
+ 
+if(isOtherOscsLinkedToMainOsc){ 
+    noteGain.connect( effect );
+   // effect.connect( context.destination ); 
+effect.connect(masterVolume);
+}
+else{
 osc.connect(effect);
 //effect.connect(context.destination);
 effect.connect(noteGain);// master audio => instead of effect.connect(context.destination)
 
-*/
-    noteGain.connect( effect );
-   // effect.connect( context.destination ); 
-effect.connect(masterVolume);
+
+}
 
 }
 if(document.getElementById("chBitcrusher").checked  ){	
@@ -2562,16 +2619,18 @@ var effect = (function() {
     };
     return node;
 })();
-/*
+ 
+if(isOtherOscsLinkedToMainOsc){ 
+    noteGain.connect( effect );
+   // effect.connect( context.destination ); 
+effect.connect(masterVolume);
+}
+else{
 osc.connect(effect);
 //effect.connect(context.destination);
 effect.connect(noteGain);// master audio => instead of effect.connect(context.destination)
 
-*/
-    noteGain.connect( effect );
-   // effect.connect( context.destination ); 
-effect.connect(masterVolume);
-
+}
 }
 
 
@@ -2666,14 +2725,19 @@ whiteNoise.onaudioprocess = function(e) {
 		},  (noteLength*1000)-((noteLength*1000)/10) ); // -((noteLength*1000)/10)  is the time less to stop. Increases performance (every sound 10% less processing required).
 
 }
-/*
-osc.connect(whiteNoise);//whiteNoise.connect(context.destination);
-whiteNoise.connect(noteGain);
-*/
+ 
+if(isOtherOscsLinkedToMainOsc){ 
+
     noteGain.connect( whiteNoise );
    // effect.connect( context.destination ); 
 whiteNoise.connect(masterVolume);
+}
 
+else{
+osc.connect(whiteNoise);//whiteNoise.connect(context.destination);
+whiteNoise.connect(noteGain);
+
+}
 }
 
 
@@ -2860,7 +2924,7 @@ patchName="newProject";
       document.getElementById("chNoteAsInMainOscFilt2").setAttribute("checked", "checked");
   } else {
       document.getElementById("chNoteAsInMainOscFilt2").removeAttribute("checked");
-  }
+  } 
    if (document.getElementById("chMainMute").checked) {
       document.getElementById("chMainMute").setAttribute("checked", "checked");
   } else {
@@ -2943,6 +3007,26 @@ patchName="newProject";
   } else {
       document.getElementById("chlfo2Pulse").removeAttribute("checked");
   }
+  
+  
+/////////// NOT ALL PATCHES CONTAIN THESE ELEMENTS: //////////////
+  if( document.getElementById("chNoLinkToOtherSignals1")  ){//REF: https://stackoverflow.com/questions/5629684/how-can-i-check-if-an-element-exists-in-the-visible-dom
+   if (document.getElementById("chNoLinkToOtherSignals1").checked) {
+      document.getElementById("chNoLinkToOtherSignals1").setAttribute("checked", "checked");
+  } else {
+      document.getElementById("chNoLinkToOtherSignals1").removeAttribute("checked");
+  }
+  }
+  if( document.getElementById("chNoLinkToOtherSignals2") ){
+     if (document.getElementById("chNoLinkToOtherSignals2").checked) {
+      document.getElementById("chNoLinkToOtherSignals2").setAttribute("checked", "checked");
+  } else {
+      document.getElementById("chNoLinkToOtherSignals2").removeAttribute("checked");
+  }
+  }
+//////////////////////////////////////////////////////////////////
+
+
  
 }
 
@@ -2972,6 +3056,14 @@ colorChangedKeyboard={};
    detuneAmount =document.querySelector('#detune-amount-control').value; 
    pitchAmount =document.querySelector('#pitch-amount-control').value; 
   waveform =  document.getElementsByName('waveform').value;
+
+if( document.getElementById("chNoLinkToOtherSignals1")  ){
+  chNoLinkToOtherSignals1 =document.querySelector('#chNoLinkToOtherSignals1');
+} 
+if( document.getElementById("chNoLinkToOtherSignals2")  ){
+
+  chNoLinkToOtherSignals2 =document.querySelector('#chNoLinkToOtherSignals2');
+} 
 
   scaleUpButton=document.querySelector('#btnScaleUp');
   scaleDownButton=document.querySelector('#btnScaleDown');
@@ -3308,7 +3400,9 @@ if(limitRefresh <= currentRefreshCounterId){
   //  (noiseButton) ? changeVUMeter(average / (100 + volumeNoise * 50)): changeVUMeter(average / 100);
 //	console.log(average);
 	if(  document.getElementById("lblOverloadCheck") != null){ 
-	document.getElementById("lblOverloadCheck").innerHTML=average.toFixed(2);
+	//document.getElementById("lblOverloadCheck").innerHTML=average.toFixed(2) ; 
+	 		document.getElementById("lblOverloadCheck").innerHTML="<span id='lblOverloadCheckSpan'>"+average.toFixed(2).toString()+"<br> <p style='opacity: 0;'>hidden lay-out</p></span>";//lay-out conform if info follows 
+
 			if( document.body.contains( document.querySelector("#chIgnoreOverload")) &&  document.getElementById("chIgnoreOverload").checked  && (average >90  )) // making sure the app won't slow down. (refresh page req.)
 	{
  	isBroken=true;
@@ -3333,16 +3427,16 @@ if(limitRefresh <= currentRefreshCounterId){
 }
  			if( document.body.contains( document.querySelector("#chIgnoreOverload")) && document.getElementById("chIgnoreOverload").checked  && isBroken)    
 	{
- 		document.getElementById("lblOverloadCheck").innerHTML="<span style='color:red;'>Continue<br>@ own risk...</span>"; 
+ 		document.getElementById("lblOverloadCheck").innerHTML="<span style='color:red;' id='lblOverloadCheckSpan'>Continue<br>@ own risk...</span>"; 
 	} 
 	else	if((!document.body.contains( document.querySelector("#chIgnoreOverload")) ||  !document.getElementById("chIgnoreOverload").checked ) &&  isBroken)   
 	{
- 		document.getElementById("lblOverloadCheck").innerHTML="<span style='color:red;'>OVERLOAD!<br>Stopping synth...</span>"; 
+ 		document.getElementById("lblOverloadCheck").innerHTML="<span style='color:red;' id='lblOverloadCheckSpan'>OVERLOAD!<br>Stopping synth...</span>"; 
 	}
 else if(isRisk ||filterLimitsCheck())  
    
 {
-	document.getElementById("lblOverloadCheck").innerHTML="<span style='color:orange;'>TENSION!<br>Limit switches on.</span>"
+	document.getElementById("lblOverloadCheck").innerHTML="<span style='color:orange;' id='lblOverloadCheckSpan'>TENSION!<br>Limit switches on.</span>"
 
 }
 	//disableFiltersIfMainIsOff();
