@@ -2726,14 +2726,16 @@ whiteNoise.onaudioprocess = function(e) {
 
 }
  
-if(isOtherOscsLinkedToMainOsc){ 
+ // added extra condition here. The noise is strong!:
+ 
+if(isOtherOscsLinkedToMainOsc && document.getElementById('chMainMute').checked){ 
 
     noteGain.connect( whiteNoise );
    // effect.connect( context.destination ); 
 whiteNoise.connect(masterVolume);
 }
 
-else{
+else if(!document.getElementById('chMainMute').checked){
 osc.connect(whiteNoise);//whiteNoise.connect(context.destination);
 whiteNoise.connect(noteGain);
 
