@@ -328,10 +328,10 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
  <label for="lblOverloadCheck">Overload %:</label> <br>
 
 		       <label id="lblOverloadCheck">-1</label> 
+ <span id='lblOverloadCheckSpan'>00<br> <p style='opacity: 0;'>hidden lay-out</p></span> 
 				</span>
+ 				</span>
 
-				</span>
- 
 	      <label for="volume-control">Master Volume</label><br>
     <input type="range" id="volume-control" min="0" max="1" step="0.01" value=".2"><br>
 				 
@@ -455,6 +455,13 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
       <label for="lfo1-triangle-wave">&#9651;</label> 
       <input type="radio" id="lfo1-sawtooth-wave" name="osc1-waveform" value="sawtooth">
       <label for="lfo1-sawtooth-wave"> &#9727;</label> 
+	  
+	        <br><input type="radio" id="lfo1-custom-wave" name="osc1-waveform" value="custom">
+      <label for="custom-waveLfo1">Custom bank</label> 	   
+<select name="custom-wave-selectLfo1" id="custom-wave-selectLfo1">
+ </select>
+ 
+
     </span>	
 
 	</div> 
@@ -499,6 +506,12 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
       <label for="lfo2-triangle-wave">&#9651;</label> 
       <input type="radio" id="lfo2-sawtooth-wave" name="osc2-waveform" value="sawtooth">
       <label for="lfo2-sawtooth-wave"> &#9727;</label>  
+	  
+	  	        <br><input type="radio" id="lfo2-custom-wave" name="osc2-waveform" value="custom">
+      <label for="custom-selectLfo2">Custom bank</label> 	   
+<select name="custom-wave-selectLfo2" id="custom-wave-selectLfo2">
+ </select>
+
     </span>	
 	</div>
 </div>
@@ -697,6 +710,8 @@ var audioContextSources = [];
 var  customWaves ;
 var  customWaveSelectedGet  ;
 var customWaveSelected ;  
+var customWaveSelectedLfo1;
+var customWaveSelectedLfo2;
 
 function customWavesFiller()
 { 
@@ -708,6 +723,19 @@ try{// allow to continue the app without network
 //console.log( customWaveSelected.real);
 
 var select = document.getElementById("custom-wave-select");  
+
+var selectlfo1 ;  
+var selectlfo2  ;  
+
+if(document.getElementById("custom-wave-selectLfo1")  ){
+  selectlfo1 = document.getElementById("custom-wave-selectLfo1");  
+   customWaveSelectedLfo1 = Object.assign({}, customWaveSelected);  
+}
+
+if(  document.getElementById("custom-wave-selectLfo2")){
+   selectlfo2 = document.getElementById("custom-wave-selectLfo2"); 
+   customWaveSelectedLfo2 = Object.assign({}, customWaveSelected); 
+}
 for(var i = 0; i < customWaves.length; i++) {
 
 if(customWaves[i].includes(".txt"))
@@ -718,7 +746,14 @@ continue;
     var el = document.createElement("option");
     el.textContent = opt;
     el.value = opt;
-    select.appendChild(el);
+    select.appendChild(  el);
+	
+	if(typeof selectlfo1!= "undefined" ){
+  selectlfo1.appendChild(el.cloneNode(true));
+ }
+if(  typeof selectlfo2!= "undefined"){
+   selectlfo2.appendChild(el.cloneNode(true));
+}
 }
 }
 catch(err){console.log(err);}
@@ -1202,6 +1237,25 @@ function setWaveform2fo1() {
     document.getElementById("custom-wave-select").options[i].defaultSelected = i == document.getElementById("custom-wave-select").selectedIndex;
 }
 }
+
+if(document.getElementById("custom-wave-selectLfo1") ){
+customWaveSelectedGet =httpGet( "/static/wave-tables/"  +document.getElementById("custom-wave-selectLfo1").value );
+  customWaveSelectedLfo1=(new Function('return ' + customWaveSelectedGet))();
+
+ for (var i = 0; i < document.getElementById("custom-wave-selectLfo1").options.length; i++) {
+    document.getElementById("custom-wave-selectLfo1").options[i].defaultSelected = i == document.getElementById("custom-wave-selectLfo1").selectedIndex;
+}
+
+}
+if(  document.getElementById("custom-wave-selectLfo2")){
+customWaveSelectedGet =httpGet( "/static/wave-tables/"  +document.getElementById("custom-wave-selectLfo2").value );
+  customWaveSelectedLfo2=(new Function('return ' + customWaveSelectedGet))();
+
+ for (var i = 0; i < document.getElementById("custom-wave-selectLfo2").options.length; i++) {
+    document.getElementById("custom-wave-selectLfo2").options[i].defaultSelected = i == document.getElementById("custom-wave-selectLfo2").selectedIndex;
+}
+}
+
 }
 catch(err){console.log(err);}
 }
@@ -1508,6 +1562,28 @@ radiobtn.checked = true;
 
 setWaveform();
  });
+ 
+ if(document.getElementById("custom-wave-selectLfo1")){
+document.getElementById("custom-wave-selectLfo1").addEventListener('change', function() { 
+setWaveformSubThroughSelect(); 
+
+radiobtn = document.getElementById("lfo1-custom-wave");
+radiobtn.checked = true;
+
+setWaveformlfo1();
+ });
+ }
+  if(document.getElementById("custom-wave-selectLfo2")){
+
+ document.getElementById("custom-wave-selectLfo2").addEventListener('change', function() { 
+setWaveformSubThroughSelect(); 
+
+radiobtn = document.getElementById("lfo2-custom-wave");
+radiobtn.checked = true;
+
+setWaveform2fo1();
+ });
+}
 
 
 document.getElementById("custom-patch-select").addEventListener('change', function() { 
@@ -2190,14 +2266,23 @@ if(noteSelects.length >currentNoteIndex){
  }
   
  
-function playOtherOscWithWithoutPulse(time,noteLength,pulseTime,pulseHz,lfoHz,type,lfoGain,noteGain,isWithVibration, isLFO,sustainLevel,attackTime,releaseTime,isWithPulse) {//REF: https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Advanced_techniques
+function playOtherOscWithWithoutPulse(time,noteLength,pulseTime,pulseHz,lfoHz,type,lfoGain,noteGain,isWithVibration, isLFO,sustainLevel,attackTime,releaseTime,isWithPulse, isCustomWave,customWave) {//REF: https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Advanced_techniques
 
  
 //pulseTime= noteLength;
 
     let osc = context.createOscillator();
-		osc.type =  type;
-
+	
+	if(typeof customWave != "undefined" &&isCustomWave){   
+    var imag= customWave.imag;   
+    var real =customWave.real; 
+    var customW = context.createPeriodicWave(real, imag);  
+    osc.setPeriodicWave(customW);
+}
+else{
+    osc.type = type;
+	}
+ 
 let amp;
  amp = noteGain;
 if(isWithPulse){
@@ -2212,7 +2297,16 @@ amp.gain.setValueAtTime(0.01, context.currentTime+ noteLength);
 
 
     let lfo = context.createOscillator();
-    lfo.type = type;//'square';
+	if(typeof customWave != "undefined" &&isCustomWave){   
+    var imag= customWave.imag;   
+    var real =customWave.real; 
+    var customW = context.createPeriodicWave(real, imag);  
+    lfo.setPeriodicWave(customW);
+}
+else{
+    lfo.type = type;
+	}
+
   	if(isLFO ==true){
   osc.frequency.value = lfoHz;//+parseFloat(pitchAmount);
 
@@ -2407,7 +2501,13 @@ return;
 	freqAmountOsc2LFO = (document["mainOscFreqAtTime"] +parseFloat(lfo1PitchAmount))/10;
 	//lfo1PitchAmount= parseFloat(pitchAmount)
 	}
-  var osc2=playOtherOscWithWithoutPulse(context.currentTime,noteLength,0.1, freqAmountOsc2,freqAmountOsc2LFO,waveformLfo1,lfoGain,noteGain,document.getElementById("chVibLFO1").checked,document.getElementById("chlfo1On").checked,sustainlfo1Level,0.05,0.05, document.getElementById('chlfo1Pulse').checked);//https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Advanced_techniques
+	
+	var isCustomWaveOsc2 = false;
+if(	document.getElementById('lfo1-custom-wave'))
+{
+isCustomWaveOsc2 = document.getElementById('lfo1-custom-wave').checked
+}
+  var osc2=playOtherOscWithWithoutPulse(context.currentTime,noteLength,0.1, freqAmountOsc2,freqAmountOsc2LFO,waveformLfo1,lfoGain,noteGain,document.getElementById("chVibLFO1").checked,document.getElementById("chlfo1On").checked,sustainlfo1Level,0.05,0.05, document.getElementById('chlfo1Pulse').checked,isCustomWaveOsc2,customWaveSelectedLfo1);//https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Advanced_techniques
  
 if(document.getElementById("chVibLFO1").checked){
 osc2.detune.value = detuneAmount;
@@ -2429,7 +2529,12 @@ osc2.detune.value = detuneAmount;
 	freqAmountOsc3LFO = (document["mainOscFreqAtTime"] +parseFloat(lfo2PitchAmount))/10;
 	}
 	
- 	var osc3=playOtherOscWithWithoutPulse(context.currentTime,noteLength,0.1, freqAmountOsc3,freqAmountOsc3LFO,waveformLfo2,lfoGain,noteGain,document.getElementById("chVibLFO2").checked,document.getElementById("chlfo2On").checked,sustainlfo2Level,0.05,0.05, document.getElementById('chlfo2Pulse').checked);//https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Advanced_techniques
+		var isCustomWaveOsc3 = false;
+if(	document.getElementById('lfo2-custom-wave'))
+{
+isCustomWaveOsc3 = document.getElementById('lfo2-custom-wave').checked
+}
+ 	var osc3=playOtherOscWithWithoutPulse(context.currentTime,noteLength,0.1, freqAmountOsc3,freqAmountOsc3LFO,waveformLfo2,lfoGain,noteGain,document.getElementById("chVibLFO2").checked,document.getElementById("chlfo2On").checked,sustainlfo2Level,0.05,0.05, document.getElementById('chlfo2Pulse').checked,isCustomWaveOsc3,customWaveSelectedLfo2);//https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Advanced_techniques
 	if(document.getElementById("chVibLFO2").checked){	
 osc3.detune.value = detuneAmount;
 }
