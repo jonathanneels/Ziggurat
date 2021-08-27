@@ -257,6 +257,12 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
 
 
 }
+  @media (min-width:960px){  
+   	#sScaleSet{         margin-top: -20px;}
+			#sScaleSet button{       width:180px; }
+
+}
+ 
 
 #btnRandomChord {position: absolute; right: 0;margin-right:15px;     top: auto !important;}/*IMPORTANT : https://stackoverflow.com/questions/51497265/prevent-animation-jump-when-making-div-fixed */
 #btnClassicKeyboard {position: absolute; left: 0;margin-left:25px; top: auto !important;}
@@ -3510,42 +3516,58 @@ if(limitRefresh <= currentRefreshCounterId){
 	//document.getElementById("lblOverloadCheck").innerHTML=average.toFixed(2) ; 
 	 		document.getElementById("lblOverloadCheck").innerHTML="<span id='lblOverloadCheckSpan'>"+average.toFixed(2).toString()+"<br> <p style='opacity: 0;'>hidden lay-out</p></span>";//lay-out conform if info follows 
 
-			if( document.body.contains( document.querySelector("#chIgnoreOverload")) &&  document.getElementById("chIgnoreOverload").checked  && (average >90  )) // making sure the app won't slow down. (refresh page req.)
+			if( document.body.contains( document.querySelector("#chIgnoreOverload")) &&  document.getElementById("chIgnoreOverload").checked  && (average >90 && !isBroken  )) // making sure the app won't slow down. (refresh page req.)
 	{
  	isBroken=true;
  	} 
-	else	if((!document.body.contains( document.querySelector("#chIgnoreOverload")) ||  !document.getElementById("chIgnoreOverload").checked ) && (average >90 || isBroken)) // making sure the app won't slow down. (refresh page req.)
+	else	if((!document.body.contains( document.querySelector("#chIgnoreOverload")) ||  !document.getElementById("chIgnoreOverload").checked ) && (average >90  )) // making sure the app won't slow down. (refresh page req.)
 	{
 	isPlaying=false;
 	isBroken=true;
  	} 
 
-	else if(average >40)
+	else if(average >40 && average <=90)
 	{isRisk=true;
 		isBroken=false; 
 	} 
 	
-	else{isRisk=false;		isBroken=false;}
+	else if( average <=40){isRisk=false;		isBroken=false;}
+	}
+	else if( average <=40){//typeof average == "undefined" ||
+	isRisk=false;		isBroken=false;
 	}
 	
-
-	         draw();
+ 	         draw();
 			 currentRefreshCounterId=0;
 }
  			if( document.body.contains( document.querySelector("#chIgnoreOverload")) && document.getElementById("chIgnoreOverload").checked  && isBroken)    
 	{
- 		document.getElementById("lblOverloadCheck").innerHTML="<span style='color:red;' id='lblOverloadCheckSpan'>Continue<br>@ own risk...</span>"; 
+	if(typeof average != "undefined"){
+ 		document.getElementById("lblOverloadCheck").innerHTML="<span style='color:red;' id='lblOverloadCheckSpan'>"+average.toFixed(2).toString()+"</span>"//Continue<br>@ own risk...</span>"; 
+	}
 	} 
 	else	if((!document.body.contains( document.querySelector("#chIgnoreOverload")) ||  !document.getElementById("chIgnoreOverload").checked ) &&  isBroken)   
 	{
- 		document.getElementById("lblOverloadCheck").innerHTML="<span style='color:red;' id='lblOverloadCheckSpan'>OVERLOAD!<br>Stopping synth...</span>"; 
+		if(typeof average != "undefined"){
+
+ 		document.getElementById("lblOverloadCheck").innerHTML="<span style='color:red;' id='lblOverloadCheckSpan'>OVERLOAD!<br>Stopped synth...</span>"; 
+	}
 	}
 else if(isRisk ||filterLimitsCheck())  
    
 {
-	document.getElementById("lblOverloadCheck").innerHTML="<span style='color:orange;' id='lblOverloadCheckSpan'>TENSION!<br>Limit switches on.</span>"
+		if(typeof average != "undefined"){
+
+	document.getElementById("lblOverloadCheck").innerHTML="<span style='color:orange;' id='lblOverloadCheckSpan'>"+average.toFixed(2).toString()+"</span>";//TENSION!<br>Limit switches on.</span>"
+}
 
 }
+else		if(typeof average != "undefined"){
+			 		document.getElementById("lblOverloadCheck").innerHTML="<span id='lblOverloadCheckSpan'>"+average.toFixed(2).toString()+"<br> <p style='opacity: 0;'>hidden lay-out</p></span>";//Default
+
+}
+ 
+ 
 	//disableFiltersIfMainIsOff();
 
 }
