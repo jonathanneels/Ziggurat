@@ -3514,7 +3514,7 @@ if(limitRefresh <= currentRefreshCounterId){
 //	console.log(average);
 	if(  document.getElementById("lblOverloadCheck") != null){ 
 	//document.getElementById("lblOverloadCheck").innerHTML=average.toFixed(2) ; 
-	 		document.getElementById("lblOverloadCheck").innerHTML="<span id='lblOverloadCheckSpan'>"+average.toFixed(2).toString()+"<br> <p style='opacity: 0;'>hidden lay-out</p></span>";//lay-out conform if info follows 
+	 		document.getElementById("lblOverloadCheck").innerHTML="<span style='color:white;' id='lblOverloadCheckSpan'>"+average.toFixed(2).toString()+"<br> <p style='opacity: 0;'>hidden lay-out</p></span>";//lay-out conform if info follows 
 
 			if( document.body.contains( document.querySelector("#chIgnoreOverload")) &&  document.getElementById("chIgnoreOverload").checked  && (average >90 && !isBroken  )) // making sure the app won't slow down. (refresh page req.)
 	{
@@ -3543,7 +3543,7 @@ if(limitRefresh <= currentRefreshCounterId){
  			if( document.body.contains( document.querySelector("#chIgnoreOverload")) && document.getElementById("chIgnoreOverload").checked  && isBroken)    
 	{
 	if(typeof average != "undefined"){
- 		document.getElementById("lblOverloadCheck").innerHTML="<span style='color:red;' id='lblOverloadCheckSpan'>"+average.toFixed(2).toString()+"</span>"//Continue<br>@ own risk...</span>"; 
+ 			document.getElementById("lblOverloadCheck").innerHTML="<span style='color:red;' id='lblOverloadCheckSpan'>"+average.toFixed(2).toString()+"<br> <p style='opacity: 0;'>hidden lay-out</p></span>"//Continue<br>@ own risk...</span>"; 
 	}
 	} 
 	else	if((!document.body.contains( document.querySelector("#chIgnoreOverload")) ||  !document.getElementById("chIgnoreOverload").checked ) &&  isBroken)   
@@ -3551,6 +3551,8 @@ if(limitRefresh <= currentRefreshCounterId){
 		if(typeof average != "undefined"){
 
  		document.getElementById("lblOverloadCheck").innerHTML="<span style='color:red;' id='lblOverloadCheckSpan'>OVERLOAD!<br>Stopped synth...</span>"; 
+			stopButton.style.background='red';
+
 	}
 	}
 else if(isRisk ||filterLimitsCheck())  
@@ -3558,12 +3560,12 @@ else if(isRisk ||filterLimitsCheck())
 {
 		if(typeof average != "undefined"){
 
-	document.getElementById("lblOverloadCheck").innerHTML="<span style='color:orange;' id='lblOverloadCheckSpan'>"+average.toFixed(2).toString()+"</span>";//TENSION!<br>Limit switches on.</span>"
+		document.getElementById("lblOverloadCheck").innerHTML="<span style='color:orange;' id='lblOverloadCheckSpan'>"+average.toFixed(2).toString()+"<br> <p style='opacity: 0;'>hidden lay-out</p></span>"//TENSION!<br>Limit switches on.</span>"
 }
 
 }
 else		if(typeof average != "undefined"){
-			 		document.getElementById("lblOverloadCheck").innerHTML="<span id='lblOverloadCheckSpan'>"+average.toFixed(2).toString()+"<br> <p style='opacity: 0;'>hidden lay-out</p></span>";//Default
+			 		document.getElementById("lblOverloadCheck").innerHTML="<span style='color:white;' id='lblOverloadCheckSpan'>"+average.toFixed(2).toString()+"<br> <p style='opacity: 0;'>hidden lay-out</p></span>";//Default
 
 }
  
