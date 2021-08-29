@@ -345,6 +345,7 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
 
 <h3 id="h3SignalsMainInfo"  >Signals</h3> 
 	       <label   for="chnoiseFreq">Noise</label> <input type="checkbox" id="chnoiseFreq">  <br>
+		   	       <label   for="chTremolo">Tremolo</label> <input type="checkbox" id="chTremolo">  <br>
 		   	       <label   for="chLowpass">Lowpass</label> <input type="checkbox" id="chLowpass"> <br> 
 		   	       <label   for="chPinkFilter">Pink filter</label> <input type="checkbox" id="chPinkFilter">   <br> 
       <input hidden type="range" id="noiseFreq-length-control" value="244" min="100" max="500" step="50">
@@ -2602,6 +2603,50 @@ effect.connect(noteGain);// master audio => instead of effect.connect(context.de
 
 }
 }
+
+    if( document.getElementById("chTremolo") ){
+if(document.getElementById("chTremolo").checked  ){  //REF: https://www.redblobgames.com/x/1618-webaudio/
+  // on a later date set the tremolo rate.
+var k1 = 1, k2 = 0.5;
+    var T = context.currentTime;
+
+    var oscx= context.createOscillator();
+    oscx.frequency.value = 10;
+oscx.connect(masterVolume);
+	audioContextSources.push(oscx); 
+
+ 
+    var gain2 = context.createGain();
+    oscx.connect(gain2.gain);
+    gain2.gain.value = k2;
+
+    var effect = context.createGain();
+    effect.gain.value = k1;
+    oscx.connect(effect.gain);
+ 
+     oscx.start(T);
+      oscx.stop(context.currentTime + noteLength);
+
+if(isOtherOscsLinkedToMainOsc){
+    noteGain.connect( effect );
+	    noteGain.connect( gain2 );
+
+   // effect.connect( context.destination ); 
+effect.connect(masterVolume);
+gain2.connect(masterVolume);
+
+}
+else{
+osc.connect(effect);
+osc.connect(gain2);
+
+//effect.connect(context.destination);
+effect.connect(noteGain);// master audio => instead of effect.connect(context.destination)
+gain2.connect(noteGain);
+}
+
+}
+}
 if(document.getElementById("chLowpass").checked  ){	//REF: https://noisehack.com/custom-audio-effects-javascript-web-audio-api/
 
 var bufferSize = 2048 ;//1024;//4096;
@@ -3135,6 +3180,14 @@ patchName="newProject";
       document.getElementById("chNoLinkToOtherSignals2").setAttribute("checked", "checked");
   } else {
       document.getElementById("chNoLinkToOtherSignals2").removeAttribute("checked");
+  }
+  }
+    if( document.getElementById("chTremolo") ){
+
+    if (document.getElementById("chTremolo").checked) {
+      document.getElementById("chTremolo").setAttribute("checked", "checked");
+  } else {
+      document.getElementById("chTremolo").removeAttribute("checked");
   }
   }
 //////////////////////////////////////////////////////////////////
