@@ -3694,5 +3694,130 @@ if(!iFrameDetection){
 }
 </script>
 
+
+<script>
+var supportsWebSockets = 'WebSocket' in window || 'MozWebSocket' in window;
+if (supportsWebSockets) {
+
+// REFERENCE PROJECT ArduinoCommunicationHC05
+// Important is first to cast x in the arduino communication (once), to silence the bot. Then type f, with checked auto-repeat.
+var isWithUltraSonicSensor=true;
+var isSocketCast=false;
+if(isWithUltraSonicSensor){
+let url = 'ws://127.0.0.1:7008/sensordata'; 
+  let outgoingMessage = "a";
+var socketTimeout;
+try{
+ let socket = new WebSocket(url);
+ 
+// handle incoming messages
+socket.onmessage = function(event) {
+  let incomingMessage = event.data;
+  handleMessage(incomingMessage);
+  
+};
+
+socket.onclose = event => console.log(`Closed ${event.code}`);
+
+// show message in div#messages
+function handleMessage(message) {
+if(message != "000" && !isBroken &&!isSocketCast && parseFloat(message)>15 &&  parseFloat(message)<750 ){
+isSocketCast=true;
+//console.log(message)
+     	playCurrentNote(parseFloat(message));
+		socketTimeout=setTimeout(function(){  isSocketCast=false; socket.send(outgoingMessage);}, 250);//(noteLength*1000)-((noteLength*1000)/10));
+
+}
+else
+{
+isPlaying=false;
+socketTimeout=setTimeout(function(){  isSocketCast=false; socket.send(outgoingMessage);}, 100);
+
+}
+}
+
+document.addEventListener("DOMContentLoaded", function(event) { 
+setTimeout(function(){
+socketTimeout=setTimeout(function(){  isSocketCast=false; socket.send(outgoingMessage);}, (noteLength*1000)-((noteLength*1000)/10));
+}, 2000);
+});
+}
+catch(err)
+{clearInterval(socketTimeout);
+isSocketCast=false;
+
+}
+}
+}
+
+</script>
+<script>
+// acceloremusic
+var isAcceleroMusic=true;
+if(isMobile() && isAcceleroMusic)
+{
+//REF: https://codepen.io/galt/pen/mQdwOy
+
+// all from http://www.albertosarullo.com/demos/accelerometer/
+var x = 0;
+ 
+
+if (window.DeviceMotionEvent != undefined) {
+	window.ondevicemotion = function(e) {
+ 		console.log(e.accelerationIncludingGravity.x);
+		/*document.getElementById("accelerationY").innerHTML = e.accelerationIncludingGravity.y;
+		document.getElementById("accelerationZ").innerHTML = e.accelerationIncludingGravity.z;
+ 	*/
+ x=e.accelerationIncludingGravity.x;
+	}
+
+	setInterval( function() {
+		 
+	 
+		
+		var currentAcceloNote=(parseFloat(Math.abs(x))*100).toFixed(2);
+		
+		document.getElementById("h2Notes").style.marginTop = "-15px";
+				document.getElementById("h2Notes").style.marginLeft = "-5px";
+
+				document.getElementById("h2Notes").style.backgroundColor = "grey"; 
+						document.getElementById("h2Notes").style.width = "10000px";
+			
+			var additions = "";
+			if(currentAcceloNote <100)
+			{
+			additions="0";
+			} 
+			
+			//console.log(notes )
+					var noteAsValue= "";
+	for (let i = 0; i < Object.keys(notes).length; i++) {
+  //console.log(Object.keys(notes)[i]);
+  //console.log( parseInt((notes)[Object.keys(notes)[i]]))
+ if((parseInt((notes)[Object.keys(notes)[i]]) ==currentAcceloNote  ||   parseInt((notes)[Object.keys(notes)[i]]) > currentAcceloNote)  && !Object.keys(notes)[i].includes('#'))
+ {
+ noteAsValue=Object.keys(notes)[i];
+  additions= "|"; 
+ break;
+ }
+}
+if( noteAsValue !=""){document.getElementById("h2Notes").innerHTML=noteAsValue+additions+" click here to play note.";}
+else{		document.getElementById("h2Notes").innerHTML=additions+(currentAcceloNote).toString();}
+		
+		document.getElementById("h2Notes"). onclick = function(event) {  
+
+		if(currentAcceloNote > 150 && currentAcceloNote < 1000){
+		     	playCurrentNote(currentAcceloNote);
+				}
+				}
+
+	}, noteLength*100);
+} 
+
+
+ 
+
+}
+</script>
   </body>
 </html>
