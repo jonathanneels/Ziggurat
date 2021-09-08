@@ -3753,7 +3753,7 @@ else{		document.getElementById("h2Notes").innerHTML=additions+(currentAcceloNote
 		
 		document.getElementById("h2Notes"). onclick = function(event) {  
 
-		if(currentAcceloNote > 150 && currentAcceloNote < 1000){
+				if(currentAcceloNote > 0 && currentAcceloNote < 1000){//if(currentAcceloNote > 150 && currentAcceloNote < 1000){
 		if( noteAsValueFloatFreq >0.0){playCurrentNote(noteAsValueFloatFreq);}
 		else{ playCurrentNote(currentAcceloNote);}
 				}
