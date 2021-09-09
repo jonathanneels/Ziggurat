@@ -253,13 +253,16 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
   @media (max-width:960px) and (min-width:600px){  
    	#sScaleSet{         margin-top: 10px;}
 
-  #note-selects-divDeepest{width:61vw;  margin: auto; max-height:40px;}
+  #note-selects-divDeepest{width:61vw;  margin: auto; height:100px; max-height:100px;}
+  #note-selects-divDeepest{overflow:hidden;}
+  #note-selects-div{overflow:auto;}
 
 
 }
   @media (min-width:960px){  
    	#sScaleSet{         margin-top: -20px;}
 			#sScaleSet button{       width:180px; }
+  #note-selects-divDeepest{  height:120px; max-height:120px;}
 
 }
  
@@ -1804,6 +1807,9 @@ document.getElementById('chLockPianoNotes').addEventListener('change', (event) =
    randomChordButton.style.visibility= "hidden";
 //document.getElementById("note-selects-divDeepest").style.overflow = 'hidden';
 document.getElementById("note-selects-divDeepest").style.setProperty("overflow", "hidden", "important")
+document.getElementById("note-selects-div").style.setProperty("overflow", "hidden", "important")
+
+
 
   } else {
 
@@ -1814,6 +1820,7 @@ document.getElementById("note-selects-divDeepest").style.setProperty("overflow",
    randomChordButton.style.visibility= "visible";
 //document.getElementById("note-selects-divDeepest").style.overflow = 'auto';
 document.getElementById("note-selects-divDeepest").style.setProperty("overflow", "auto", "important")
+document.getElementById("note-selects-div").style.setProperty("overflow", "auto", "important")
 
   }
 
@@ -3721,7 +3728,7 @@ if (window.DeviceMotionEvent != undefined) {
 		
 		var currentAcceloNote=(parseFloat(Math.abs(x))*100).toFixed(2);
 		
-		                document.getElementById("h2Notes").style.marginTop = "-3%";
+		document.getElementById("h2Notes").style.marginTop = "-3.5%";
 				document.getElementById("h2Notes").style.marginLeft = "-5px";
 
 				document.getElementById("h2Notes").style.backgroundColor = "grey"; 
