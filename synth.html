@@ -286,6 +286,8 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
      background-color: #434a40; 
  }
 
+ 
+
   </style>
 </head>
   <body class="text-selection-none" id="body"  onclick="openFullscreen()">
@@ -471,7 +473,7 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
       <label for="lfo1-sawtooth-wave"> &#9727;</label> 
 	  
 	        <br><input type="radio" id="lfo1-custom-wave" name="osc1-waveform" value="custom">
-      <label for="custom-waveLfo1">Custom bank</label> 	   
+      <label for="custom-wave-selectLfo1">Custom bank</label> 	   
 <select name="custom-wave-selectLfo1" id="custom-wave-selectLfo1">
  </select>
  
@@ -522,7 +524,7 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
       <label for="lfo2-sawtooth-wave"> &#9727;</label>  
 	  
 	  	        <br><input type="radio" id="lfo2-custom-wave" name="osc2-waveform" value="custom">
-      <label for="custom-selectLfo2">Custom bank</label> 	   
+      <label for="custom-wave-selectLfo2">Custom bank</label> 	   
 <select name="custom-wave-selectLfo2" id="custom-wave-selectLfo2">
  </select>
 
@@ -3257,8 +3259,10 @@ stopButton.style.background='orange';
 
 //startButton.click(); // 1x activating
 					
+					  customWavesFiller();
+
 			  document.getElementById("custom-patch-select").options.length = 1;
-				customPatchesFiller()
+				customPatchesFiller();
 
 					document.getElementById('inputfile') .value = '';
 		 setWaveformSubThroughSelect();
