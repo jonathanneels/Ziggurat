@@ -246,13 +246,9 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
  	#note-selects-span{background-color:transparent !important;}
 	#sScaleSet{        display: flex;   justify-content: center;  }
 		#sScaleSet button{       width:80px; }
- @media (max-width:600px) {  
- 	#sScaleSet{         margin-top:5px;}
  
- } 
   @media (max-width:960px) and (min-width:600px){  
-   	/*#sScaleSet{         margin-top: 10px;}*/
-
+ 
   #note-selects-divDeepest{width:61vw;  margin: auto; height:100px; max-height:100px;}
   #note-selects-divDeepest{overflow:hidden;}
   #note-selects-div{overflow:auto;}
@@ -260,8 +256,7 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
 
 }
   @media (min-width:960px){  
-     	#sScaleSet{         margin-top: -50px; z-index:99999;} 
-			#sScaleSet button{       width:180px; }
+ 			#sScaleSet button{       width:180px; }
   #note-selects-divDeepest{  height:120px; max-height:120px;}
 
 }
@@ -282,6 +277,15 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
  #chlfo1On,#chlfo2On,#chOsc1On,#chOsc2On,#chlfo1Pulse,#chlfo2Pulse
 {margin-left:-40px;}
 #h3SignalsMainInfo{text-decoration: underline;}
+
+#sScaleSet {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  margin-bottom:2px;
+ }
+
   </style>
 </head>
   <body class="text-selection-none" id="body"  onclick="openFullscreen()">
