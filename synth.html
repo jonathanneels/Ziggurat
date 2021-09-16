@@ -3558,9 +3558,18 @@ var isPressureByFilters=((document.getElementById('chBitcrusher').checked &&docu
 (document.getElementById('chBitcrusher').checked &&document.getElementById('chPinkFilter').checked) ||
 (document.getElementById('chnoiseFreq').checked &&document.getElementById('chPinkFilter').checked) ||
 (document.getElementById('chLowpass').checked &&document.getElementById('chPinkFilter').checked) ||
+(document.getElementById('chLowpass').checked &&document.getElementById('chBitcrusher').checked) || 
+(document.getElementById('chLowpass').checked &&document.getElementById('chMoogfilter').checked) || 
+(document.getElementById('chLowpass').checked &&document.getElementById('chTremolo').checked) || 
+(document.getElementById('chLowpass').checked &&document.getElementById('chnoiseFreq').checked) || 
 (document.getElementById('chMoogfilter').checked &&document.getElementById('chPinkFilter').checked) ||
 (document.getElementById('chMoogfilter').checked &&document.getElementById('chnoiseFreq').checked)  ||
-(document.getElementById('chMoogfilter').checked &&document.getElementById('chBitcrusher').checked));
+(document.getElementById('chMoogfilter').checked &&document.getElementById('chBitcrusher').checked))||
+(document.getElementById('chLowpass').checked &&document.getElementById('chTremolo').checked)  ||
+(document.getElementById('chMoogfilter').checked &&document.getElementById('chTremolo').checked)  ||
+(document.getElementById('chBitcrusher').checked &&document.getElementById('chTremolo').checked)  ||
+(document.getElementById('chnoiseFreq').checked &&document.getElementById('chTremolo').checked)  ||
+(document.getElementById('chPinkFilter').checked &&document.getElementById('chTremolo').checked) ;
 return isPressureByFilters
  
 }
@@ -3571,6 +3580,8 @@ return false
 }
 javascriptNode.onaudioprocess = function () {
 currentRefreshCounterId+=1;
+
+var isLimitReach=filterLimitsCheck();
 
 if(limitRefresh <= currentRefreshCounterId){
  
@@ -3623,7 +3634,7 @@ if(limitRefresh <= currentRefreshCounterId){
 
 	}
 	}
-else if(isRisk ||filterLimitsCheck())  
+else if(isRisk ||isLimitReach)  
    
 {
 		if(typeof average != "undefined"){
@@ -3633,8 +3644,14 @@ else if(isRisk ||filterLimitsCheck())
 
 }
 else		if(typeof average != "undefined"){
-			 		document.getElementById("lblOverloadCheck").innerHTML="<span style='color:white;' id='lblOverloadCheckSpan'>"+average.toFixed(2).toString()+"<br> <p style='opacity: 0;'>hidden lay-out</p></span>";//Default
 
+if(isLimitReach){
+			 		document.getElementById("lblOverloadCheck").innerHTML="<span style='color:orange;' id='lblOverloadCheckSpan'>"+average.toFixed(2).toString()+"<br> <p style='opacity: 0;'>hidden lay-out</p></span>";//Default
+
+}
+else{
+			 		document.getElementById("lblOverloadCheck").innerHTML="<span style='color:white;' id='lblOverloadCheckSpan'>"+average.toFixed(2).toString()+"<br> <p style='opacity: 0;'>hidden lay-out</p></span>";//Default
+}
 }
  
  
