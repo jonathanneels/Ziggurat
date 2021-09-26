@@ -1763,6 +1763,12 @@ if( event.target.id == stopButton.id ) {//stopButton.addEventListener('click', f
 	//context.suspend();
 	removeAudioSources();
 	
+	// not perfect here (sometimes key will be decolored after long note length and quick press tbc
+		setCurrentNotes();
+	colorChangedKeyboard={};
+/////////////////////////
+
+
 	if(stopButton.style.background !='orange')
 	{
 	
@@ -2029,8 +2035,14 @@ document.getElementById("btnBackgroundColorNotes").addEventListener('click', (e)
  
 document.addEventListener('keydown', (event) => {
 	
+	[].forEach.call(document.querySelectorAll('.creationMode'),(e) => {
+	stopButton.style.background = "orange"; // added quick & dirty 
+});
+
 	var i=0;
 [].forEach.call(document.querySelectorAll('.pianoMode'),(e) => {
+
+	stopButton.style.background = "orange"; // added quick & dirty 
 
    var x = event.keyCode;
   //console.log(x)
@@ -2884,15 +2896,23 @@ bufferSize =  256;
 }
 var whiteNoise = context.createScriptProcessor(bufferSize, 1, 1);
 whiteNoise.onaudioprocess = function(e) {
+
+if(stopButton.style.background == "red" ) // quick & dirty, tbc
+{
+clearTimeout(whiteNoise.timeoutHandler);
+whiteNoise.onaudioprocess = null;
+}
+ 
     var output = e.outputBuffer.getChannelData(0);
     for (var i = 0; i < bufferSize; i++) {
         output[i] = Math.random() * 2 - 1;
     }
-			setTimeout(function(){ //without timeout just a beep
+		whiteNoise.timeoutHandler=	setTimeout(function(){ //without timeout just a beep
 	 whiteNoise.onaudioprocess = null; //IMPORTANT:https://stackoverflow.com/questions/17648819/how-can-i-stop-a-web-audio-script-processor-and-clear-the-buffer
     return null;
 		},  (noteLength*1000)-((noteLength*1000)/10) ); // -((noteLength*1000)/10)  is the time less to stop. Increases performance (every sound 10% less processing required).
 
+ 
 }
  
  // added extra condition here. The noise is strong!:
