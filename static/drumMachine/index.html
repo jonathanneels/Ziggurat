@@ -227,6 +227,38 @@ function modifyInputs() {
 										document.getElementById("localStorageActions").style.visibility = 'hidden';
  
 setTimeout(function(){ 
+
+var touchtime=0;
+  var rangeList= document.querySelectorAll('input[type="range"]'); 
+  for (let i = 0; i < rangeList.length; i++) {
+
+rangeList[i].addEventListener('click', function(event) {
+     if (touchtime == 0) {
+        // set first click
+        touchtime = new Date().getTime();
+    } else {
+        // compare first click to this click and see if they occurred within double click threshold
+        if (((new Date().getTime()) - touchtime) < 800) {
+            // double click occurred
+            
+			var rangeInput = prompt("Set value", "1");
+
+if (rangeInput != null && !isNaN(rangeInput)) {
+  rangeList[i].value= parseFloat(rangeInput);
+  rangeList[i].defaultValue = parseFloat(rangeInput);
+   modifyInputs();  
+
+}
+
+			
+            touchtime = 0;
+        } else {
+            // not a double click so set as a new first click
+            touchtime = new Date().getTime();
+        }
+    }
+});
+}
 //startRecordAudio(false);setTimeout(function(){ 	  document.getElementById("stop").click();;stopRecordAudio()}, 10000);
 modifyInputs();
 
