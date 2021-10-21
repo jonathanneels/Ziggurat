@@ -620,6 +620,8 @@ if(document.body.contains(document.getElementById("fourth2"))){
 </script>
 
 <script>
+	var touchtime = 0;
+
 function domElementsAsAnalogSynth()
 { var rangeList= document.querySelectorAll('input[type="range"]'); 
   for (let i = 0; i < rangeList.length; i++) {
@@ -627,7 +629,37 @@ function domElementsAsAnalogSynth()
   rangeList[i].setAttribute('data-diameter', 60);
     rangeList[i].setAttribute('data-src',"./static/images/knob70Alt2.png");  
     rangeList[i].setAttribute('data-sprites',"100");  
- }
+	
+	
+ 
+rangeList[i].addEventListener('click', function(event) {
+     if (touchtime == 0) {
+        // set first click
+        touchtime = new Date().getTime();
+    } else {
+        // compare first click to this click and see if they occurred within double click threshold
+        if (((new Date().getTime()) - touchtime) < 800) {
+            // double click occurred
+            
+			var rangeInput = prompt("Set value", "1");
+
+if (rangeInput != null && !isNaN(rangeInput)) {
+  rangeList[i].value= parseFloat(rangeInput);
+  rangeList[i].defaultValue = parseFloat(rangeInput);
+   removeLabelSliderValueReferences();
+  modifyInputs();  
+
+}
+
+			
+            touchtime = 0;
+        } else {
+            // not a double click so set as a new first click
+            touchtime = new Date().getTime();
+        }
+    }
+});
+  
 
  var checkboxList= document.querySelectorAll('input[type="checkbox"]'); 
   for (let i = 0; i < checkboxList.length; i++) {
@@ -645,6 +677,8 @@ function domElementsAsAnalogSynth()
 
 //document.getElementById("fourth2").style.height =  document.getElementById("vibrato-options").offsetHeight*1.3
 
+
+}
 }
 function removeDomElementsAsAnalogSynth()
 { var rangeList= document.querySelectorAll('input[type="range"]'); 
@@ -717,6 +751,18 @@ function httpGet(theUrl)//REF: https://stackoverflow.com/questions/247483/http-g
  return true;
 }
 else{return false;}
+}
+function iOS() {
+  return [
+    'iPad Simulator',
+    'iPhone Simulator',
+    'iPod Simulator',
+    'iPad',
+    'iPhone',
+    'iPod'
+  ].includes(navigator.platform)
+  // iPad on iOS 13 detection
+  || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
 }
 function generateRandomIntegerInRange(min, max) {  
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -3681,6 +3727,8 @@ else{
 
 }
 
+ 
+
 var iFrameDetection=true;
 document.addEventListener("DOMContentLoaded", function(event) {
 
@@ -3748,7 +3796,7 @@ if(!iFrameDetection){
 <script>
 // acceloremusic
 var isAcceleroMusic=true;
-if(isMobile() && isAcceleroMusic)
+if(isMobile() && isAcceleroMusic && !iOS())
 {
 //REF: https://codepen.io/galt/pen/mQdwOy
 
