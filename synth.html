@@ -646,18 +646,23 @@ function domElementsAsAnalogSynth()
  });
 
 	rangeList[i].addEventListener('mouseup', function(event) {
+			if( rangeList[i].min != rangeList[i].value || rangeList[i].value ==  rangeList[i].min + rangeList[i].step){  
 	  rangeList[i].value=lastValKnob;
   rangeList[i].defaultValue = lastValKnob;
-
+}
 		});
 			rangeList[i].addEventListener('touchcancel', function(event) {
+			if( rangeList[i].min != rangeList[i].value || rangeList[i].value ==  rangeList[i].min + rangeList[i].step){  
 	  rangeList[i].value=lastValKnob;
   rangeList[i].defaultValue = lastValKnob;
+}
 
 		});
 			rangeList[i].addEventListener('touchend', function(event) {
+			if( rangeList[i].min != rangeList[i].value || rangeList[i].value ==  rangeList[i].min + rangeList[i].step){  
 	  rangeList[i].value=lastValKnob;
   rangeList[i].defaultValue = lastValKnob;
+}
 
 		});
 ///////////////////////////////////////////////////////////
@@ -3823,6 +3828,65 @@ if(!iFrameDetection){
   }
   }
 }
+</script>
+<script>
+var supportsWebSockets = 'WebSocket' in window || 'MozWebSocket' in window;
+if (supportsWebSockets) {
+
+// REFERENCE PROJECT ArduinoCommunicationHC05
+// Important is first to cast x in the arduino communication (once), to silence the bot. Then type f, with checked auto-repeat.
+var isWithUltraSonicSensor=true;
+var isSocketCast=false;
+if(isWithUltraSonicSensor){
+let url = 'ws://127.0.0.1:7008/sensordata'; 
+  let outgoingMessage = "a";
+var socketTimeout;
+try{
+ let socket = new WebSocket(url);
+ 
+// handle incoming messages
+socket.onmessage = function(event) {
+  let incomingMessage = event.data;
+  handleMessage(incomingMessage);
+  
+};
+
+socket.onclose = event => console.log(`Closed ${event.code}`);
+
+// show message in div#messages
+function handleMessage(message) {
+if(message != "000" && !isBroken &&!isSocketCast && parseFloat(message)>15 &&  parseFloat(message)<750 ){
+isSocketCast=true;
+//console.log(message)
+     	playCurrentNote(parseFloat(message));
+		socketTimeout=setTimeout(function(){  isSocketCast=false; socket.send(outgoingMessage);}, 250);//(noteLength*1000)-((noteLength*1000)/10));
+
+}
+else
+{
+isPlaying=false;
+ document.getElementById("lblOverloadCheck").innerHTML="<span style='color:blue;' id='lblOverloadCheckSpan'>Waiting for external device. <p style='opacity: 0;'>hidden lay-out</p></span>";//lay-out conform if info follows 
+
+socketTimeout=setTimeout(function(){  isSocketCast=false; socket.send(outgoingMessage);}, 100);
+
+}
+}
+
+document.addEventListener("DOMContentLoaded", function(event) { 
+setTimeout(function(){
+socketTimeout=setTimeout(function(){  isSocketCast=false; socket.send(outgoingMessage);}, (noteLength*1000)-((noteLength*1000)/10));
+}, 2000);
+});
+}
+catch(err)
+{clearInterval(socketTimeout);
+isSocketCast=false;
+ document.getElementById("lblOverloadCheck").innerHTML="<span style='color:blue;' id='lblOverloadCheckSpan'>Waiting for external device. <p style='opacity: 0;'>hidden lay-out</p></span>";//lay-out conform if info follows 
+
+}
+}
+}
+
 </script>
 <script>
 // acceloremusic
