@@ -633,13 +633,16 @@ function domElementsAsAnalogSynth()
 	
 //////////// handling (bug?) custom knob release issue [somewhat dirty...]
 	rangeList[i].addEventListener('mousemove', function(event) {
- 	lastValKnob=rangeList[i].value;
+		if( rangeList[i].min != rangeList[i].value || rangeList[i].value ==  rangeList[i].min + rangeList[i].step){ 
+ 		lastValKnob=rangeList[i].value;
+}
 
  });
  
  	rangeList[i].addEventListener('touchmove', function(event) {
+		if( rangeList[i].min != rangeList[i].value || rangeList[i].value == rangeList[i].min + rangeList[i].step){ 
  		lastValKnob=rangeList[i].value;
-
+}
  });
 
 	rangeList[i].addEventListener('mouseup', function(event) {
