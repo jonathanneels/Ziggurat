@@ -621,7 +621,7 @@ if(document.body.contains(document.getElementById("fourth2"))){
 
 <script>
 	var touchtime = 0;
-
+var lastValKnob= 0;
 function domElementsAsAnalogSynth()
 { var rangeList= document.querySelectorAll('input[type="range"]'); 
   for (let i = 0; i < rangeList.length; i++) {
@@ -631,7 +631,35 @@ function domElementsAsAnalogSynth()
     rangeList[i].setAttribute('data-sprites',"100");  
 	
 	
+//////////// handling (bug?) custom knob release issue [somewhat dirty...]
+	rangeList[i].addEventListener('mousemove', function(event) {
+ 	lastValKnob=rangeList[i].value;
+
+ });
  
+ 	rangeList[i].addEventListener('touchmove', function(event) {
+ 		lastValKnob=rangeList[i].value;
+
+ });
+
+	rangeList[i].addEventListener('mouseup', function(event) {
+	  rangeList[i].value=lastValKnob;
+  rangeList[i].defaultValue = lastValKnob;
+
+		});
+			rangeList[i].addEventListener('touchcancel', function(event) {
+	  rangeList[i].value=lastValKnob;
+  rangeList[i].defaultValue = lastValKnob;
+
+		});
+			rangeList[i].addEventListener('touchend', function(event) {
+	  rangeList[i].value=lastValKnob;
+  rangeList[i].defaultValue = lastValKnob;
+
+		});
+///////////////////////////////////////////////////////////
+		
+		
 rangeList[i].addEventListener('click', function(event) {
      if (touchtime == 0) {
         // set first click
