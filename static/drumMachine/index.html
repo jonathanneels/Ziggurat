@@ -120,7 +120,18 @@ document.getElementById("sampleSet").selectedIndex = "0";
  }, 300);
 
 
-
+function iOS() {
+  return [
+    'iPad Simulator',
+    'iPhone Simulator',
+    'iPod Simulator',
+    'iPad',
+    'iPhone',
+    'iPod'
+  ].includes(navigator.platform)
+  // iPad on iOS 13 detection
+  || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+}
 var recorder;
 function startRecordAudio(isSkipClick)//REF: https://hacks.mozilla.org/2016/04/record-almost-everything-in-the-browser-with-mediarecorder/
 {
@@ -240,18 +251,21 @@ var lastValKnob=0;
 //}
 
  });
- 
+ 		if(!iOS()) {
+
  	rangeList[i].addEventListener('touchmove', function(event) {
 	//	if( rangeList[i].min != rangeList[i].value || rangeList[i].value == rangeList[i].min + rangeList[i].step){ 
  		lastValKnob=rangeList[i].value;
 //}
  });
-
+	}
 	rangeList[i].addEventListener('mouseup', function(event) {
 	  rangeList[i].value=lastValKnob;
   rangeList[i].defaultValue = lastValKnob;
 
 		});
+		
+ 		if(!iOS()) {
 			rangeList[i].addEventListener('touchcancel', function(event) {
 
 
@@ -261,6 +275,7 @@ var lastValKnob=0;
   rangeList[i].defaultValue = lastValKnob;
 
 		});
+		}
 ///////////////////////////////////////////////////////////
 
 rangeList[i].addEventListener('click', function(event) {
@@ -272,8 +287,15 @@ rangeList[i].addEventListener('click', function(event) {
         if (((new Date().getTime()) - touchtime) < 800) {
             // double click occurred
             
-			var rangeInput = prompt("Set value", "1");
+   var rangeInput;
+			if(rangeList[i].labels[0] != "undefined"){
+			  rangeInput = prompt("Set value for "+rangeList[i].labels[0].textContent.split(":")[0], rangeList[i].value);
+				}
+				else
+				{
+							  rangeInput = prompt("Set value", rangeList[i].value);
 
+				}
 if (rangeInput != null && !isNaN(rangeInput)) {
   rangeList[i].value= parseFloat(rangeInput);
   rangeList[i].defaultValue = parseFloat(rangeInput);
