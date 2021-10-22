@@ -248,18 +248,23 @@ var lastValKnob=0;
  });
 
 	rangeList[i].addEventListener('mouseup', function(event) {
+			if( rangeList[i].min != rangeList[i].value || rangeList[i].value ==  rangeList[i].min + rangeList[i].step){  
 	  rangeList[i].value=lastValKnob;
   rangeList[i].defaultValue = lastValKnob;
-
+}
 		});
 			rangeList[i].addEventListener('touchcancel', function(event) {
+			if( rangeList[i].min != rangeList[i].value || rangeList[i].value ==  rangeList[i].min + rangeList[i].step){  
 	  rangeList[i].value=lastValKnob;
   rangeList[i].defaultValue = lastValKnob;
+}
 
 		});
 			rangeList[i].addEventListener('touchend', function(event) {
+			if( rangeList[i].min != rangeList[i].value || rangeList[i].value ==  rangeList[i].min + rangeList[i].step){  
 	  rangeList[i].value=lastValKnob;
   rangeList[i].defaultValue = lastValKnob;
+}
 
 		});
 ///////////////////////////////////////////////////////////
