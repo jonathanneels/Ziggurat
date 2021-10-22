@@ -235,36 +235,30 @@ var lastValKnob=0;
 
 //////////// handling (bug?) custom knob release issue [somewhat dirty...]
 	rangeList[i].addEventListener('mousemove', function(event) {
-		if( rangeList[i].min != rangeList[i].value || rangeList[i].value ==  rangeList[i].min + rangeList[i].step){ 
+	//	if( rangeList[i].min != rangeList[i].value || rangeList[i].value ==  rangeList[i].min + rangeList[i].step){ 
  		lastValKnob=rangeList[i].value;
-}
+//}
 
  });
  
  	rangeList[i].addEventListener('touchmove', function(event) {
-		if( rangeList[i].min != rangeList[i].value || rangeList[i].value == rangeList[i].min + rangeList[i].step){ 
+	//	if( rangeList[i].min != rangeList[i].value || rangeList[i].value == rangeList[i].min + rangeList[i].step){ 
  		lastValKnob=rangeList[i].value;
-}
+//}
  });
 
 	rangeList[i].addEventListener('mouseup', function(event) {
-			if( rangeList[i].min != rangeList[i].value || rangeList[i].value ==  rangeList[i].min + rangeList[i].step){  
 	  rangeList[i].value=lastValKnob;
   rangeList[i].defaultValue = lastValKnob;
-}
+
 		});
 			rangeList[i].addEventListener('touchcancel', function(event) {
-			if( rangeList[i].min != rangeList[i].value || rangeList[i].value ==  rangeList[i].min + rangeList[i].step){  
-	  rangeList[i].value=lastValKnob;
-  rangeList[i].defaultValue = lastValKnob;
-}
+
 
 		});
 			rangeList[i].addEventListener('touchend', function(event) {
-			if( rangeList[i].min != rangeList[i].value || rangeList[i].value ==  rangeList[i].min + rangeList[i].step){  
 	  rangeList[i].value=lastValKnob;
   rangeList[i].defaultValue = lastValKnob;
-}
 
 		});
 ///////////////////////////////////////////////////////////
