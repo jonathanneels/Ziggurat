@@ -60,7 +60,7 @@ resize: both;
  }
 } 
         .iframeSynth {
-             width: 95vw;//30vw;
+            width: 95vw;//30vw;
             height: 800px;//20vh;
             overflow-y: auto;
             overflow-x: auto;
@@ -68,7 +68,7 @@ resize: both;
             position: relative;
             z-index: 2;
 			max-width:95vw;
-        } 
+        }
 
 @media (max-width:960px) {
 .iframeSynth { 
@@ -376,16 +376,16 @@ innerDoc.querySelector("#blocks-control").setAttribute("max",999);
   innerDoc.querySelector("#divOscillator").innerHTML=  previousState;
 				classList[i].contentWindow.restoreDOMElements();
 				classList[i].contentWindow.currentNoteIndex=previousIndex;
-if(typeof  classList[i].contentWindow.modifyInputs() != "undefined"){   
-	   classList[i].contentWindow.modifyInputs();  
-	   }		//////  
+//if(typeof  classList[i].contentWindow.modifyInputs() != "undefined"){   
+	   classList[i].contentWindow.modifyInputs(true);  
+	//   }		//////  
 
 	 
 
 
-if(typeof classList[i] != "undefined" && typeof classList[i].contentWindow != "undefined" && typeof  classList[i].contentWindow.modifyInputs() != "undefined"){   
-	   classList[i].contentWindow.modifyInputs();  
-	   }
+//if(typeof classList[i] != "undefined" && typeof classList[i].contentWindow != "undefined" && typeof  classList[i].contentWindow.modifyInputs() != "undefined"){   
+	 //  classList[i].contentWindow.modifyInputs(true);  
+	 //  }
 }
 
 
@@ -397,9 +397,10 @@ innerDoc.querySelector("#tempo-control").setAttribute("max",300);
       innerDoc.querySelector("#tempo-control").defaultValue =Number(document.querySelector("#txtTempLength").value);  
    classList[i].contentWindow.tempo  = Number(document.querySelector("#txtTempLength").value)
  }
-if(typeof classList[i] != "undefined" && typeof  classList[i].contentWindow.modifyInputs() != "undefined"){   
-	   classList[i].contentWindow.modifyInputs();  
-	   }
+//if(typeof  classList[i].contentWindow.modifyInputs() != "undefined"){   
+	   classList[i].contentWindow.modifyInputs(true);  
+	//   }		//////  
+
 }
 if(document.querySelector("#chReqVoice").checked)
 {
@@ -743,9 +744,9 @@ if(innerDoc.body.contains( innerDoc.querySelector("#divOscillator"))){
   innerDoc.querySelector("#divOscillator").innerHTML ="";//key;
   innerDoc.querySelector("#divOscillator").innerHTML = jsonContent.synths[key];
 			document.getElementById(key).contentWindow.restoreDOMElements();
-if(typeof  document.getElementById(key).contentWindow.modifyInputs() != "undefined"){   
-	   document.getElementById(key).contentWindow.modifyInputs();  
-	   }  
+//if(typeof  document.getElementById(key).contentWindow.modifyInputs() != "undefined"){   
+	   document.getElementById(key).contentWindow.modifyInputs(true);  
+//	   }  
  }
 }
 	   

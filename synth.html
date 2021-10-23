@@ -714,7 +714,7 @@ if (rangeInput != null && !isNaN(rangeInput)) {
   rangeList[i].value= parseFloat(rangeInput);
   rangeList[i].defaultValue = parseFloat(rangeInput);
    removeLabelSliderValueReferences();
-  modifyInputs();  
+  modifyInputs(true);  
 
 }
 
@@ -922,24 +922,33 @@ catch(err)
 }
  }
 }
-function modifyInputs() {
+function modifyInputs(triggerChange) {
 	var inputs = document.getElementsByTagName("input");
 	for (var i = 0; i < inputs.length; i++) {
 		if (inputs[i].getAttribute("type") == "range") {
-			inputs[i].onchange = modifyOffset;
-				//		inputs[i].input = modifyOffset
-		// inputs[i].onchange = modifyOffset;
-			inputs[i].onmousemove = modifyOffset
-			inputs[i].ontouchmove = modifyOffset
-			inputs[i].touchstart = modifyOffset
+			//inputs[i].onchange = modifyOffset;
+			//	 inputs[i].input = modifyOffset
 
+			if(isMobile()){
+						inputs[i].ontouchmove = modifyOffset;
+			}
+			else{
+		 	inputs[i].onmousemove = modifyOffset;
+				inputs[i].input = modifyOffset;
+ 			}
+		//	inputs[i].touchstart = modifyOffset 
+
+		if(triggerChange ){
+		inputs[i].onchange = modifyOffset;
 			// the following taken from http://stackoverflow.com/questions/2856513/trigger-onchange-event-manually
-			if ("fireEvent" in inputs[i]) {
+		if ("fireEvent" in inputs[i]) {
 			    inputs[i].fireEvent("onchange");
 			} else {
 			    var evt = document.createEvent("HTMLEvents");
 			    evt.initEvent("change", false, true);
 			    inputs[i].dispatchEvent(evt);
+			}
+			
 			}
 		}
 	}
@@ -1382,7 +1391,7 @@ if(customPatchSelected != "")
               document.getElementById('divOscillator').innerHTML= customPatchSelected; 
 				restoreDOMElements();
 				  domElementsAsAnalogSynth();
-  modifyInputs(); 
+  modifyInputs(true); 
 
  
 				}
@@ -1698,7 +1707,7 @@ switchToLoadingScreen();
               document.getElementById('divOscillator').innerHTML= defaultPatch; 
 				restoreDOMElements();
 				  domElementsAsAnalogSynth();
-  modifyInputs(); 
+  modifyInputs(true); 
 
 }
 else{
@@ -3460,7 +3469,7 @@ removeAudioSources();
 //////////////////////////////////////////
 
 				restoreDOMElements();
-  modifyInputs(); 
+  modifyInputs(true); 
 
  // added for the AsAnalogSynth visuals (otherwise not necessary) => this is not required, just good to keep the index intact.
  currentNoteIndex=previousIndex;
@@ -3479,7 +3488,7 @@ document.body.addEventListener( 'click', function ( event ) {
                 document.getElementById('divOscillator').innerHTML= fr.result;
 				restoreDOMElements();
 				  domElementsAsAnalogSynth();
-  modifyInputs(); 
+  modifyInputs(true); 
 
 						 setTimeout(function(){ switchToSynthField();}, 2000);
 			
@@ -3792,7 +3801,7 @@ patchUrl = window.location.href.split("?")[1];
    
    document.getElementById("blocks-control").click();// BUGFIX (quick) because interation without click first wouldn't launch the thing...
 
-window.onload = modifyInputs; 
+window.onload = modifyInputs(true); 
   
   /*
   var node = document.createElement("small");                   
