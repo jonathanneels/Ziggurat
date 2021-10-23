@@ -248,6 +248,19 @@ function modifyInputs(triggerChange) {
 			}
 			
 			}
+			else ///REF: https://stackoverflow.com/questions/38420339/input-range-fires-input-event-on-mouseup-in-firefox
+			 	{
+					inputs[i].onchange = modifyOffset;
+
+				if ("fireEvent" in inputs[i]) {
+			    inputs[i].fireEvent("oninput");
+			} else {
+			    var evt = document.createEvent("HTMLEvents");
+			    evt.initEvent("input", false, true);
+			    inputs[i].dispatchEvent(evt);
+			}
+			 
+			}
 		}
 	}
 }
