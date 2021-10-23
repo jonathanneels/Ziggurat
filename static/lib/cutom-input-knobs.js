@@ -1,4 +1,16 @@
+var KNOBSENSIBILITY= 50// default: 200;
 window.addEventListener("load",()=>{
+	
+	if( navigator.userAgent.match(/Android/i)
+ || navigator.userAgent.match(/webOS/i)
+ || navigator.userAgent.match(/iPhone/i)
+ || navigator.userAgent.match(/iPad/i)
+ || navigator.userAgent.match(/iPod/i)
+ || navigator.userAgent.match(/BlackBerry/i)
+ || navigator.userAgent.match(/Windows Phone/i))
+ {
+	 KNOBSENSIBILITY= 1500;// high for mobile!
+ }
   let op=window.inputKnobsOptions||{};
   op.knobWidth=op.knobWidth||op.knobDiameter||64;
   op.knobHeight=op.knobHeight||op.knobDiameter||64;
@@ -135,7 +147,7 @@ input[type=checkbox].input-switch:checked,input[type=radio].input-switch:checked
       h=parseFloat(el.getAttribute("data-height")||d||st.height);
       bg=el.getAttribute("data-bgcolor")||op.bgcolor;
       fg=el.getAttribute("data-fgcolor")||op.fgcolor;
-      ik.sensex=ik.sensey=200;
+      ik.sensex=ik.sensey=KNOBSENSIBILITY;
       if(el.className.indexOf("input-knob")>=0)
         ik.itype="k";
       else{
