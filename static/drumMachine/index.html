@@ -119,6 +119,20 @@ document.getElementById("sampleSet").selectedIndex = "0";
 
  }, 300);
 
+function isMobile()//REF:https://redstapler.co/detect-mobile-device-with-javascript/#:~:text=The%20basic%20and%20easy%20way,extract%20the%20information%20like%20this.&text=alert(%22You're%20using,userAgent.
+{
+ if( navigator.userAgent.match(/Android/i)
+ || navigator.userAgent.match(/webOS/i)
+ || navigator.userAgent.match(/iPhone/i)
+ || navigator.userAgent.match(/iPad/i)
+ || navigator.userAgent.match(/iPod/i)
+ || navigator.userAgent.match(/BlackBerry/i)
+ || navigator.userAgent.match(/Windows Phone/i))
+ {
+ return true;
+}
+else{return false;}
+}
 
 function iOS() {
   return [
@@ -206,24 +220,33 @@ catch(err)
 }
  }
 }
-function modifyInputs() {
+function modifyInputs(triggerChange) {
 	var inputs = document.getElementsByTagName("input");
 	for (var i = 0; i < inputs.length; i++) {
 		if (inputs[i].getAttribute("type") == "range") {
-			inputs[i].onchange = modifyOffset;
-				//		inputs[i].input = modifyOffset
-		// inputs[i].onchange = modifyOffset;
-			inputs[i].onmousemove = modifyOffset
-			inputs[i].ontouchmove = modifyOffset
-			inputs[i].touchstart = modifyOffset
+			//inputs[i].onchange = modifyOffset;
+			//	 inputs[i].input = modifyOffset
 
+			if(isMobile()){
+						inputs[i].ontouchmove = modifyOffset;
+			}
+			else{
+		 	inputs[i].onmousemove = modifyOffset;
+				inputs[i].input = modifyOffset;
+ 			}
+		//	inputs[i].touchstart = modifyOffset 
+
+		if(triggerChange ){
+		inputs[i].onchange = modifyOffset;
 			// the following taken from http://stackoverflow.com/questions/2856513/trigger-onchange-event-manually
-			if ("fireEvent" in inputs[i]) {
+		if ("fireEvent" in inputs[i]) {
 			    inputs[i].fireEvent("onchange");
 			} else {
 			    var evt = document.createEvent("HTMLEvents");
 			    evt.initEvent("change", false, true);
 			    inputs[i].dispatchEvent(evt);
+			}
+			
 			}
 		}
 	}
@@ -299,7 +322,7 @@ rangeList[i].addEventListener('click', function(event) {
 if (rangeInput != null && !isNaN(rangeInput)) {
   rangeList[i].value= parseFloat(rangeInput);
   rangeList[i].defaultValue = parseFloat(rangeInput);
-   modifyInputs();  
+   modifyInputs(true);  
 
 }
 
@@ -313,7 +336,7 @@ if (rangeInput != null && !isNaN(rangeInput)) {
 });
 }
 //startRecordAudio(false);setTimeout(function(){ 	  document.getElementById("stop").click();;stopRecordAudio()}, 10000);
-modifyInputs();
+   modifyInputs(true);  
 
 
     try {//REF: https://stackoverflow.com/questions/326069/how-to-identify-if-a-webpage-is-being-loaded-inside-an-iframe-or-directly-into-t
