@@ -442,7 +442,7 @@ groundInfo.position.x=  -1.3;
 groundInfo.position.z=   0.2;
 
    InfoTexture.getContext().clearRect(0, 0, 512, 512);
-	InfoTexture.drawText( "Sine", 20, 200, "bold 150px Segoe UI", "white", "transparent");
+	InfoTexture.drawText( "Hi!", 20, 200, "bold 200px Segoe UI", "white", "transparent");
 
 	 }
 	 
@@ -1024,7 +1024,7 @@ if(window.game.scene.getMeshByName("cyLeft").rotation.y > 0.1)
 {
 window.game.scene.getMeshByName("cyLeft").rotation.y = 0.1; 
 }
-var cyleftVal=parseFloat(window.game.scene.getMeshByName("cyLeft").rotation.y ).toFixed(1)  ;//(Math.round(parseFloat(window.game.scene.getMeshByName("cyLeft").rotation.y*2.5)*2)/2)
+var cyleftVal=parseFloat(window.game.scene.getMeshByName("cyLeft").rotation.y ).toFixed(2)  ;//(Math.round(parseFloat(window.game.scene.getMeshByName("cyLeft").rotation.y*2.5)*2)/2)
       innerDoc.querySelector("input[id='note-length-control']").value =cyleftVal;
 	  innerDoc.querySelector("input[id='note-length-control']").defaultValue =cyleftVal;
   	 
