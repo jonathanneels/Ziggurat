@@ -1040,12 +1040,13 @@ var cyleftVal=parseFloat(window.game.scene.getMeshByName("cyLeft").rotation.y ).
 	      InfoTexture.getContext().clearRect(0, 0, 512, 512);
 				InfoTexture.drawText( "🦶: "+BMP, 20, 200, "bold 120px Segoe UI", "white", "transparent");
  
+ 	  clearTimeout(knobActionTimeout);
+	knobActionTimeout= setTimeout(function(){   
+
  intervalBMP = (60 / BMP) * 1000; 
  clearInterval( customBMPInterval);
  interValActions();
 
-	  clearTimeout(knobActionTimeout);
-	knobActionTimeout= setTimeout(function(){   
 	 		innerDoc.querySelector("input[id='note-length-control']").dispatchEvent(new Event("change"));
 			setBPMZiggurat();
  }, 200);
