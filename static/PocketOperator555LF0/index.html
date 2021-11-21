@@ -109,7 +109,8 @@ left:0;
 function goBackToPo()
 {
 	    document.getElementById("iframeWrite").style.display= "relative"
-	    document.getElementById("renderCanvas").style.display = "block"
+	    document.getElementById("renderCanvas").style.display = "block";
+					    document.getElementById("btnReturnToPo").style.visibility = "hidden"  
 			    document.getElementById("btnZoom").style.display = "block"
 	    document.getElementById("iframePlay").style.display = "relative"
 	    document.getElementById("iframeDrum").style.display = "relative"
@@ -469,9 +470,11 @@ groundInfo.position.z=   0.1;
 	 }
 	 
 	 createHeaderField(); 
+	    document.getElementById("btnReturnToPo").style.visibility = "hidden"  
   setTimeout(function(){ 
   setDefaultParametersZigguratEngine();
  window.game.scene.getMeshByName("cyLeft").rotation.y=0.2; 
+
   }, 3000);
 
  		window.game.scene.onPointerDown = function (evt, pickResult) {
@@ -550,7 +553,8 @@ CyLeftReverse=true;
 	    document.getElementById("iframeWrite").style.display= "inline-block"
 	    document.getElementById("iframeDrum").style.display= "inline-block"
 
-	    document.getElementById("renderCanvas").style.display = "none"
+	    document.getElementById("renderCanvas").style.display = "none";
+					    document.getElementById("btnReturnToPo").style.visibility = "visible"  
  					    document.getElementById("btnZoom").style.display = "none"
 
 	    document.getElementById("iframeWrite").style.width = "49.7%"
@@ -682,7 +686,8 @@ setBPMZiggurat();
 
 	/////
 	    document.getElementById("iframeWrite").style.display= "none"
-	    document.getElementById("renderCanvas").style.display = "none"
+	    document.getElementById("renderCanvas").style.display = "none";
+					    document.getElementById("btnReturnToPo").style.visibility = "visible"  
 							    document.getElementById("btnZoom").style.display = "none"
 	    document.getElementById("iframePlay").style.display = "block"
 			    document.getElementById("iframeDrum").style.display = "none";	
@@ -733,7 +738,8 @@ setBPMZiggurat();
 	
 	/////
 	    document.getElementById("iframeWrite").style.display= "block"
-	    document.getElementById("renderCanvas").style.display = "none"
+	    document.getElementById("renderCanvas").style.display = "none";
+					    document.getElementById("btnReturnToPo").style.visibility = "visible"  
 							    document.getElementById("btnZoom").style.display = "none"
 	    document.getElementById("iframePlay").style.display = "none"
 			    document.getElementById("iframeDrum").style.display = "none";	
@@ -775,8 +781,9 @@ if( idToPlay ==3 && isSoundSelected)
 isSoundSelected=false;
 	/////
 	    document.getElementById("iframeWrite").style.display= "none"
-	    document.getElementById("renderCanvas").style.display = "none"
-					    document.getElementById("btnZoom").style.display = "none"
+	    document.getElementById("renderCanvas").style.display = "none";
+					    document.getElementById("btnReturnToPo").style.visibility = "visible"  
+ 					    document.getElementById("btnZoom").style.display = "none"
 	    document.getElementById("iframePlay").style.display = "none"
 			    document.getElementById("iframeDrum").style.display = "block";	
  	/////	
@@ -847,6 +854,8 @@ var mesh = window.game.scene.meshes[k];
     };
 	
 	
+	var knobActionTimeout;
+	var restoreDomTimeout;
 	let customInterval = setInterval(function(){ // besides the scene default interval 
 
    
@@ -877,18 +886,8 @@ window.game.scene.getMeshByName("cyRight").rotation.y = 0.99;
 
 var cyRVal=parseFloat(window.game.scene.getMeshByName("cyRight").rotation.y ).toFixed(1) *100 ;   
 
-if(isBMPSelected)
-{
-      innerDoc.querySelector("input[id='delay-reverb-control']").value =cyRVal;
-	  innerDoc.querySelector("input[id='delay-reverb-control']").defaultValue =cyRVal;
-  	 
-		innerDoc.querySelector("input[id='delay-reverb-control']").dispatchEvent(new Event("change"));
 
-	      InfoTexture.getContext().clearRect(0, 0, 512, 512);
-	InfoTexture.drawText("D:"+cyRVal, 20, 200, "bold 150px Segoe UI", "white", "transparent");
-
-}
-else if(isSoundSelected)
+  if(isSoundSelected)
 {
 
 if(CyRightReverse  )
@@ -957,8 +956,10 @@ else{
       innerDoc.querySelector("input[id='vibrato-amount-control']").value =cyRVal;
 	  innerDoc.querySelector("input[id='vibrato-amount-control']").defaultValue =cyRVal;
   	 
+	 clearTimeout(knobActionTimeout);
+	knobActionTimeout= setTimeout(function(){   
 		innerDoc.querySelector("input[id='vibrato-amount-control']").dispatchEvent(new Event("change"));
-
+ }, 200);
  	   
 	      InfoTexture.getContext().clearRect(0, 0, 512, 512);
 	InfoTexture.drawText("V:"+cyRVal, 20, 200, "bold 150px Segoe UI", "white", "transparent");
@@ -966,8 +967,11 @@ else{
 }
 
  }
-  	 //// added for 'bugfix' analog lay-out. Altering max makes the knob invisible///
+  	 //// added for 'bugfix' analog lay-out. Altering max makes the knob invisible///	 
+	 	 clearTimeout(restoreDomTimeout);
+	restoreDomTimeout= setTimeout(function(){   
 				iFrameList[0].contentWindow.restoreDOMElements();
+ }, 200);
 
  	}
 	
@@ -983,7 +987,32 @@ else{
  if(iFrameList[i] !== null && i == 0 ){  // only play synth
 var innerDoc = iFrameList[i].contentDocument || iFrameList[i].contentWindow.document;  
 
-if(isBMPSelected)
+if(isSoundSelected)
+{
+if(window.game.scene.getMeshByName("cyLeft").rotation.y  <  0)
+{
+window.game.scene.getMeshByName("cyLeft").rotation.y=0;
+}
+if( window.game.scene.getMeshByName("cyLeft").rotation.y   >=1 )
+{
+window.game.scene.getMeshByName("cyLeft").rotation.y = 0.99; 
+}
+var cyLVal=parseFloat(window.game.scene.getMeshByName("cyLeft").rotation.y ).toFixed(1) *100 ;   
+
+      innerDoc.querySelector("input[id='delay-reverb-control']").value =cyLVal;
+	  innerDoc.querySelector("input[id='delay-reverb-control']").defaultValue =cyLVal;
+  	 
+	 	  clearTimeout(knobActionTimeout);
+	knobActionTimeout= setTimeout(function(){   
+		innerDoc.querySelector("input[id='delay-reverb-control']").dispatchEvent(new Event("change"));
+ }, 200);
+
+
+	      InfoTexture.getContext().clearRect(0, 0, 512, 512);
+	InfoTexture.drawText("D:"+cyLVal, 20, 200, "bold 150px Segoe UI", "white", "transparent");
+
+}
+else if(isBMPSelected)
 
 {
 
@@ -999,7 +1028,10 @@ var cyleftVal=parseFloat(window.game.scene.getMeshByName("cyLeft").rotation.y ).
       innerDoc.querySelector("input[id='note-length-control']").value =cyleftVal;
 	  innerDoc.querySelector("input[id='note-length-control']").defaultValue =cyleftVal;
   	 
+	  clearTimeout(knobActionTimeout);
+	knobActionTimeout= setTimeout(function(){   
 	 		innerDoc.querySelector("input[id='note-length-control']").dispatchEvent(new Event("change"));
+ }, 200);
 
  BMP  += cyleftVal*100;
  	 
@@ -1031,7 +1063,10 @@ var cyleftVal=parseFloat(window.game.scene.getMeshByName("cyLeft").rotation.y ).
       innerDoc.querySelector("input[id='note-length-control']").value =cyleftVal;
 	  innerDoc.querySelector("input[id='note-length-control']").defaultValue =cyleftVal;
   	 
+	  clearTimeout(knobActionTimeout);
+	knobActionTimeout= setTimeout(function(){   
 	 		innerDoc.querySelector("input[id='note-length-control']").dispatchEvent(new Event("change"));
+ }, 200);
 
 
  	   
@@ -1043,7 +1078,10 @@ var cyleftVal=parseFloat(window.game.scene.getMeshByName("cyLeft").rotation.y ).
  }
  
  	 //// added for 'bugfix' analog lay-out. Altering max makes the knob invisible///
+	 	 clearTimeout(restoreDomTimeout);
+	restoreDomTimeout= setTimeout(function(){   
 				iFrameList[0].contentWindow.restoreDOMElements();
+ }, 200);
 
 	}
 	
