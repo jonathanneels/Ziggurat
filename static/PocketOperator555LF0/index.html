@@ -1028,10 +1028,6 @@ var cyleftVal=parseFloat(window.game.scene.getMeshByName("cyLeft").rotation.y ).
       innerDoc.querySelector("input[id='note-length-control']").value =cyleftVal;
 	  innerDoc.querySelector("input[id='note-length-control']").defaultValue =cyleftVal;
   	 
-	  clearTimeout(knobActionTimeout);
-	knobActionTimeout= setTimeout(function(){   
-	 		innerDoc.querySelector("input[id='note-length-control']").dispatchEvent(new Event("change"));
- }, 200);
 
  BMP  += cyleftVal*100;
  	 
@@ -1048,7 +1044,12 @@ var cyleftVal=parseFloat(window.game.scene.getMeshByName("cyLeft").rotation.y ).
  clearInterval( customBMPInterval);
  interValActions();
 
-setBPMZiggurat();
+	  clearTimeout(knobActionTimeout);
+	knobActionTimeout= setTimeout(function(){   
+	 		innerDoc.querySelector("input[id='note-length-control']").dispatchEvent(new Event("change"));
+			setBPMZiggurat();
+ }, 200);
+
 
 }else{
 if(window.game.scene.getMeshByName("cyLeft").rotation.y  <  0.1)
