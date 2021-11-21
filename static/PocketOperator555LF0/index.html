@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>PO 555 LFO (Ziggurat engine)</title>
+
+    <script src="./dist/bundle.js" type="text/javascript"></script>
+    <script src="./node_modules/cannon/build/cannon.js" type="text/javascript"></script>
+
+    <style rel="stylesheet" type="text/css">
+        html,
+        body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+        #renderCanvas {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            touch-action: none;
+            -ms-touch-action: none;
+        }
+		
+		   #item { position:absolute;
+      width: 50px;
+      height: 50px;
+	        background-color: rgba(244, 218, 220, 1.00); 
+      border: 10px solid rgba(136, 136, 136, .5);
+      border-radius: 50%;
+      touch-action: none;
+      user-select: none;
+    }
+   
+	iframe{width:100%; height:100%;frameBorder:0;border:none;}
+	
+	.button {  color: black;
+	        background-color: rgba(244, 218, 220, 1.00); 
+  border: none;
+  border-radius: 50%;
+   padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer; position:absolute;
+opacity:0.6;
+	}  
+	
+	#btnZoom
+	{
+	top:0; 
+right:0;
+   margin-right:  10px;
+      margin-top: 10px; 
+
+	}
+	
+	
+	#btnReturnToPo
+	{
+	top:0; 
+left:0;
+   margin-left:  10px;
+      margin-top: 10px; 
+  font-size: large;
+
+	}
+	
+	    .button:hover {  position:absolute;
+      cursor: pointer;
+	        background-color: rgba(244, 118, 220, 1.00); 
+	    .button:active {  position:absolute;
+       background-color: rgba(168, 218, 220, 1.00);
+
+    }
+
+
+    </style>
+</head>
+
+<body class="noselect" id="body" onclick="openFullscreen()">
+    <canvas id="renderCanvas"></canvas>
+	
+	<button id="btnZoom"class="button" onclick="zoomToPO()">🔍</button>
+
+     <button id="btnReturnToPo"class="button" id="item" onclick="goBackToPo()">&#x23ce;</button>
+
+<iframe src="/" id="iframePlay" class="iframeSynth" title="ZigguratPlayEngine" ></iframe>
+<iframe src="/" id="iframeWrite" class="iframeSynth" title="ZigguratwriteEngine"></iframe>
+<iframe src="/static/drumMachine/index.html" id="iframeDrum" class="iframeSynth" title="ZigguratDrumEngine"></iframe>
+
+        <script src="src/babylon.js"></script>
+
+<script>
+
+function goBackToPo()
+{
+	    document.getElementById("iframeWrite").style.display= "relative"
+	    document.getElementById("renderCanvas").style.display = "block"
+			    document.getElementById("btnZoom").style.display = "block"
+	    document.getElementById("iframePlay").style.display = "relative"
+	    document.getElementById("iframeDrum").style.display = "relative"
+		
+		  document.getElementById("iframeWrite").style.width = "100%"
+	    document.getElementById("iframePlay").style.width = "100%"
+	    document.getElementById("iframeDrum").style.width = "100%"
+	    document.getElementById("iframeWrite").style.height = "100%"
+	    document.getElementById("iframePlay").style.height = "100%"
+	    document.getElementById("iframeDrum").style.height = "100%"
+
+}
+</script>
+    <script type="text/javascript">
+        window.game = new window.game.Game();
+				console.log(window.game);
+
+		var isDownOnCYLeft= false;
+						var CyLeftReverse=true;
+
+				var isDownOnCYRight= false;
+				var CyRightReverse=true;
+				
+				var isPlay=false;
+				var isRec= false;
+				
+				var BMP =  80;
+				var intervalBMP = (60 / BMP) * 1000;//REF: https://stackoverflow.com/questions/43115258/do-function-x-times-in-one-minute-bpm
+
+				var isSoundSelected=false;
+				var isBMPSelected= false;
+				var isPatternSelected=false;
+				var isSpecialSelected=false;
+				var isFXselected=false;
+ 
+  	var timerTexture;
+	  	var InfoTexture;
+
+var currentIndex= 4; 
+var trueIndex=-1;
+
+var currentLFOSpecialIndex= 0;
+var LFOSpecialArray=["NONE", "OSC", "LFO", "PULSE"]
+
+		var waveFormArray=[0,3,6,7,9,11,12,13,16,18,19,21,22,24,26,29]; // ziguratwaveform dropdownlist
+ 
+ var iFrameList=document.querySelectorAll('.iframeSynth') ;  
+
+ 
+var customBMPInterval;
+function interValActions()
+{
+	customBMPInterval = setInterval(function(){ // besides the scene default interval a BMP counter
+
+   timerTexture.getContext().clearRect(0, 0, 512, 512);
+	timerTexture.drawText( DisplayCurrentTime(), 20, 200, "bold 150px Segoe UI", "white", "transparent");
+ 
+	if(isPlay)
+	{
+	 
+currentIndex+=1; 
+trueIndex+=1;
+// oddity of loop visual:
+if(currentIndex ==17)
+{
+
+currentIndex=9;
+}
+else if(currentIndex ==13)
+{
+
+currentIndex=5;
+}
+else if(currentIndex ==9)
+{
+
+currentIndex=1;
+}
+else if(currentIndex==5)
+{
+
+currentIndex=13;
+}
+//////
+
+if(trueIndex >15)
+{
+
+trueIndex=0;
+}
+
+ var innerDoc = iFrameList[1].contentDocument || iFrameList[1].contentWindow.document; 
+
+		if( isPlay){
+ 		
+  if(iFrameList[1] !== null ){  
+  //innerDoc.getElementById('start-button').click();  
+     innerDoc.querySelectorAll('.pianoMode')[trueIndex].onmousedown();
+
+ }
+ 
+			}
+			
+ for (var k = 0 ; k < window.game.scene.meshes.length; k++) {
+
+var mesh = window.game.scene.meshes[k];
+ if(mesh.name.includes("sphereOut" )   )
+		   {
+
+ if(mesh.name.includes("sphereOut"+currentIndex.toString())   ) 
+		   {
+				window.game.scene.getMeshByName("sphereOut"+currentIndex.toString()).material= window.game.scene.getMaterialByName("color_highlight")
+				window.game.scene.getMeshByName("sphereNote"+currentIndex.toString()).material= window.game.scene.getMaterialByName("color_highlight")
+ 
+ 				 
+ 
+		   }
+		  else {
+		  				mesh.material= window.game.scene.getMaterialByName("color_black")
+				mesh.material= window.game.scene.getMaterialByName("color_black");
+				if(		  window.game.scene.getMeshByName( mesh.name.replace("sphereOut","sphereNote").trim()))
+				{
+				window.game.scene.getMeshByName( mesh.name.replace("sphereOut","sphereNote").trim()).material=window.game.scene.getMaterialByName("color_Magenta");
+				}
+				 
+
+		  }
+		  }
+}
+
+
+	}
+	
+}, intervalBMP);
+}
+ function setBPMZiggurat()
+ {
+ 
+  var dMachine = document.querySelector("#iframeDrum");
+ var innerDocDMachine = dMachine.contentDocument || dMachine.contentWindow.document; 
+
+        innerDocDMachine.getElementById("bpm").setAttribute("max",BMP);
+		   innerDocDMachine.getElementById("bpm").setAttribute("min",BMP);
+             innerDocDMachine.getElementById("bpm").value =BMP;
+            innerDocDMachine.getElementById("bpm").defaultValue =BMP;
+		 innerDocDMachine.getElementById("bpm").dispatchEvent(new Event("change"));
+
+
+ 
+ for (let i = 0; i < iFrameList.length; i++) {
+
+
+ if(iFrameList[i] == null || i== 2){continue;}
+var innerDoc = iFrameList[i].contentDocument || iFrameList[i].contentWindow.document;  
+
+ 
+ 
+ 
+
+//if(i ==0){ //not for write
+ 		        innerDoc.querySelector("#tempo-control").setAttribute("max",BMP);
+		  innerDoc.querySelector("#tempo-control").setAttribute("min",BMP);
+              innerDoc.querySelector("#tempo-control").value =BMP;
+            innerDoc.querySelector("#tempo-control").defaultValue =BMP;
+		  innerDoc.querySelector("#tempo-control").dispatchEvent(new Event("change")); 
+//}
+
+
+				iFrameList[i].contentWindow.restoreDOMElements();
+				
+			 
+	 
+  
+}
+  }
+  
+  function zoomToPO()
+{
+ if(window.game.scene.cameras[0].fov == 0.8)
+{
+ window.game.scene.cameras[0].fov = 19.48;
+}
+else 
+{
+window.game.scene.cameras[0].fov = 0.8
+}
+}
+
+ function setDefaultParametersZigguratEngine()
+ {
+ iFrameList=document.querySelectorAll('.iframeSynth') ;  
+ 
+  var dMachine = document.querySelector("#iframeDrum");
+ var innerDocDMachine = dMachine.contentDocument || dMachine.contentWindow.document; 
+
+ 
+
+        innerDocDMachine.getElementById("measureLength").setAttribute("max",16);
+		   innerDocDMachine.getElementById("measureLength").setAttribute("min",16);
+             innerDocDMachine.getElementById("measureLength").value =16;
+            innerDocDMachine.getElementById("measureLength").defaultValue =16;
+		 innerDocDMachine.getElementById("measureLength").dispatchEvent(new Event("input")); 
+		 
+		 	 			    innerDocDMachine.getElementById("localStorageActions").style.visibility= "visible"; 
+ 	 
+	 			    innerDocDMachine.getElementById("play").style.display= "none";
+	 			    innerDocDMachine.getElementById("btnRecord").style.display= "none";
+	 			    innerDocDMachine.getElementById("pause").style.display= "none";
+	 			    innerDocDMachine.getElementById("bpm").style.display= "none";
+						 			    innerDocDMachine.getElementById("stop").style.display= "none";
+
+ 
+ 
+ 
+ for (let i = 0; i < iFrameList.length; i++) {
+
+
+ if(iFrameList[i] == null || i== 2 ){continue;}
+var innerDoc = iFrameList[i].contentDocument || iFrameList[i].contentWindow.document;  
+
+ if(innerDoc.body.contains( innerDoc.querySelector("#blocks-control"))){   
+innerDoc.querySelector("#blocks-control").setAttribute("max",16);
+innerDoc.querySelector("#blocks-control").setAttribute("min",16); 
+   innerDoc.querySelector("#blocks-control").value =16;
+      innerDoc.querySelector("#blocks-control").defaultValue =16;
+							 innerDoc.getElementById("btnClassicKeyboard").click();
+
+ 
+innerDoc.querySelector("input[id='custom-wave']").click()
+innerDoc.querySelector("#custom-wave-select").selectedIndex = waveFormArray[waveFormArray.length-1].toString();
+
+
+        innerDoc.querySelector("#note-length-control").setAttribute("max",5);
+		     innerDoc.querySelector("#note-length-control").setAttribute("min",0.1);
+			 		    innerDoc.querySelector("#note-length-control").setAttribute("step",0.1); 
+             innerDoc.querySelector("#note-length-control").value =0.5;
+            innerDoc.querySelector("#note-length-control").defaultValue =0.5;
+		innerDoc.querySelector("#note-length-control").dispatchEvent(new Event("change"));
+		
+						 			    innerDoc.getElementById("start-button").style.display= "none" ;
+				 			    innerDoc.getElementById("stop-button").style.display= "none" ;
+				 			    innerDoc.getElementById("custom-patch-select").style.display= "none" ;
+
+
+		 if(i ==0){ //not for write
+
+ 			    innerDoc.getElementById("fourth2").style.display= "none" ;
+innerDoc.getElementById("txtProjectName").value= "PLAY synth";
+				
+		
+  }
+  else if(i==1)
+  {
+  innerDoc.getElementById("txtProjectName").value= "WRITE synth";
+
+   			    innerDoc.getElementById("tempo-control").style.display= "none" ;
+   			    innerDoc.getElementById("blocks-control").style.display= "none" ;
+
+  
+  }
+        innerDoc.getElementById("chIgnoreOverload").setAttribute("checked",true);
+
+
+         innerDoc.getElementById("chNoteAsInMainOscFilt1").setAttribute("checked",true);
+        innerDoc.getElementById("chNoLinkToOtherSignals1").setAttribute("checked",true);
+        innerDoc.getElementById("lfo1-square-wave").setAttribute("checked",true);
+
+
+				iFrameList[i].contentWindow.restoreDOMElements();
+				
+				if(i==1)
+				{
+			highlightedItems=	 innerDoc.querySelectorAll(".btnBackgroundColorS")// show difference play & write
+				highlightedItems.forEach(function(userItem) {
+				if( userItem.id != "btnSavePatch" && userItem.id != "btnLoad"&& userItem.id != "record-button"){
+							  userItem.click();}
+							});
+
+				}
+	 
+  
+}
+} 
+setBPMZiggurat();
+ }
+     function DisplayCurrentTime() {
+        var date = new Date();
+        var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+        var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+       // var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+       return time = hours + ":" + minutes //+ ":" + seconds;
+     };
+	 
+	 function createtimerField()
+	 {
+	 	  timerTexture = new BABYLON.DynamicTexture("textureTime", 512, window.game.scene, true);//REF: https://playground.babylonjs.com/#JQ0YXQ#4  & https://www.babylonjs-playground.com/#TMHF80#1
+    timerTexture.hasAlpha = true; 
+	
+	var dynamicMaterial = new BABYLON.StandardMaterial('matTextureTime', window.game.scene);
+	dynamicMaterial.diffuseTexture = timerTexture;
+    dynamicMaterial.opacityTexture = timerTexture;
+	dynamicMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+	dynamicMaterial.backFaceCulling = false;
+
+    var groundTimer = BABYLON.Mesh.CreateGround("groundTimerField", 0.8, 0.8, 08, window.game.scene);
+	groundTimer.material = dynamicMaterial;
+groundTimer.rotation.y= -1.56;
+groundTimer.position.y=  0.8;
+groundTimer.position.x=  -1.9;
+groundTimer.position.z=   0.8;
+	 }
+	 
+	 function createInfoField()
+	 {
+	 	  InfoTexture = new BABYLON.DynamicTexture("textureField", 512, window.game.scene, true);   
+    InfoTexture.hasAlpha = true; 
+	
+	var dynamicMaterial = new BABYLON.StandardMaterial('matTextureField', window.game.scene);
+	dynamicMaterial.diffuseTexture = InfoTexture;
+    dynamicMaterial.opacityTexture = InfoTexture;
+	dynamicMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+	dynamicMaterial.backFaceCulling = false;
+
+    var groundInfo = BABYLON.Mesh.CreateGround("groundInfoField", 1.2, 1.2, 1, window.game.scene);
+	groundInfo.material = dynamicMaterial;
+groundInfo.rotation.y= -1.56;
+groundInfo.position.y=  0.8;
+groundInfo.position.x=  -1.3;
+groundInfo.position.z=   0.2;
+
+   InfoTexture.getContext().clearRect(0, 0, 512, 512);
+	InfoTexture.drawText( "Sine", 20, 200, "bold 150px Segoe UI", "white", "transparent");
+
+	 }
+	 
+	  function createHeaderField()
+	 {
+	 	  InfoTexture = new BABYLON.DynamicTexture("textureHeader", 1300, window.game.scene, true);    
+    InfoTexture.hasAlpha = true; 
+	
+	var dynamicMaterial = new BABYLON.StandardMaterial('matHeaderField', window.game.scene);
+	dynamicMaterial.diffuseTexture = InfoTexture;
+    dynamicMaterial.opacityTexture = InfoTexture;
+	dynamicMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+	dynamicMaterial.backFaceCulling = false;
+
+    var groundInfo = BABYLON.Mesh.CreateGround("groundHeaderField", 1.2, 1.2, 1, window.game.scene);
+	groundInfo.material = dynamicMaterial;
+groundInfo.rotation.y= -1.56;
+groundInfo.position.y=  0.8;
+groundInfo.position.x=  -1.9;
+groundInfo.position.z=   0.1;
+
+   InfoTexture.getContext().clearRect(0, 0, 512, 512);
+	InfoTexture.drawText( "PO 555 - LF0", 20, 200, "bold 150px Segoe UI", "#d6006e", "transparent");
+
+	 }
+	 
+	 createHeaderField(); 
+  setTimeout(function(){ 
+  setDefaultParametersZigguratEngine();
+ window.game.scene.getMeshByName("cyLeft").rotation.y=0.2; 
+  }, 3000);
+
+ 		window.game.scene.onPointerDown = function (evt, pickResult) {
+window.game.scene.cameras[0].inputs.remove(window.game.scene.cameras[0].inputs.attached.mouse);// lock camera movement
+
+        // We try to pick an object
+        if (pickResult.hit) {
+           console.log(pickResult.pickedMesh.name);
+		   
+		   
+		   if(pickResult.pickedMesh.name.includes("cubLCD") || pickResult.pickedMesh.name.includes("groundInfoField") )
+		   {
+		   
+
+		   }
+		
+		   
+		   if( "cyRight" ==pickResult.pickedMesh.name)
+		{
+	 	  // window.game.scene.getMeshByName("cyRight").material= window.game.scene.getMaterialByName("color_Magenta")
+
+if(CyRightReverse)
+{
+CyRightReverse=false;
+}
+else
+{
+CyRightReverse=true;
+}
+		isDownOnCYRight= true;
+		}
+		
+		if( "cyLeft" ==pickResult.pickedMesh.name)
+		{
+		if(CyLeftReverse)
+{
+CyLeftReverse=false;
+}
+else
+{
+CyLeftReverse=true;
+}
+				//   window.game.scene.getMeshByName("cyLeft").material= window.game.scene.getMaterialByName("color_Magenta")
+
+		isDownOnCYLeft= true;
+		 
+		}
+			if( "sphereSound" ==pickResult.pickedMesh.name || "backsideButtonSound" ==pickResult.pickedMesh.name)
+		{
+				   		   var itemName = pickResult.pickedMesh.name.replace("backsideButtonSound","sphereSound");
+
+		   window.game.scene.getMeshByName(itemName).material= window.game.scene.getMaterialByName("color_Magenta")
+
+		if(!isSoundSelected){
+		isSoundSelected= true;
+		   InfoTexture.getContext().clearRect(0, 0, 512, 512);
+	InfoTexture.drawText( "Set 🎷", 20, 200, "bold 150px Segoe UI", "white", "transparent");
+
+ 			}
+			else 
+			{
+					   InfoTexture.getContext().clearRect(0, 0, 512, 512);
+				InfoTexture.drawText( "", 20, 200, "bold 150px Segoe UI", "white", "transparent");
+
+					isSoundSelected= false;
+ 
+			}
+		}
+			if( "spherePattern" ==pickResult.pickedMesh.name|| "backsideButtonPattern" ==pickResult.pickedMesh.name)
+		{
+				   		   var itemName = pickResult.pickedMesh.name.replace("backsideButtonPattern","spherePattern");
+		 
+   window.game.scene.getMeshByName(itemName).material= window.game.scene.getMaterialByName("color_Magenta")
+
+ 	    document.getElementById("iframePlay").style.display = "inline-block"
+	    document.getElementById("iframeWrite").style.display= "inline-block"
+	    document.getElementById("iframeDrum").style.display= "inline-block"
+
+	    document.getElementById("renderCanvas").style.display = "none"
+ 					    document.getElementById("btnZoom").style.display = "none"
+
+	    document.getElementById("iframeWrite").style.width = "49.7%"
+	    document.getElementById("iframePlay").style.width = "49.7%"
+	    document.getElementById("iframeDrum").style.width = "100%"
+	    document.getElementById("iframeWrite").style.height = "65%"
+	    document.getElementById("iframePlay").style.height = "65%"
+	    document.getElementById("iframeDrum").style.height = "35%"
+ 
+
+
+return;
+		if(!isPatternSelected){
+		isPatternSelected= true;
+ 			}
+			else 
+			{
+					isPatternSelected= false;
+ 
+			}
+		}
+					if( "sphereBPM" ==pickResult.pickedMesh.name || "backsideButtonBPM" ==pickResult.pickedMesh.name)
+		{
+				   		   var itemName = pickResult.pickedMesh.name.replace("backsideButtonBPM","sphereBPM");
+		 
+	  window.game.scene.getMeshByName(itemName).material= window.game.scene.getMaterialByName("color_Magenta")
+
+if(BMP ==80)
+{
+BMP =120;
+
+} 
+else if(BMP ==120)
+{
+BMP =140;
+
+}
+	else if(BMP ==140)
+{
+BMP =80;
+
+}				   InfoTexture.getContext().clearRect(0, 0, 512, 512);
+				InfoTexture.drawText( "🦶: "+BMP, 20, 200, "bold 120px Segoe UI", "white", "transparent");
+ 
+ intervalBMP = (60 / BMP) * 1000;
+ 
+ clearInterval( customBMPInterval);
+ interValActions();
+
+setBPMZiggurat();
+
+		if(!isBMPSelected){
+		isBMPSelected= true;
+ 			}
+			 
+			 
+		}
+						if( "sphereSpecial" ==pickResult.pickedMesh.name || "backsideButtonSpecial" ==pickResult.pickedMesh.name)
+		{
+				   		   var itemName = pickResult.pickedMesh.name.replace("backsideButtonSpecial","sphereSpecial");
+		 
+					 window.game.scene.getMeshByName(itemName).material= window.game.scene.getMaterialByName("color_Magenta")
+
+
+			currentLFOSpecialIndex+=1; 
+			
+			if( currentLFOSpecialIndex>3)
+			{
+			currentLFOSpecialIndex=0; 
+			}
+			
+
+  var dMachine = document.querySelector("#iframePlay");//"#iframeWrite");
+ var innerDocDMachine = dMachine.contentDocument || dMachine.contentWindow.document; 
+
+ 
+
+	if(currentLFOSpecialIndex==0)
+		{
+			  innerDocDMachine.getElementById("chlfo1On").checked =false;
+	    innerDocDMachine.getElementById("chlfo1Pulse").checked =false;
+        innerDocDMachine.getElementById("chOsc1On").checked =false;
+
+		}
+		else if(currentLFOSpecialIndex==1)
+		{
+			  innerDocDMachine.getElementById("chlfo1On").checked =false;
+	    innerDocDMachine.getElementById("chlfo1Pulse").checked =false;
+        innerDocDMachine.getElementById("chOsc1On").checked =true;
+
+		}
+ 	else if(currentLFOSpecialIndex==2)
+		{
+			  innerDocDMachine.getElementById("chlfo1On").checked =true;
+	    innerDocDMachine.getElementById("chlfo1Pulse").checked =false;
+        innerDocDMachine.getElementById("chOsc1On").checked =true;
+
+		}
+		else if(currentLFOSpecialIndex==3)
+		{
+			  innerDocDMachine.getElementById("chlfo1On").checked =false;
+	    innerDocDMachine.getElementById("chlfo1Pulse").checked =true;
+        innerDocDMachine.getElementById("chOsc1On").checked =true;
+
+		}
+  
+		
+					      InfoTexture.getContext().clearRect(0, 0, 512, 512);
+	InfoTexture.drawText("S:"+LFOSpecialArray[currentLFOSpecialIndex], 20, 200, "bold 120px Segoe UI", "white", "transparent");
+
+
+ 
+				return;// lower code is unused
+
+		if(!isSpecialSelected){
+		isSpecialSelected= true;
+ 			}
+			else 
+			{
+					isSpecialSelected= false;
+ 
+			}
+		}
+						if( "sphereFX" ==pickResult.pickedMesh.name|| "backsideButtonFX" ==pickResult.pickedMesh.name)
+		{
+				   		   var itemName = pickResult.pickedMesh.name.replace("backsideButtonFX","sphereFX");
+				window.game.scene.getMeshByName(itemName).material= window.game.scene.getMaterialByName("color_Magenta")
+
+
+	/////
+	    document.getElementById("iframeWrite").style.display= "none"
+	    document.getElementById("renderCanvas").style.display = "none"
+							    document.getElementById("btnZoom").style.display = "none"
+	    document.getElementById("iframePlay").style.display = "block"
+			    document.getElementById("iframeDrum").style.display = "none";	
+ 	/////	
+	return;// lower code is unused
+
+
+		if(!isFXselected){
+		isFXselected= true;
+ 			}
+			else 
+			{
+					isFXselected= false;
+ 
+			}
+		}
+		if( "spherePlay" ==pickResult.pickedMesh.name|| "backsideButtonPlay" ==pickResult.pickedMesh.name)
+		{
+				   		   var itemName = pickResult.pickedMesh.name.replace("backsideButtonPlay","spherePlay");
+		 window.game.scene.getMeshByName(itemName).material= window.game.scene.getMaterialByName("color_Magenta")
+			   
+			    var dMachine = document.querySelector("#iframeDrum");
+ var innerDocDMachine = dMachine.contentDocument || dMachine.contentWindow.document;
+
+		if(!isPlay){
+		isPlay= true;
+		window.game.scene.getMeshByName("cubPlay").material.alpha=1.0;
+		 
+  							 innerDocDMachine.getElementById("play").click();
+
+			}
+			else 
+			{
+					isPlay= false;
+		window.game.scene.getMeshByName("cubPlay").material.alpha=0.0;
+
+  							 innerDocDMachine.getElementById("stop").click();
+
+			}
+				return; 
+
+		}
+		if( "sphereWrite" ==pickResult.pickedMesh.name || "backsideButtonWrite" ==pickResult.pickedMesh.name)
+		{
+				   		   var itemName = pickResult.pickedMesh.name.replace("backsideButtonWrite","sphereWrite");
+		 
+			 window.game.scene.getMeshByName("sphereWrite").material= window.game.scene.getMaterialByName("color_Magenta")
+	
+	/////
+	    document.getElementById("iframeWrite").style.display= "block"
+	    document.getElementById("renderCanvas").style.display = "none"
+							    document.getElementById("btnZoom").style.display = "none"
+	    document.getElementById("iframePlay").style.display = "none"
+			    document.getElementById("iframeDrum").style.display = "none";	
+ 	/////	
+	return;// lower code is unused
+	
+ 		if(!isRec){
+		isRec= true;
+		window.game.scene.getMeshByName("cubRec").material.alpha=1.0;
+			}
+			else 
+			{
+					isRec= false;
+		window.game.scene.getMeshByName("cubRec").material.alpha=0.0;
+
+			}
+		}
+		
+		 else  if(pickResult.pickedMesh.name.includes("sphereOut") || pickResult.pickedMesh.name.includes("backsideButton"))
+		   {
+		   		   var itemName = pickResult.pickedMesh.name.replace("backsideButton","sphereOut");
+
+		   window.game.scene.getMeshByName(  itemName).position.z -= 100;
+		   
+		   
+ 		  window.game.scene.getMeshByName( itemName.replace("sphereOut","sphereNote").trim()).isOn=true;
+		   
+		  // pickResult.pickedMesh.scaling.x =0.01;
+		   //		   pickResult.pickedMesh.scaling.y =0.01;
+		  // pickResult.pickedMesh.scaling.z =0.01;
+		  
+		   var idToPlay =parseInt(itemName.replace("sphereOut","").trim())-1;
+		 //  setTimeout(function(){   
+
+isBMPSelected= false; 
+
+if( idToPlay ==3 && isSoundSelected)
+{
+isSoundSelected=false;
+	/////
+	    document.getElementById("iframeWrite").style.display= "none"
+	    document.getElementById("renderCanvas").style.display = "none"
+					    document.getElementById("btnZoom").style.display = "none"
+	    document.getElementById("iframePlay").style.display = "none"
+			    document.getElementById("iframeDrum").style.display = "block";	
+ 	/////	
+	return;// lower code is unused
+
+}
+
+   if(iFrameList[0] !== null ){ 
+var innerDoc = iFrameList[0].contentDocument || iFrameList[0].contentWindow.document; 
+
+if(isSoundSelected){
+innerDoc.querySelector("#custom-wave-select").selectedIndex = waveFormArray[idToPlay].toString();
+isSoundSelected=false;
+				iFrameList[0].contentWindow.restoreDOMElements();
+									   InfoTexture.getContext().clearRect(0, 0, 512, 512);
+				InfoTexture.drawText( "🎷:"+(parseInt(idToPlay)+1).toString(), 20, 200, "bold 150px Segoe UI", "white", "transparent");
+
+}
+else{
+  if(typeof innerDoc.querySelectorAll('.pianoMode')[idToPlay] !== "undefined" ){ 
+   innerDoc.querySelectorAll('.pianoMode')[idToPlay].onmousedown();
+ }}
+ 
+ 
+ }
+ //}, 1);
+		   }
+        }
+		
+    };
+window.game.scene.onPointerUp = function (evt, pickResult) {
+
+ 	window.game.scene.getMeshByName("sphereFX").material= window.game.scene.getMaterialByName("color_black")
+ 	window.game.scene.getMeshByName("sphereWrite").material= window.game.scene.getMaterialByName("color_black")
+ 	window.game.scene.getMeshByName("spherePlay").material= window.game.scene.getMaterialByName("color_black")
+ 	window.game.scene.getMeshByName("sphereSpecial").material= window.game.scene.getMaterialByName("color_black")
+ 	window.game.scene.getMeshByName("sphereBPM").material= window.game.scene.getMaterialByName("color_black")
+ 	window.game.scene.getMeshByName("spherePattern").material= window.game.scene.getMaterialByName("color_black")
+ 	window.game.scene.getMeshByName("sphereSound").material= window.game.scene.getMaterialByName("color_black")
+// 	window.game.scene.getMeshByName("cyLeft").material= window.game.scene.getMaterialByName("color_Magenta")
+ //	window.game.scene.getMeshByName("cyRight").material= window.game.scene.getMaterialByName("color_Magenta")
+
+
+
+ for (var k = window.game.scene.meshes.length - 1; k >= 0; k--) {
+
+var mesh = window.game.scene.meshes[k];
+
+ if(mesh.name.includes("sphereOut") && mesh.position.z < -99 && !isRec  )
+		   {
+		   mesh.position.z +=100;
+		  window.game.scene.getMeshByName( pickResult.pickedMesh.name.replace("sphereOut","sphereNote")).isOn=false;
+
+		   }
+		  // mesh.dispose(false,true);
+}
+
+        // We try to pick an object
+        if (pickResult.hit) {
+		 
+		 }
+
+
+				isDownOnCYRight= false;
+				isDownOnCYLeft= false;
+
+          
+    };
+	
+	
+	let customInterval = setInterval(function(){ // besides the scene default interval 
+
+   
+	 if(isDownOnCYRight)
+	{
+	if(CyRightReverse){
+			window.game.scene.getMeshByName("cyRight").rotation.y -=0.1;
+
+	}
+	else{
+		window.game.scene.getMeshByName("cyRight").rotation.y +=0.1;
+ 	}
+	
+	for (let i = 0; i < iFrameList.length; i++) { 
+
+ if(iFrameList[i] !== null && i == 0 ){  // only play synth
+var innerDoc = iFrameList[i].contentDocument || iFrameList[i].contentWindow.document;  
+
+
+if(window.game.scene.getMeshByName("cyRight").rotation.y  <  0)
+{
+window.game.scene.getMeshByName("cyRight").rotation.y=0;
+}
+if( window.game.scene.getMeshByName("cyRight").rotation.y   >=1 )
+{
+window.game.scene.getMeshByName("cyRight").rotation.y = 0.99; 
+}
+
+var cyRVal=parseFloat(window.game.scene.getMeshByName("cyRight").rotation.y ).toFixed(1) *100 ;   
+
+if(isBMPSelected)
+{
+      innerDoc.querySelector("input[id='delay-reverb-control']").value =cyRVal;
+	  innerDoc.querySelector("input[id='delay-reverb-control']").defaultValue =cyRVal;
+  	 
+		innerDoc.querySelector("input[id='delay-reverb-control']").dispatchEvent(new Event("change"));
+
+	      InfoTexture.getContext().clearRect(0, 0, 512, 512);
+	InfoTexture.drawText("D:"+cyRVal, 20, 200, "bold 150px Segoe UI", "white", "transparent");
+
+}
+else if(isSoundSelected)
+{
+
+if(CyRightReverse  )
+{
+
+if( typeof innerDoc["scaleKnopDown"] != "undefined" &&innerDoc["scaleKnopDown"] > 1 )
+{
+ 
+return;
+}
+else if( typeof innerDoc["scaleKnopDown"] == "undefined")
+{
+innerDoc["scaleKnopDown"]=0;
+}
+
+
+if( typeof innerDoc["scaleKnopUp"] == "undefined")
+{
+innerDoc["scaleKnopUp"]=0;
+}
+
+innerDoc["scaleKnopDown"] +=1;
+innerDoc["scaleKnopUp"] -=1;
+
+var  yRot= window.game.scene.getMeshByName("cyRight").rotation.y.toFixed(1).toString().replace("0.","");
+							 innerDoc.getElementById("btnScaleDown").click();
+							 		   InfoTexture.getContext().clearRect(0, 0, 512, 512);
+
+							InfoTexture.drawText( "Oct: "+innerDoc["scaleKnopUp"].toString() , 20, 200, "bold 100px Segoe UI", "white", "transparent");
+	 
+
+}
+else  
+{
+
+if( typeof innerDoc["scaleKnopUp"] != "undefined" && innerDoc["scaleKnopUp"] > 1)
+{
+
+return;
+}
+else if( typeof innerDoc["scaleKnopUp"] == "undefined")
+{
+innerDoc["scaleKnopUp"]=0;
+}
+
+if( typeof innerDoc["scaleKnopDown"] == "undefined")
+{
+innerDoc["scaleKnopDown"]=0;
+}
+
+innerDoc["scaleKnopDown"] -=1;
+innerDoc["scaleKnopUp"] +=1;
+
+var  yRot= window.game.scene.getMeshByName("cyRight").rotation.y.toFixed(1).toString().replace("0.","");
+
+							 innerDoc.getElementById("btnScaleUp").click();
+ 
+		   InfoTexture.getContext().clearRect(0, 0, 512, 512);
+	InfoTexture.drawText( "Oct: "+innerDoc["scaleKnopUp"].toString() , 20, 200, "bold 100px Segoe UI", "white", "transparent");
+
+}
+ 
+
+}
+else{
+      innerDoc.querySelector("input[id='vibrato-amount-control']").value =cyRVal;
+	  innerDoc.querySelector("input[id='vibrato-amount-control']").defaultValue =cyRVal;
+  	 
+		innerDoc.querySelector("input[id='vibrato-amount-control']").dispatchEvent(new Event("change"));
+
+ 	   
+	      InfoTexture.getContext().clearRect(0, 0, 512, 512);
+	InfoTexture.drawText("V:"+cyRVal, 20, 200, "bold 150px Segoe UI", "white", "transparent");
+	}
+}
+
+ }
+  	 //// added for 'bugfix' analog lay-out. Altering max makes the knob invisible///
+				iFrameList[0].contentWindow.restoreDOMElements();
+
+ 	}
+	
+	 if(isDownOnCYLeft)
+	{
+	if(CyLeftReverse){window.game.scene.getMeshByName("cyLeft").rotation.y -=0.1;}
+	else{
+	window.game.scene.getMeshByName("cyLeft").rotation.y +=0.1;}
+	
+	
+	 for (let i = 0; i < iFrameList.length; i++) { 
+
+ if(iFrameList[i] !== null && i == 0 ){  // only play synth
+var innerDoc = iFrameList[i].contentDocument || iFrameList[i].contentWindow.document;  
+
+if(isBMPSelected)
+
+{
+
+if(window.game.scene.getMeshByName("cyLeft").rotation.y  <  -0.1)
+{
+window.game.scene.getMeshByName("cyLeft").rotation.y=-0.1;
+}
+if(window.game.scene.getMeshByName("cyLeft").rotation.y > 0.1)
+{
+window.game.scene.getMeshByName("cyLeft").rotation.y = 0.1; 
+}
+var cyleftVal=parseFloat(window.game.scene.getMeshByName("cyLeft").rotation.y ).toFixed(1)  ;//(Math.round(parseFloat(window.game.scene.getMeshByName("cyLeft").rotation.y*2.5)*2)/2)
+      innerDoc.querySelector("input[id='note-length-control']").value =cyleftVal;
+	  innerDoc.querySelector("input[id='note-length-control']").defaultValue =cyleftVal;
+  	 
+	 		innerDoc.querySelector("input[id='note-length-control']").dispatchEvent(new Event("change"));
+
+ BMP  += cyleftVal*100;
+ 	 
+	 if(BMP < 40)
+	 {
+	 
+	 BMP=40
+	 }else if(BMP > 200){BMP=200;}
+	 
+	      InfoTexture.getContext().clearRect(0, 0, 512, 512);
+				InfoTexture.drawText( "🦶: "+BMP, 20, 200, "bold 120px Segoe UI", "white", "transparent");
+ 
+ intervalBMP = (60 / BMP) * 1000; 
+ clearInterval( customBMPInterval);
+ interValActions();
+
+setBPMZiggurat();
+
+}else{
+if(window.game.scene.getMeshByName("cyLeft").rotation.y  <  0.1)
+{
+window.game.scene.getMeshByName("cyLeft").rotation.y=0.1;
+}
+if(window.game.scene.getMeshByName("cyLeft").rotation.y > 5)
+{
+window.game.scene.getMeshByName("cyLeft").rotation.y = 5; 
+}
+var cyleftVal=parseFloat(window.game.scene.getMeshByName("cyLeft").rotation.y ).toFixed(1)  ;//(Math.round(parseFloat(window.game.scene.getMeshByName("cyLeft").rotation.y*2.5)*2)/2)
+      innerDoc.querySelector("input[id='note-length-control']").value =cyleftVal;
+	  innerDoc.querySelector("input[id='note-length-control']").defaultValue =cyleftVal;
+  	 
+	 		innerDoc.querySelector("input[id='note-length-control']").dispatchEvent(new Event("change"));
+
+
+ 	   
+	      InfoTexture.getContext().clearRect(0, 0, 512, 512);
+	InfoTexture.drawText("l:"+cyleftVal, 20, 200, "bold 150px Segoe UI", "white", "transparent");
+	}
+}
+
+ }
+ 
+ 	 //// added for 'bugfix' analog lay-out. Altering max makes the knob invisible///
+				iFrameList[0].contentWindow.restoreDOMElements();
+
+	}
+	
+	
+	
+	
+}, 100);
+
+
+ 
+ 
+createtimerField();
+ createInfoField();
+  interValActions();
+ 
+
+    </script>
+	 		<script>
+/* Get the element you want displayed in fullscreen mode (a video in this example): */
+var elem = document.getElementById("body");
+
+/* When the openFullscreen() function is executed, open the video in fullscreen.
+Note that we must include prefixes for different browsers, as they don't support the requestFullscreen method yet */
+function openFullscreen() {
+  if (!document.fullscreenElement) {
+
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) { /* Safari */
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { /* IE11 */
+    elem.msRequestFullscreen();
+  }}
+}
+</script>
+
+</body>
+
+</html>
