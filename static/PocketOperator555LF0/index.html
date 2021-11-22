@@ -107,6 +107,147 @@ left:0;
         <script src="src/babylon.js"></script>
 
 <script>
+        window.game = new window.game.Game();
+		  	var timerTexture;
+	  	var InfoTexture;
+
+				console.log(window.game);
+
+</script>
+<script> 
+/////GAME SIMON SAYS:///////////////////////////////////////
+var playerSoundMoveIndex=0;
+var localSphereStepId=0;
+
+ var simonSaysArray;
+var isGameMode=false;
+var timeoutNextEntry;
+function randomInteger(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function gameStopped()
+{
+for (let i = 1; i < 16; i++) {
+try{
+ window.game.scene.getMeshByName("sphereOut"+i.toString()).material= window.game.scene.getMaterialByName("color_black")
+ 
+}
+catch (err)
+{
+continue;
+}
+}
+}
+function newGame()
+{
+if(!isGameMode){return;}
+
+playerSoundMoveIndex=0;
+localSphereStepId=0;
+   simonSaysArray =difficultyObjectsSimonSays(3);
+  computerShowsMovement(0);
+
+   InfoTexture.getContext().clearRect(0, 0, 512, 512);
+	InfoTexture.drawText( "Start!", 20, 200, "bold 90px Segoe UI", "white", "transparent");
+
+}
+function computerShowsMovement( )
+{
+ 
+var sId= simonSaysArray[playerSoundMoveIndex] ;
+
+   if( isGameMode){ 
+window.game.scene.getMeshByName("sphereOut"+sId.toString()).material= window.game.scene.getMaterialByName("color_highlight")
+ var innerDoc = iFrameList[1].contentDocument || iFrameList[1].contentWindow.document; 
+     innerDoc.querySelectorAll('.pianoMode')[sId].onmousedown();
+
+timeoutNextEntry=setTimeout(function(){ 
+ if( isGameMode){ 
+
+ window.game.scene.getMeshByName("sphereOut"+sId.toString()).material= window.game.scene.getMaterialByName("color_black")
+}
+}, 500,sId);
+}
+ 
+}
+
+function playerResponse(SphereId)
+{
+
+   if( isGameMode){ 
+
+console.log(simonSaysArray[localSphereStepId] +"--"+ SphereId);
+
+if(simonSaysArray[localSphereStepId] == SphereId)
+{
+if( localSphereStepId ==playerSoundMoveIndex){
+console.log("Next entry in round.");
+playerSoundMoveIndex+=1;
+localSphereStepId=0;
+   InfoTexture.getContext().clearRect(0, 0, 512, 512);
+	InfoTexture.drawText( "Score: "+playerSoundMoveIndex, 20, 200, "bold 90px Segoe UI", "white", "transparent");
+
+setTimeout(function(){ 
+ computerShowsMovement( );
+}, 1);
+
+}
+ else 
+ {
+ localSphereStepId+=1;
+
+ }
+}
+else 
+{
+clearTimeout(timeoutNextEntry);
+   InfoTexture.getContext().clearRect(0, 0, 512, 512);
+	InfoTexture.drawText( "End: "+playerSoundMoveIndex, 20, 200, "bold 90px Segoe UI", "white", "transparent");
+isGameMode=false;
+gameStopped();
+setTimeout(function(){ 
+isGameMode=true; 
+ newGame()
+}, 5000);
+
+}
+}
+}
+function difficultyObjectsSimonSays(difficultyLvl)
+{
+var arrayList= [];
+if(  difficultyLvl == 0 )
+{
+for (let i = 0; i < 1000; i++) {
+  arrayList.push(randomInteger(0,3));
+}
+
+}
+else if(  difficultyLvl== 1)
+{
+for (let i = 0; i < 1000; i++) {
+  arrayList.push(randomInteger(0,7));
+}
+}
+else if( difficultyLvl == 2 )
+{
+for (let i = 0; i < 1000; i++) {
+  arrayList.push(randomInteger(0,11));
+}
+}
+else //if( difficultyLvl == 3  )
+{
+for (let i = 0; i < 1000; i++) {
+  arrayList.push(randomInteger(0,15));
+}
+}
+return  arrayList;
+}
+
+
+</script>
+<script>
 
 function goBackToPo()
 {
@@ -127,8 +268,6 @@ function goBackToPo()
 }
 </script>
     <script type="text/javascript">
-        window.game = new window.game.Game();
-				console.log(window.game);
 
 		var isDownOnCYLeft= false;
 						var CyLeftReverse=true;
@@ -148,8 +287,6 @@ function goBackToPo()
 				var isSpecialSelected=false;
 				var isFXselected=false;
  
-  	var timerTexture;
-	  	var InfoTexture;
 
 var currentIndex= 4; 
 var trueIndex=-1;
@@ -487,7 +624,24 @@ window.game.scene.cameras[0].inputs.remove(window.game.scene.cameras[0].inputs.a
            console.log(pickResult.pickedMesh.name);
 		   
 		   
-		   if(pickResult.pickedMesh.name.includes("cubLCD") || pickResult.pickedMesh.name.includes("groundInfoField") )
+		   
+		    if(pickResult.pickedMesh.name.includes("groundHeaderField") )
+		   {
+		   if(!isGameMode){
+		   isGameMode=true;
+setTimeout(function(){ 
+newGame()
+}, 500);}
+else
+{
+   InfoTexture.getContext().clearRect(0, 0, 512, 512);
+	InfoTexture.drawText( "Stopped", 20, 200, "bold 90px Segoe UI", "white", "transparent");
+gameStopped();
+ isGameMode=false;
+}
+
+		   }
+		   if(pickResult.pickedMesh.name.includes("cubLCD")  )
 		   {
 		   
 
@@ -776,9 +930,10 @@ setBPMZiggurat();
 		   var idToPlay =parseInt(itemName.replace("sphereOut","").trim())-1;
 		 //  setTimeout(function(){   
 
+
 isBMPSelected= false; 
 
-if( idToPlay ==3 && isSoundSelected)
+if( idToPlay ==3 && isSoundSelected && !isGameMode)
 {
 isSoundSelected=false;
 	/////
@@ -809,7 +964,12 @@ else{
    innerDoc.querySelectorAll('.pianoMode')[idToPlay].onmousedown();
  }}
  
- 
+ if(isGameMode)
+{console.log(isGameMode)
+playerResponse(idToPlay+1); 
+}
+
+
  }
  //}, 1);
 		   }
@@ -1122,46 +1282,6 @@ function openFullscreen() {
 }
 </script>
 
-<script>
-function randomInteger(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-
-function difficultyObjectsSimonSays(difficultyLvl)
-{
-var arrayList= [];
-if(  difficultyLvl == 0 )
-{
-for (let i = 0; i < 1000; i++) {
-  arrayList.push(randomInteger(0,3));
-}
-
-}
-else if(  difficultyLvl== 1)
-{
-for (let i = 0; i < 1000; i++) {
-  arrayList.push(randomInteger(0,7));
-}
-}
-else if( difficultyLvl == 2 )
-{
-for (let i = 0; i < 1000; i++) {
-  arrayList.push(randomInteger(0,11));
-}
-}
-else //if( difficultyLvl == 3  )
-{
-for (let i = 0; i < 1000; i++) {
-  arrayList.push(randomInteger(0,15));
-}
-}
-return  arrayList;
-}
-
-//var simonSaysArray =difficultyObjectsSimonSays(3);
-//console.log(simonSaysArray)
-</script>
 </body>
 
 </html>
