@@ -98,9 +98,11 @@ left:0;
 
      <button id="btnReturnToPo"class="button" id="item" onclick="goBackToPo()">&#x23ce;</button>
 
+<span id="sFramesInstruments">
 <iframe src="/" id="iframePlay" class="iframeSynth" title="ZigguratPlayEngine" ></iframe>
 <iframe src="/" id="iframeWrite" class="iframeSynth" title="ZigguratwriteEngine"></iframe>
-<iframe src="https://zigguratsynth.herokuapp.com/static/drumMachine/index.html" id="iframeDrum" class="iframeSynth" title="ZigguratDrumEngine"></iframe>
+<iframe src="/drum" id="iframeDrum" class="iframeSynth" title="ZigguratDrumEngine"></iframe>
+</span>
 
         <script src="src/babylon.js"></script>
 
@@ -1120,6 +1122,46 @@ function openFullscreen() {
 }
 </script>
 
+<script>
+function randomInteger(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+function difficultyObjectsSimonSays(difficultyLvl)
+{
+var arrayList= [];
+if(  difficultyLvl == 0 )
+{
+for (let i = 0; i < 1000; i++) {
+  arrayList.push(randomInteger(0,3));
+}
+
+}
+else if(  difficultyLvl== 1)
+{
+for (let i = 0; i < 1000; i++) {
+  arrayList.push(randomInteger(0,7));
+}
+}
+else if( difficultyLvl == 2 )
+{
+for (let i = 0; i < 1000; i++) {
+  arrayList.push(randomInteger(0,11));
+}
+}
+else //if( difficultyLvl == 3  )
+{
+for (let i = 0; i < 1000; i++) {
+  arrayList.push(randomInteger(0,15));
+}
+}
+return  arrayList;
+}
+
+//var simonSaysArray =difficultyObjectsSimonSays(3);
+//console.log(simonSaysArray)
+</script>
 </body>
 
 </html>
