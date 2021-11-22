@@ -66,6 +66,12 @@ const server = http.createServer((req, res) => {
     });
     res.end();
     } 	
+		 else   if (feedbackUrl.trim() === '/drum') {
+		    res.writeHead(302, {
+      location: "/static/drumMachine/index.html",
+    });
+    res.end();
+    }
  else if (feedbackUrl.split('?')[0] === '/') {//REF: https://stackoverflow.com/questions/4720343/loading-basic-html-in-node-js
         res.writeHead(200, {'Content-Type': 'text/html'});
         fs.createReadStream('synth.html').pipe(res);
