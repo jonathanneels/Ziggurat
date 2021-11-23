@@ -990,8 +990,10 @@ isSoundSelected=false;
 }
 else{
   if(typeof innerDoc.querySelectorAll('.pianoMode')[idToPlay] !== "undefined" ){ 
+  setTimeout(function(){ 
     innerDoc.colorChangedKeyboard={};
    innerDoc.querySelectorAll('.pianoMode')[idToPlay].onmousedown();
+   }, 1);
  }}
  
  if(isGameMode)
