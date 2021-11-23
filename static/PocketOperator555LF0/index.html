@@ -632,15 +632,20 @@ groundInfo.position.z=   0.1;
 	 }
 	 
 	 createHeaderField(); 
-	    document.getElementById("btnReturnToPo").style.visibility = "hidden"  
-  setTimeout(function(){ 
+	    document.getElementById("btnReturnToPo").style.visibility = "hidden" ;
+		  setTimeout(function(){ 
   setDefaultParametersZigguratEngine();
+
  window.game.scene.getMeshByName("cyLeft").rotation.y=0.2; 
+
+window.game.scene.cameras[0].inputs.remove(window.game.scene.cameras[0].inputs.attached.mouse);// lock camera movement
+	window.game.scene.cameras[0].multiTouchPanAndZoom=false;
+		window.game.scene.cameras[0].pinchZoom=false;
+	window.game.scene.cameras[0].multiTouchPanning=false; 
 
   }, 3000);
 
  		window.game.scene.onPointerDown = function (evt, pickResult) {
-window.game.scene.cameras[0].inputs.remove(window.game.scene.cameras[0].inputs.attached.mouse);// lock camera movement
 
         // We try to pick an object
         if (pickResult.hit) {
