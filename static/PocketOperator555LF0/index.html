@@ -118,16 +118,21 @@ left:0;
 /////GAME SIMON SAYS:///////////////////////////////////////
 var playerSoundMoveIndex=0;
 var localSphereStepId=0;
-
+var difficulty=3;// 0 min, 3 max
  var simonSaysArray;
 var isGameMode=false;
+var isNewgameStarted=false;
 var timeoutNextEntry;
+var timeoutNextEntrySub; 
+var timeoutResetGame; 
+
 function randomInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function gameStopped()
 {
+clearTimeout(timeoutNextEntry);
 for (let i = 1; i < 16; i++) {
 try{
  window.game.scene.getMeshByName("sphereOut"+i.toString()).material= window.game.scene.getMaterialByName("color_black")
@@ -141,35 +146,54 @@ continue;
 }
 function newGame()
 {
-if(!isGameMode){return;}
+if(isGameMode &&  !isNewgameStarted){  
 
+clearTimeout(timeoutNextEntry);
+clearTimeout(timeoutNextEntrySub);
+clearTimeout(timeoutResetGame);
+
+ for (let i = 0; i < iFrameList.length; i++) { 
+ if(iFrameList[i] == null || i== 2 ){continue;}
+var innerDoc = iFrameList[i].contentDocument || iFrameList[i].contentWindow.document;  
+ 							 innerDoc.getElementById("btnClassicKeyboard").click();
+ 
+}
+
+isNewgameStarted=true;
 playerSoundMoveIndex=0;
 localSphereStepId=0;
-   simonSaysArray =difficultyObjectsSimonSays(3);
-  computerShowsMovement(0);
+simonSaysArray=[];
+   simonSaysArray =difficultyObjectsSimonSays(difficulty);
+  computerShowsMovement();
 
    InfoTexture.getContext().clearRect(0, 0, 512, 512);
 	InfoTexture.drawText( "Start!", 20, 200, "bold 90px Segoe UI", "white", "transparent");
+}
 
 }
 function computerShowsMovement( )
 {
  
 var sId= simonSaysArray[playerSoundMoveIndex] ;
+timeoutNextEntry=setTimeout(function(){ 
 
    if( isGameMode){ 
 window.game.scene.getMeshByName("sphereOut"+sId.toString()).material= window.game.scene.getMaterialByName("color_highlight")
  var innerDoc = iFrameList[1].contentDocument || iFrameList[1].contentWindow.document; 
-     innerDoc.querySelectorAll('.pianoMode')[sId].onmousedown();
+   innerDoc.colorChangedKeyboard={};
+     innerDoc.querySelectorAll('.pianoMode')[sId-1].onmousedown();
 
-timeoutNextEntry=setTimeout(function(){ 
+timeoutNextEntrySub=setTimeout(function(){ 
  if( isGameMode){ 
 
  window.game.scene.getMeshByName("sphereOut"+sId.toString()).material= window.game.scene.getMaterialByName("color_black")
 }
 }, 500,sId);
 }
+ }, 500,sId);
+
  
+
 }
 
 function playerResponse(SphereId)
@@ -188,9 +212,8 @@ localSphereStepId=0;
    InfoTexture.getContext().clearRect(0, 0, 512, 512);
 	InfoTexture.drawText( "Score: "+playerSoundMoveIndex, 20, 200, "bold 90px Segoe UI", "white", "transparent");
 
-setTimeout(function(){ 
  computerShowsMovement( );
-}, 1);
+
 
 }
  else 
@@ -201,13 +224,11 @@ setTimeout(function(){
 }
 else 
 {
-clearTimeout(timeoutNextEntry);
-   InfoTexture.getContext().clearRect(0, 0, 512, 512);
+    InfoTexture.getContext().clearRect(0, 0, 512, 512);
 	InfoTexture.drawText( "End: "+playerSoundMoveIndex, 20, 200, "bold 90px Segoe UI", "white", "transparent");
-isGameMode=false;
 gameStopped();
-setTimeout(function(){ 
-isGameMode=true; 
+timeoutResetGame=setTimeout(function(){ 
+isNewgameStarted=false;
  newGame()
 }, 5000);
 
@@ -220,26 +241,26 @@ var arrayList= [];
 if(  difficultyLvl == 0 )
 {
 for (let i = 0; i < 1000; i++) {
-  arrayList.push(randomInteger(0,3));
+  arrayList.push(randomInteger(1,4));
 }
 
 }
 else if(  difficultyLvl== 1)
 {
 for (let i = 0; i < 1000; i++) {
-  arrayList.push(randomInteger(0,7));
+  arrayList.push(randomInteger(1,8));
 }
 }
 else if( difficultyLvl == 2 )
 {
 for (let i = 0; i < 1000; i++) {
-  arrayList.push(randomInteger(0,11));
+  arrayList.push(randomInteger(1,12));
 }
 }
 else //if( difficultyLvl == 3  )
 {
 for (let i = 0; i < 1000; i++) {
-  arrayList.push(randomInteger(0,15));
+  arrayList.push(randomInteger(1,16));
 }
 }
 return  arrayList;
@@ -347,6 +368,8 @@ trueIndex=0;
  		
   if(iFrameList[1] !== null ){  
   //innerDoc.getElementById('start-button').click();  
+  innerDoc.colorChangedKeyboard={};
+
      innerDoc.querySelectorAll('.pianoMode')[trueIndex].onmousedown();
 
  }
@@ -630,7 +653,8 @@ window.game.scene.cameras[0].inputs.remove(window.game.scene.cameras[0].inputs.a
 		   if(!isGameMode){
 		   isGameMode=true;
 setTimeout(function(){ 
-newGame()
+isNewgameStarted=false;
+newGame();
 }, 500);}
 else
 {
@@ -961,6 +985,7 @@ isSoundSelected=false;
 }
 else{
   if(typeof innerDoc.querySelectorAll('.pianoMode')[idToPlay] !== "undefined" ){ 
+    innerDoc.colorChangedKeyboard={};
    innerDoc.querySelectorAll('.pianoMode')[idToPlay].onmousedown();
  }}
  
