@@ -78,7 +78,10 @@ left:0;
   font-size: large;
 
 	}
-	
+	.button {
+	width:12%;
+ 	font-size:large;
+	}
 	    .button:hover {  position:absolute;
       cursor: pointer;
 	        background-color: rgba(244, 118, 220, 1.00); 
@@ -94,9 +97,9 @@ left:0;
 <body class="noselect" id="body" onclick="openFullscreen()">
     <canvas id="renderCanvas"></canvas>
 	
-	<button id="btnZoom"class="button" onclick="zoomToPO()">🔍</button>
+	<button id="btnZoom"class="button" onclick="setTimeout(function(){ zoomToPO();}, 100);">🔍</button>
 
-     <button id="btnReturnToPo"class="button" id="item" onclick="goBackToPo()">&#x23ce;</button>
+     <button id="btnReturnToPo"class="button" id="item" onclick="setTimeout(function(){ goBackToPo();}, 100);">&#x23ce;</button>
 
 <span id="sFramesInstruments">
 <iframe src="/" id="iframePlay" class="iframeSynth" title="ZigguratPlayEngine" ></iframe>
@@ -230,7 +233,7 @@ gameStopped();
 timeoutResetGame=setTimeout(function(){ 
 isNewgameStarted=false;
  newGame()
-}, 5000);
+}, 3000);
 
 }
 }
@@ -303,6 +306,7 @@ function goBackToPo()
 				var intervalBMP = (60 / BMP) * 1000;//REF: https://stackoverflow.com/questions/43115258/do-function-x-times-in-one-minute-bpm
 
 				var isSoundSelected=false;
+				var noteLength= 0.3;
 				var isBMPSelected= false;
 				var isPatternSelected=false;
 				var isSpecialSelected=false;
@@ -313,7 +317,7 @@ var currentIndex= 4;
 var trueIndex=-1;
 
 var currentLFOSpecialIndex= 0;
-var LFOSpecialArray=["NONE", "OSC", "LFO", "PULSE"]
+var LFOSpecialArray=["NONE", "OSC", "LFO", "PULSE"];
 
 		var waveFormArray=[0,3,6,7,9,11,12,13,16,18,19,21,22,24,26,29]; // ziguratwaveform dropdownlist
  
@@ -508,8 +512,8 @@ innerDoc.querySelector("#custom-wave-select").selectedIndex = waveFormArray[wave
         innerDoc.querySelector("#note-length-control").setAttribute("max",5);
 		     innerDoc.querySelector("#note-length-control").setAttribute("min",0.1);
 			 		    innerDoc.querySelector("#note-length-control").setAttribute("step",0.1); 
-             innerDoc.querySelector("#note-length-control").value =0.5;
-            innerDoc.querySelector("#note-length-control").defaultValue =0.5;
+             innerDoc.querySelector("#note-length-control").value =noteLength;
+            innerDoc.querySelector("#note-length-control").defaultValue =noteLength;
 		innerDoc.querySelector("#note-length-control").dispatchEvent(new Event("change"));
 		
 						 			    innerDoc.getElementById("start-button").style.display= "none" ;
@@ -943,7 +947,7 @@ setBPMZiggurat();
 			}
 		}
 		
-		 else  if(pickResult.pickedMesh.name.includes("sphereOut") || pickResult.pickedMesh.name.includes("backsideButton"))
+		 else  if(!window.game.scene.getMeshByName( pickResult.pickedMesh.name.replace("sphereOut","sphereNote")).isOn &&pickResult.pickedMesh.name.includes("sphereOut") || pickResult.pickedMesh.name.includes("backsideButton"))
 		   {
 		   		   var itemName = pickResult.pickedMesh.name.replace("backsideButton","sphereOut");
 
@@ -999,6 +1003,10 @@ else{
 playerResponse(idToPlay+1); 
 }
 
+		  setTimeout(function(){   
+		  		   window.game.scene.getMeshByName(  itemName).position.z +=100;
+		  window.game.scene.getMeshByName( itemName.replace("sphereOut","sphereNote")).isOn=false;
+ }, noteLength*1000,itemName);
 
  }
  //}, 1);
@@ -1019,19 +1027,7 @@ window.game.scene.onPointerUp = function (evt, pickResult) {
  //	window.game.scene.getMeshByName("cyRight").material= window.game.scene.getMaterialByName("color_Magenta")
 
 
-
- for (var k = window.game.scene.meshes.length - 1; k >= 0; k--) {
-
-var mesh = window.game.scene.meshes[k];
-
- if(mesh.name.includes("sphereOut") && mesh.position.z < -99 && !isRec  )
-		   {
-		   mesh.position.z +=100;
-		  window.game.scene.getMeshByName( pickResult.pickedMesh.name.replace("sphereOut","sphereNote")).isOn=false;
-
-		   }
-		  // mesh.dispose(false,true);
-}
+ 
 
         // We try to pick an object
         if (pickResult.hit) {
@@ -1256,7 +1252,7 @@ window.game.scene.getMeshByName("cyLeft").rotation.y = 5;
 var cyleftVal=parseFloat(window.game.scene.getMeshByName("cyLeft").rotation.y ).toFixed(1)  ;//(Math.round(parseFloat(window.game.scene.getMeshByName("cyLeft").rotation.y*2.5)*2)/2)
       innerDoc.querySelector("input[id='note-length-control']").value =cyleftVal;
 	  innerDoc.querySelector("input[id='note-length-control']").defaultValue =cyleftVal;
-  	 
+  	 noteLength= cyleftVal;
 	  clearTimeout(knobActionTimeout);
 	knobActionTimeout= setTimeout(function(){   
 	 		innerDoc.querySelector("input[id='note-length-control']").dispatchEvent(new Event("change"));
