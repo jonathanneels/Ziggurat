@@ -612,7 +612,7 @@ ground.position.y=  0.8;
     var ground = textGround("groundPoAtlasSOUND", dmat ,0.8, 0.8, 0 )   
  ground.position.x=   0.07;
 ground.position.z=    -1;
-
+texture.isPickable= false;
 	 textContent(texture,"SOUND", 20, 200, "bold 80px Segoe UI","#d6006e",true)
 
   	 	 var texture = textTexture("texturePoAtlasPATTERN", 512); 
@@ -620,6 +620,7 @@ ground.position.z=    -1;
     var ground = textGround("groundPoAtlasPATTERN", dmat ,0.8, 0.8, 0 )   
  ground.position.x=   0.07;
 ground.position.z=    -0.5; 
+texture.isPickable= false; 
 	 textContent(texture,"PATTERN", 20, 200, "bold 80px Segoe UI","#d6006e",true)
 
   	 	 var texture = textTexture("texturePoAtlasBPM", 512); 
@@ -627,6 +628,7 @@ ground.position.z=    -0.5;
     var ground = textGround("groundPoAtlasBPM", dmat ,0.8, 0.8, 0 )   
  ground.position.x=   0.07;
 ground.position.z=    0.2; 
+texture.isPickable= false;
 	 textContent(texture,"BPM", 20, 200, "bold 80px Segoe UI","#d6006e",true)
 
 
@@ -635,13 +637,15 @@ ground.position.z=    0.2;
     var ground = textGround("groundPoAtlasSPECIAL", dmat ,0.8, 0.8, 0 )   
  ground.position.x=   0.7;
 ground.position.z=    1.25; 
+texture.isPickable= false;
 	 textContent(texture,"SPECIAL", 20, 200, "bold 80px Segoe UI","#d6006e",true)
 
   	 	 var texture = textTexture("texturePoAtlasFX", 512); 
 	var dmat = textMaterial('matTexturePoAtlasFX',texture ); 
     var ground = textGround("groundPoAtlasFX", dmat ,0.8, 0.8, 0 )   
  ground.position.x=   1.32;
-ground.position.z=    1.40; 
+ground.position.z=    1.40;
+texture.isPickable= false; 
 	 textContent(texture,"FX", 20, 200, "bold 80px Segoe UI","#d6006e",true)
 
 
@@ -650,13 +654,15 @@ ground.position.z=    1.40;
     var ground = textGround("groundPoAtlasPLAY", dmat ,0.8, 0.8, 0 )   
  ground.position.x=   1.95;
 ground.position.z=    1.34; 
+texture.isPickable= false;
 	 textContent(texture,"PLAY", 20, 200, "bold 80px Segoe UI","#d6006e",true)
 
   	 	 var texture = textTexture("texturePoAtlasWRITE", 512); 
 	var dmat = textMaterial('matTexturePoAtlasWRITE',texture ); 
     var ground = textGround("groundPoAtlasWRITE", dmat ,0.8, 0.8, 0 )   
  ground.position.x=   2.57;
-ground.position.z=    1.31; 
+ground.position.z=    1.31;
+texture.isPickable= false; 
 	 textContent(texture,"WRITE", 20, 200, "bold 80px Segoe UI","#d6006e",true)
 
   }
