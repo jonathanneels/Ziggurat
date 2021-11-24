@@ -230,10 +230,8 @@ else
     InfoTexture.getContext().clearRect(0, 0, 512, 512);
 	InfoTexture.drawText( "End: "+playerSoundMoveIndex, 20, 200, "bold 90px Segoe UI", "white", "transparent");
 gameStopped();
-timeoutResetGame=setTimeout(function(){ 
-isNewgameStarted=false;
- newGame()
-}, 3000);
+ isNewgameStarted=false;
+  		   isGameMode=false;
 
 }
 }
@@ -715,14 +713,13 @@ groundInfo.position.z=   0.1;
 		   
 		   
 		   
-		    if(pickResult.pickedMesh.name.includes("groundHeaderField") )
+		    if(pickResult.pickedMesh.name.includes("groundHeaderField")  || pickResult.pickedMesh.name.includes("cubLCD") )
 		   {
 		   if(!isGameMode){
 		   isGameMode=true;
-setTimeout(function(){ 
-isNewgameStarted=false;
-newGame();
-}, 500);}
+ isNewgameStarted=false;
+ newGame();
+ }
 else
 {
    InfoTexture.getContext().clearRect(0, 0, 512, 512);
@@ -732,11 +729,7 @@ gameStopped();
 }
 
 		   }
-		   if(pickResult.pickedMesh.name.includes("cubLCD")  )
-		   {
 		   
-
-		   }
 		
 		   
 		   if( "cyRight" ==pickResult.pickedMesh.name)
