@@ -329,9 +329,8 @@ function interValActions()
 {
 	customBMPInterval = setInterval(function(){ // besides the scene default interval a BMP counter
 
-   timerTexture.getContext().clearRect(0, 0, 512, 512);
-	timerTexture.drawText( DisplayCurrentTime(), 20, 200, "bold 150px Segoe UI", "white", "transparent");
- 
+    textContent(timerTexture,DisplayCurrentTime(), 20, 200, "bold 150px Segoe UI", "white" )
+
 	if(isPlay)
 	{
 	 
@@ -453,6 +452,7 @@ var innerDoc = iFrameList[i].contentDocument || iFrameList[i].contentWindow.docu
 }
   }
   
+ 
   function zoomToPO()
 {
  if(window.game.scene.cameras[0].fov == 0.8)
@@ -570,84 +570,136 @@ setBPMZiggurat();
        return time = hours + ":" + minutes //+ ":" + seconds;
      };
 	 
-	 function createtimerField()
+	  function textMaterial(name, text)
 	 {
-	 	  timerTexture = new BABYLON.DynamicTexture("textureTime", 512, window.game.scene, true);//REF: https://playground.babylonjs.com/#JQ0YXQ#4  & https://www.babylonjs-playground.com/#TMHF80#1
-    timerTexture.hasAlpha = true; 
-	
-	var dynamicMaterial = new BABYLON.StandardMaterial('matTextureTime', window.game.scene);
-	dynamicMaterial.diffuseTexture = timerTexture;
-    dynamicMaterial.opacityTexture = timerTexture;
+	 	var dynamicMaterial = new BABYLON.StandardMaterial(name, window.game.scene);
+	dynamicMaterial.diffuseTexture = text ;
+    dynamicMaterial.opacityTexture = text ;
 	dynamicMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
 	dynamicMaterial.backFaceCulling = false;
+	return dynamicMaterial;
+	 }
+	 function textTexture(name, size)
+	 {
+	 
+	 	 	 var x = new BABYLON.DynamicTexture(name, size, window.game.scene, true);//REF: https://playground.babylonjs.com/#JQ0YXQ#4  & https://www.babylonjs-playground.com/#TMHF80#1
+    x.hasAlpha = true; 
+	return x;
 
-    var groundTimer = BABYLON.Mesh.CreateGround("groundTimerField", 0.8, 0.8, 08, window.game.scene);
-	groundTimer.material = dynamicMaterial;
-groundTimer.rotation.y= -1.56;
-groundTimer.position.y=  0.8;
-groundTimer.position.x=  -1.9;
+	 }
+	 function textGround(name, mat , x,y,z)
+	 {
+	     var ground = BABYLON.Mesh.CreateGround(name, x,y,z, window.game.scene);
+	ground.material = mat;
+	ground.rotation.y= -1.56;
+ground.position.y=  0.8;
+
+	return ground
+
+	 }
+	 function textContent(texture, text,x,y,font,color, isSkipClean)
+	 {
+	 
+	 if(!isSkipClean){
+	    texture.getContext().clearRect(0, 0, 512, 512);}
+	texture.drawText( text, x,y,font, color, "transparent");
+
+	 }
+	  function createPOAtlas()
+  {
+  	 	 var texture = textTexture("texturePoAtlasSOUND", 512); 
+	var dmat = textMaterial('matTexturePoAtlasSOUND',texture ); 
+    var ground = textGround("groundPoAtlasSOUND", dmat ,0.8, 0.8, 0 )   
+ ground.position.x=   0.07;
+ground.position.z=    -1;
+
+	 textContent(texture,"SOUND", 20, 200, "bold 80px Segoe UI","#d6006e",true)
+
+  	 	 var texture = textTexture("texturePoAtlasPATTERN", 512); 
+	var dmat = textMaterial('matTexturePoAtlasPATTERN',texture ); 
+    var ground = textGround("groundPoAtlasPATTERN", dmat ,0.8, 0.8, 0 )   
+ ground.position.x=   0.07;
+ground.position.z=    -0.5; 
+	 textContent(texture,"PATTERN", 20, 200, "bold 80px Segoe UI","#d6006e",true)
+
+  	 	 var texture = textTexture("texturePoAtlasBPM", 512); 
+	var dmat = textMaterial('matTexturePoAtlasBPM',texture ); 
+    var ground = textGround("groundPoAtlasBPM", dmat ,0.8, 0.8, 0 )   
+ ground.position.x=   0.07;
+ground.position.z=    0.2; 
+	 textContent(texture,"BPM", 20, 200, "bold 80px Segoe UI","#d6006e",true)
+
+
+  	 	 var texture = textTexture("texturePoAtlasSPECIAL", 512); 
+	var dmat = textMaterial('matTexturePoAtlasSPECIAL',texture ); 
+    var ground = textGround("groundPoAtlasSPECIAL", dmat ,0.8, 0.8, 0 )   
+ ground.position.x=   0.7;
+ground.position.z=    1.25; 
+	 textContent(texture,"SPECIAL", 20, 200, "bold 80px Segoe UI","#d6006e",true)
+
+  	 	 var texture = textTexture("texturePoAtlasFX", 512); 
+	var dmat = textMaterial('matTexturePoAtlasFX',texture ); 
+    var ground = textGround("groundPoAtlasFX", dmat ,0.8, 0.8, 0 )   
+ ground.position.x=   1.32;
+ground.position.z=    1.40; 
+	 textContent(texture,"FX", 20, 200, "bold 80px Segoe UI","#d6006e",true)
+
+
+  	 	 var texture = textTexture("texturePoAtlasPLAY", 512); 
+	var dmat = textMaterial('matTexturePoAtlasPLAY',texture ); 
+    var ground = textGround("groundPoAtlasPLAY", dmat ,0.8, 0.8, 0 )   
+ ground.position.x=   1.95;
+ground.position.z=    1.34; 
+	 textContent(texture,"PLAY", 20, 200, "bold 80px Segoe UI","#d6006e",true)
+
+  	 	 var texture = textTexture("texturePoAtlasWRITE", 512); 
+	var dmat = textMaterial('matTexturePoAtlasWRITE',texture ); 
+    var ground = textGround("groundPoAtlasWRITE", dmat ,0.8, 0.8, 0 )   
+ ground.position.x=   2.57;
+ground.position.z=    1.31; 
+	 textContent(texture,"WRITE", 20, 200, "bold 80px Segoe UI","#d6006e",true)
+
+  }
+	 function createtimerField()
+	 {
+	 	  timerTexture = textTexture("textureTime", 512);
+	
+	var dynamicMaterial = textMaterial('matTextureTime',timerTexture );
+ 
+    var groundTimer = textGround("groundTimerField", dynamicMaterial , 0.8, 0.8, 08)   
+	
+ groundTimer.position.x=  -1.9;
 groundTimer.position.z=   0.8;
 	 }
 	 
+	
 	 function createInfoField()
 	 {
-	 	  InfoTexture = new BABYLON.DynamicTexture("textureField", 512, window.game.scene, true);   
-    InfoTexture.hasAlpha = true; 
-	
-	var dynamicMaterial = new BABYLON.StandardMaterial('matTextureField', window.game.scene);
-	dynamicMaterial.diffuseTexture = InfoTexture;
-    dynamicMaterial.opacityTexture = InfoTexture;
-	dynamicMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-	dynamicMaterial.backFaceCulling = false;
+ 		 	  InfoTexture = textTexture("textureField", 512);
 
-    var groundInfo = BABYLON.Mesh.CreateGround("groundInfoField", 1.2, 1.2, 1, window.game.scene);
-	groundInfo.material = dynamicMaterial;
-groundInfo.rotation.y= -1.56;
-groundInfo.position.y=  0.8;
+	var dynamicMaterial = textMaterial('matTextureField',InfoTexture); 
+
+ 	var groundInfo = textGround("groundInfoField", dynamicMaterial ,1.2, 1.2, 1)   
 groundInfo.position.x=  -1.3;
 groundInfo.position.z=   0.2;
 
-   InfoTexture.getContext().clearRect(0, 0, 512, 512);
-	InfoTexture.drawText( "Hi!", 20, 200, "bold 200px Segoe UI", "white", "transparent");
-
+ textContent(InfoTexture,"Hi!", 20, 200, "bold 200px Segoe UI","white")
 	 }
 	 
 	  function createHeaderField()
 	 {
-	 	  InfoTexture = new BABYLON.DynamicTexture("textureHeader", 1300, window.game.scene, true);    
-    InfoTexture.hasAlpha = true; 
+  		 	var  headText = textTexture("textureHeader", 1300);
 	
-	var dynamicMaterial = new BABYLON.StandardMaterial('matHeaderField', window.game.scene);
-	dynamicMaterial.diffuseTexture = InfoTexture;
-    dynamicMaterial.opacityTexture = InfoTexture;
-	dynamicMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-	dynamicMaterial.backFaceCulling = false;
+ 	var dynamicMaterial = textMaterial('matHeaderField',headText ); 
 
-    var groundInfo = BABYLON.Mesh.CreateGround("groundHeaderField", 1.2, 1.2, 1, window.game.scene);
-	groundInfo.material = dynamicMaterial;
-groundInfo.rotation.y= -1.56;
-groundInfo.position.y=  0.8;
-groundInfo.position.x=  -1.9;
+  	var groundInfo = textGround("groundHeaderField", dynamicMaterial ,1.2, 1.2, 1)   
+ groundInfo.position.x=  -1.9;
 groundInfo.position.z=   0.1;
 
-   InfoTexture.getContext().clearRect(0, 0, 512, 512);
-	InfoTexture.drawText( "PO 555 - LF0", 20, 200, "bold 150px Segoe UI", "#d6006e", "transparent");
+  textContent(headText,"PO 555 - LF0", 20, 200, "bold 150px Segoe UI", "#d6006e" )
 
 	 }
 	 
-	 createHeaderField(); 
-	    document.getElementById("btnReturnToPo").style.visibility = "hidden" ;
-		  setTimeout(function(){ 
-  setDefaultParametersZigguratEngine();
-
- window.game.scene.getMeshByName("cyLeft").rotation.y=0.2; 
-
-window.game.scene.cameras[0].inputs.remove(window.game.scene.cameras[0].inputs.attached.mouse);// lock camera movement
-	window.game.scene.cameras[0].multiTouchPanAndZoom=false;
-		window.game.scene.cameras[0].pinchZoom=false;
-	window.game.scene.cameras[0].multiTouchPanning=false; 
-
-  }, 3000);
 
  		window.game.scene.onPointerDown = function (evt, pickResult) {
 
@@ -1281,12 +1333,32 @@ var cyleftVal=parseFloat(window.game.scene.getMeshByName("cyLeft").rotation.y ).
 }, 100);
 
 
+ document.addEventListener("DOMContentLoaded", function(){
  
- 
-createtimerField();
+ 		     createtimerField();
  createInfoField();
-  interValActions();
- 
+ 		     createPOAtlas(); 	 
+   	 createHeaderField();  
+	    document.getElementById("btnReturnToPo").style.visibility = "hidden" ;
+		
+		  setTimeout(function(){ 
+	 		    interValActions();
+
+
+  setDefaultParametersZigguratEngine();
+
+ window.game.scene.getMeshByName("cyLeft").rotation.y=0.2; 
+
+window.game.scene.cameras[0].inputs.remove(window.game.scene.cameras[0].inputs.attached.mouse);// lock camera movement
+	window.game.scene.cameras[0].multiTouchPanAndZoom=false;
+		window.game.scene.cameras[0].pinchZoom=false;
+	window.game.scene.cameras[0].multiTouchPanning=false; 
+
+  }, 3000);
+
+
+});
+
 
     </script>
 	 		<script>
