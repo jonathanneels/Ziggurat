@@ -57,6 +57,9 @@
   text-decoration: none;
   cursor: pointer; position:absolute;
 opacity:0.6;
+	width:12%;
+ 	font-size:large;
+
 	}  
 	
 	#btnZoom
@@ -78,11 +81,7 @@ left:0;
   font-size: large;
 
 	}
-	.button {
-	width:12%;
- 	font-size:large;
-	}
-	    .button:hover {  position:absolute;
+ 	    .button:hover {  position:absolute;
       cursor: pointer;
 	        background-color: rgba(244, 118, 220, 1.00); 
 	    .button:active {  position:absolute;
@@ -127,8 +126,7 @@ var isGameMode=false;
 var isNewgameStarted=false;
 var timeoutNextEntry;
 var timeoutNextEntrySub; 
-var timeoutResetGame; 
-
+ 
 function randomInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -136,6 +134,8 @@ function randomInteger(min, max) {
 function gameStopped()
 {
 clearTimeout(timeoutNextEntry);
+clearTimeout(timeoutNextEntrySub);
+
 for (let i = 1; i < 16; i++) {
 try{
  window.game.scene.getMeshByName("sphereOut"+i.toString()).material= window.game.scene.getMaterialByName("color_black")
@@ -153,8 +153,7 @@ if(isGameMode &&  !isNewgameStarted){
 
 clearTimeout(timeoutNextEntry);
 clearTimeout(timeoutNextEntrySub);
-clearTimeout(timeoutResetGame);
-
+ 
  for (let i = 0; i < iFrameList.length; i++) { 
  if(iFrameList[i] == null || i== 2 ){continue;}
 var innerDoc = iFrameList[i].contentDocument || iFrameList[i].contentWindow.document;  
