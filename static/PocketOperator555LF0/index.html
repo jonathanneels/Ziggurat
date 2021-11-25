@@ -667,7 +667,8 @@ texture.isPickable= false;
 	 function createtimerField()
 	 {
 	 	  timerTexture = textTexture("textureTime", 512);
-	
+	timerTexture.isPickable= false; 
+
 	var dynamicMaterial = textMaterial('matTextureTime',timerTexture );
  
     var groundTimer = textGround("groundTimerField", dynamicMaterial , 0.8, 0.8, 08)   
@@ -680,6 +681,7 @@ groundTimer.position.z=   0.8;
 	 function createInfoField()
 	 {
  		 	  InfoTexture = textTexture("textureField", 512);
+	InfoTexture.isPickable= false; 
 
 	var dynamicMaterial = textMaterial('matTextureField',InfoTexture); 
 
@@ -693,7 +695,8 @@ groundInfo.position.z=   0.2;
 	  function createHeaderField()
 	 {
   		 	var  headText = textTexture("textureHeader", 1300);
-	
+		headText.isPickable= false; 
+
  	var dynamicMaterial = textMaterial('matHeaderField',headText ); 
 
   	var groundInfo = textGround("groundHeaderField", dynamicMaterial ,1.2, 1.2, 1)   
@@ -713,7 +716,7 @@ groundInfo.position.z=   0.1;
 		   
 		   
 		   
-		    if(pickResult.pickedMesh.name.includes("groundHeaderField")  || pickResult.pickedMesh.name.includes("cubLCD") )
+		    if(pickResult.pickedMesh.name.includes("groundHeaderField")  || pickResult.pickedMesh.name.includes("groundInfoField") || pickResult.pickedMesh.name.includes("cubLCD") )
 		   {
 		   if(!isGameMode){
 		   isGameMode=true;
