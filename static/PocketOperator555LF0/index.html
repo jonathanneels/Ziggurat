@@ -172,10 +172,8 @@ function randomInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function gameStopped()
+function clearButtons()
 {
-clearTimeout(timeoutNextEntry);
-clearTimeout(timeoutNextEntrySub);
 
 for (let i = 1; i < 16; i++) {
 try{
@@ -188,8 +186,17 @@ continue;
 }
 }
 }
+function gameStopped()
+{
+clearTimeout(timeoutNextEntry);
+clearTimeout(timeoutNextEntrySub);
+
+clearButtons();
+}
 function newGame()
 {
+clearButtons();
+
 if(isGameMode &&  !isNewgameStarted){  
 
 clearTimeout(timeoutNextEntry);
@@ -989,6 +996,8 @@ setBPMZiggurat();
 		}
 		if( "spherePlay" ==pickResult.pickedMesh.name|| "backsideButtonPlay" ==pickResult.pickedMesh.name)
 		{
+		clearButtons();
+
 				   		   var itemName = pickResult.pickedMesh.name.replace("backsideButtonPlay","spherePlay");
 		 window.game.scene.getMeshByName(itemName).material= window.game.scene.getMaterialByName("color_Magenta")
 			   
@@ -1007,7 +1016,11 @@ setBPMZiggurat();
 					isPlay= false;
 		window.game.scene.getMeshByName("cubPlay").material.alpha=0.0;
 
+  currentIndex= 4; //reset play
+  trueIndex=-1;
   							 innerDocDMachine.getElementById("stop").click();
+setTimeout(function(){   							 innerDocDMachine.getElementById("stop").click(); }, 200);// absolute play stop
+
 
 			}
 				return; 
