@@ -36,15 +36,7 @@
             -ms-touch-action: none;
         }
 		
-		   #item { position:absolute;
-      width: 50px;
-      height: 50px;
-	        background-color: rgba(244, 218, 220, 1.00); 
-      border: 10px solid rgba(136, 136, 136, .5);
-      border-radius: 50%;
-      touch-action: none;
-      user-select: none;
-    }
+	 
    
 	iframe{width:100%; height:100%;frameBorder:0;border:none;}
 	
@@ -60,6 +52,8 @@ opacity:0.6;
 	width:12%;
  	font-size:large;
 
+min-width:80px;
+min-height:50px;
 	}  
 	
 	#btnZoom
@@ -74,12 +68,15 @@ right:0;
 	
 	#btnReturnToPo
 	{
+	
+	position:absolute;
+ 	        background-color: rgba(244, 218, 220, 1.00); 
+  	  
 	top:0; 
 left:0;
    margin-left:  10px;
       margin-top: 10px; 
-  font-size: large;
-
+ 
 	}
  	    .button:hover {  position:absolute;
       cursor: pointer;
@@ -88,26 +85,70 @@ left:0;
        background-color: rgba(168, 218, 220, 1.00);
 
     }
+#sInfo,#sGame{
+background-color:white;
+}
 
+#sInfo,#sStartupInfo{overflow:scroll;}
 
     </style>
 </head>
 
-<body class="noselect" id="body" onclick="openFullscreen()">
+<body class="noselect" id="body" >
+
+<span id="sInfo">
+		<span id="sStartupInfo"><br>
+	<label class="pInfo">&nbsp;L knop         = note length</label> <br>
+	<label class="pInfo">&nbsp;R knob         = vibrate</label> <br>
+ 	<label class="pInfo">&nbsp;SOUND + 1-16   = instrument</label> <br>
+	<label class="pInfo">&nbsp;SOUND + L knob = reverb</label> <br>
+	<label class="pInfo">&nbsp;SOUND + R knob = octave</label> <br>
+	<label class="pInfo">&nbsp;PATTERN        = 3 synths view</label> <br>
+	<label class="pInfo">&nbsp;BPM            = Play synth tempo</label> <br>
+	<label class="pInfo">&nbsp;SPECIAL        = Osc type</label> <br>
+	<label class="pInfo">&nbsp;FX             = Edit Play synth</label> <br>
+	<label class="pInfo">&nbsp;PLAY           = start Write Synth pattern</label> <br>
+	<label class="pInfo">&nbsp;WRITE          = Edit Write Synth pattern</label> <br> 
+	<label class="pInfo">&nbsp;Tap on LCD     = Simon Says game start/stop/restart 
+		<hr>
+  
+ &nbsp; Pocket Operator, a superb product from Teenage Engineering. <br>
+ &nbsp; My personal work Synth engine "Ziggurat" is <a href="https://github.com/jonathanneels/Ziggurat">open-source</a> (Fumetsujo Studio). <br>
+ &nbsp; I am not affiliated with the company. Mail me <a href = "mailto: jonathanneels@gmail.com">here</a> <hr>
+
+    &nbsp; <button id="btnLaunchProject"class="button"   onclick="LaunchProject()">GO</button>
+		</span>
+
+</span>
+<span id="sGame" onclick="openFullscreen()">
     <canvas id="renderCanvas"></canvas>
 	
 	<button id="btnZoom"class="button" onclick="setTimeout(function(){ zoomToPO();}, 100);">🔍</button>
 
-     <button id="btnReturnToPo"class="button" id="item" onclick="setTimeout(function(){ goBackToPo();}, 100);">&#x23ce;</button>
+     <button id="btnReturnToPo"class="button"   onclick="setTimeout(function(){ goBackToPo();}, 100);">&#x23ce;</button>
 
 <span id="sFramesInstruments">
 <iframe src="/" id="iframePlay" class="iframeSynth" title="ZigguratPlayEngine" ></iframe>
 <iframe src="/" id="iframeWrite" class="iframeSynth" title="ZigguratwriteEngine"></iframe>
 <iframe src="/drum" id="iframeDrum" class="iframeSynth" title="ZigguratDrumEngine"></iframe>
 </span>
-
+</span>
         <script src="src/babylon.js"></script>
 
+<script> 
+
+function LaunchProject()
+
+{
+
+  // document.getElementById("divInfo").parentNode.removeChild(document.getElementById("divInfo"));
+ 
+	    document.getElementById("sGame").style.visibility = "visible";  
+  		 	    document.getElementById("sInfo").style.display = "none";
+
+ 
+}
+</script>
 <script>
         window.game = new window.game.Game();
 		  	var timerTexture;
@@ -1335,7 +1376,8 @@ var cyleftVal=parseFloat(window.game.scene.getMeshByName("cyLeft").rotation.y ).
 
 
  document.addEventListener("DOMContentLoaded", function(){
- 
+ 	    document.getElementById("sGame").style.visibility = "hidden";  
+
  		     createtimerField();
  createInfoField();
  		     createPOAtlas(); 	 
