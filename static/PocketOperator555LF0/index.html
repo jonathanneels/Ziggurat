@@ -178,7 +178,8 @@ function clearButtons()
 for (let i = 1; i < 16; i++) {
 try{
  window.game.scene.getMeshByName("sphereOut"+i.toString()).material= window.game.scene.getMaterialByName("color_black")
- 
+   window.game.scene.getMeshByName("sphereNote"+i.toString()).material= window.game.scene.getMaterialByName("color_Magenta")
+
 }
 catch (err)
 {
