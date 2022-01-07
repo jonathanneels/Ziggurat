@@ -290,7 +290,7 @@ input{ background: rgba(67, 74, 64, 0.95); color:white;}
 
   </style>
 </head>
-  <body class="text-selection-none" id="body"  onclick="openFullscreen()">
+  <body class="text-selection-none" id="body"  onclick="launchMidiConnect();openFullscreen();">
   <span id='sMainContainer' hidden>
 
  <button  class="btnBackgroundColorS" hidden id="btnBackgroundColorHeader" >&#x26F6;</button>
@@ -3101,7 +3101,7 @@ if(isFinite(x) && isFinite(y) ){
 	id= id
 	}
 	
-	if(typeof colorChangedKeyboard["colorChangedKeyboard"+id] == "undefined"){
+	if(typeof colorChangedKeyboard["colorChangedKeyboard"+id] == "undefined"   && document.body.contains(document.getElementById(id))){
 
 
 	  colorChangedKeyboard["colorChangedKeyboard"+id]= true;
@@ -3925,6 +3925,86 @@ else{		document.getElementById("h2Notes").innerHTML=additions+(currentAcceloNote
 	}, noteLength*100);
 }  
 
+}
+</script>
+<script>
+//REF: https://www.smashingmagazine.com/2018/03/web-midi-api/  & https://www.keithmcmillen.com/blog/making-music-in-the-browser-web-midi-api/   &     https://jsfiddle.net/KeithMcMillenInstruments/upae79bu/   &   https://codepen.io/Rumyra/pen/NxdbzL
+var midi, mididata, isMidiLaunched;
+ 
+ function frequencyFromNoteNumber(note) {
+    return 440 * Math.pow(2, (note - 69) / 12);
+}
+
+ function launchMidiConnect()
+{
+if(!isMidiLaunched && window.location === window.parent.location){ // not in iframe
+isMidiLaunched=true;
+// request MIDI access
+if (navigator.requestMIDIAccess) {
+    navigator.requestMIDIAccess({
+        sysex: false // this defaults to 'false' and we won't be covering sysex in this article. 
+    }).then(onMIDISuccess, onMIDIFailure);
+} else {
+    console.log("No MIDI support in your browser.");
+}
+function onMIDISuccess(midiAccess) {
+    // when we get a succesful response, run this code
+    console.log('MIDI Access Object', midiAccess);
+	
+	    midi = midiAccess; // this is our raw MIDI data, inputs, outputs, and sysex status
+
+    var inputs = midi.inputs.values();
+    // loop over all available inputs and listen for any MIDI input
+    for (var input = inputs.next(); input && !input.done; input = inputs.next()) {
+        // each time there is a midi message call the onMIDIMessage function
+        input.value.onmidimessage = onMIDIMessage;
+    }
+
+}
+
+function onMIDIFailure(e) {
+    // when we get a failed response, run this code
+    console.log("No access to MIDI devices or your browser doesn't support WebMIDI API. Please use WebMIDIAPIShim " + e);
+}
+function onMIDIMessage(message) {
+    mididata = message.data; // this gives us our [command/channel, note, velocity] data.
+     cmd = mididata[0] >> 4,
+    channel = mididata[0] & 0xf,
+    type = mididata[0] & 0xf0, // channel agnostic message type. Thanks, Phil Burk.
+    noteMidi = mididata[1], // noteMidi here is the the notenumber (59, 60, ....)
+    velocity = mididata[2];
+    // with pressure and tilt off
+    // note off: 128, cmd: 8 
+    // note on: 144, cmd: 9
+    // pressure / tilt on
+    // pressure: 176, cmd 11: 
+    // bend: 224, cmd: 14
+
+    switch (type) {
+        case 144: // noteOn message 
+          //   important:  noteMidi, velocity ;
+		//  console.log(mididata);
+		  
+		  
+		  		  var locVelocity =velocity/100; 
+			if(locVelocity <0.01){locVelocity=0.01;}
+			else if(locVelocity >0.9){locVelocity=0.9;}// maybe better 1.0?=> really loud!
+
+masterVolume.gain.value= locVelocity;
+					document.getElementById('volume-control').value= locVelocity;
+		   modifyInputs(true);    
+ 			  	playCurrentNote(frequencyFromNoteNumber(noteMidi));
+
+             break;
+        case 128: // noteOff message 
+
+            break;
+    }
+
+    //console.log('data', data, 'cmd', cmd, 'channel', channel);
+    // console.log('MIDI data', mididata); // MIDI data [144, 63, 73]
+}
+}
 }
 </script>
 
