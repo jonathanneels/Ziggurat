@@ -3008,11 +3008,13 @@ bufferSize =  256;
 var whiteNoise = context.createScriptProcessor(bufferSize, 1, 1);
 whiteNoise.onaudioprocess = function(e) {
 
+/*  => ENDED because if issue overload & if manually pressed button sound continues. Design choice. If this needs reactivation, also look for the playing oscs & other sounds. 25/03/2022
 if(stopButton.style.background == "red" ) // quick & dirty, tbc
 {
 clearTimeout(whiteNoise.timeoutHandler);
 whiteNoise.onaudioprocess = null;
 }
+*/
  
     var output = e.outputBuffer.getChannelData(0);
     for (var i = 0; i < bufferSize; i++) {
