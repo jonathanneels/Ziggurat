@@ -4,7 +4,9 @@ Ziggurat is a creative take on analog synthesizers. Create, load and save custom
 
 Play it here: https://zigguratsynth.herokuapp.com/
 
-Recently A POCKET OPERATOR frontend has been added: https://zigguratsynth.herokuapp.com/po
+Less recently A POCKET OPERATOR frontend has been added: https://zigguratsynth.herokuapp.com/po
+
+Recently A Chord mode frontend has been added: https://zigguratsynth.herokuapp.com/chords
 
 To play on your computer locally you must install NODE JS. 
 By typing 'node index.js' in your commandprompt (windows) in the project's directory you can browse to 127.0.0.1:22222 and have a blast!
