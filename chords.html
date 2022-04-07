@@ -1,0 +1,379 @@
+<html>
+<head>
+ <meta name="viewport" charset="UTF-8" content="width=device-width, initial-scale=1,user-scalable=no">
+
+ <style> //REF: https://www.rapidtables.com/web/tools/html-table-generator.html
+ 	.chord {
+		border:1px solid #C0C0C0;
+		border-collapse:collapse;
+		padding:5px;
+	}
+	.chord th {
+		border:1px solid #C0C0C0;
+		padding:5px;
+		background:#F0F0F0;
+		width:2%;
+	}
+	.chord td {
+		border:2px solid #C0C0C0;
+		padding:5px;
+	  background-image: url( 'data:image/png;base64,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');
+   background-repeat:no-repeat;
+  background-size: cover;
+
+	}
+ .chord td:active  {
+				border:2px solid green;
+
+}
+.infoTd{      background-image: none !important;
+
+
+}
+         .singleNote{background-image: none !important; background-color:slategrey;}
+        
+        .noselect {
+            -webkit-touch-callout: none; /* iOS Safari */
+            -webkit-user-select: none; /* Safari */
+            -khtml-user-select: none; /* Konqueror HTML */
+            -moz-user-select: none; /* Old versions of Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+        }
+#divFrame{  overflow:auto; max-height:83%;
+}
+#divTable{/*  position: fixed;*/
+ background-color:white;
+}
+    </style>
+	<script src='static/lib/cutom-input-knobs.js'></script>
+
+</head>
+<body> <!-- <body scroll="no" style="overflow: hidden"> -->
+<script>
+var insideFrameSynth;
+
+var  lastInteractionId;
+var chordInterval; 
+var chordIntervalRepeat=100;
+ </script>
+<div id="divTable">
+	<span style="position:fixed;margin-top:-5px;" id="spanRepeat"> <label for="chRepeatChord"> Repeat</label> <input type="checkbox" id="chRepeatChord" name="chRepeatChord" >  
+	<label for="chRepeatChordRate"> Rate</label> <input type="number" id="chRepeatChordRate" name="chRepeatChordRate" value=500 min=10 max=5000> </span>
+<table class="chord" id="tabelChord">
+	<caption>Chords</caption>
+	<thead> 
+	<tr>
+		<th>Header 1</th>
+		<th>D♭</th>
+		<th>A♭</th>
+		<th>E♭</th>
+		<th>B♭</th>
+		<th>F&nbsp;</th>
+		<th>C&nbsp;</th>
+		<th>G&nbsp;</th>
+		<th>D&nbsp;</th>
+		<th>A&nbsp;</th>
+		<th>E&nbsp;</th>
+		<th>B&nbsp;</th>
+		<th>F♯</th>
+
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td class="infoTd"> Maj </td>
+		<td id="maj0" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[2].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[6].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[9].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="maj1" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[9].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[13].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[16].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="maj2" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[4].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[8].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[11].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="maj3" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[11].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[15].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[18].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="maj4" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[6].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[10].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[13].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="maj5" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[1].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[5].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[8].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="maj6" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[8].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[12].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[15].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="maj7" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[3].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[7].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[10].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="maj8" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[10].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[14].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[17].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="maj9"onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[5].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[9].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[12].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="maj10" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[12].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[16].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[19].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="maj11" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[7].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[11].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[14].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+	</tr>
+	<tr>
+		<td class="infoTd">Min</td>
+		<td id="min0" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[2].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[5].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[9].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="min1" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[9].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[12].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[16].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="min2" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[4].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[7].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[11].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="min3" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[11].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[14].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[18].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="min4" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[6].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[9].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[13].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="min5" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[1].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[4].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[8].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="min6" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[8].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[11].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[15].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="min7" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[3].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[6].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[10].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="min8" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[10].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[13].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[17].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="min9" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[5].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[8].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[12].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="min10" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[12].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[15].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[19].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="min11" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[7].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[10].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[14].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+	</tr>
+	<tr>
+		<td class="infoTd">7th</td>
+		<td id="7th0" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[2].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[6].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[9].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[12].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="7th1" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[9].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[13].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[16].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[19].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="7th2" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[4].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[8].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[11].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[14].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="7th3" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[11].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[15].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[18].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[21].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="7th4" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[6].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[10].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[13].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[16].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="7th5" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[1].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[5].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[8].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[11].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="7th6" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[8].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[12].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[15].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[18].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="7th7" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[3].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[7].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[10].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[13].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="7th8" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[10].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[14].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[17].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[20].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="7th9" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[5].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[9].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[12].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[15].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="7th10" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[12].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[16].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[19].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[22].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="7th11" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[7].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[11].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[14].dispatchEvent(new Event('mousedown'));insideFrameSynth.querySelectorAll('.pianoMode')[17].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+	</tr>
+		<tr>
+		<td class="infoTd">Single</td>
+		<td id="sNote0" class="singleNote" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[0].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="sNote1" class="singleNote" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[1].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="sNote2" class="singleNote" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[2].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="sNote3" class="singleNote" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[3].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td  id="sNote4" class="singleNote" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[4].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="sNote5" class="singleNote" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[5].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="sNote6" class="singleNote" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[6].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="sNote7" class="singleNote" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[7].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="sNote8" class="singleNote" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[8].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="sNote9" class="singleNote" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[9].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="sNote10" class="singleNote" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[10].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+		<td id="sNote11" class="singleNote" onclick=" lastInteractionId=this;insideFrameSynth.querySelectorAll('.pianoMode')[11].dispatchEvent(new Event('mousedown'));">&nbsp;</td>
+	</tr>
+	</tbody>
+</table>
+</div>
+<div id= "divFrame">
+<iframe id="iFrameSynth" src="./" style="width:100%; height:100%">
+</iframe>
+</div>
+
+<script>
+     document.getElementById('iFrameSynth').onload= function() {
+
+//REF:https://stackoverflow.com/questions/1452871/how-can-i-access-iframe-elements-with-javascript
+function iframeRef( frameRef ) {
+    return frameRef.contentWindow
+        ? frameRef.contentWindow.document
+        : frameRef.contentDocument
+}
+
+  insideFrameSynth = iframeRef( document.getElementById('iFrameSynth') );
+  
+  insideFrameSynth.getElementById("btnClassicKeyboard").click();
+    insideFrameSynth.getElementById("chPiano").click();
+    insideFrameSynth.getElementById("chIgnoreOverload").click();
+
+  
+  function chordIntervalHandler()
+  {
+  chordInterval=setInterval(function(){
+
+ 
+  if(typeof lastInteractionId!= "undefined" && document.querySelector('#chRepeatChord').checked)
+  {
+     document.getElementById(lastInteractionId.id).click();
+
+console.log(document.getElementById('chRepeatChord').value)
+chordIntervalRepeat=document.getElementById('chRepeatChordRate').value;
+clearInterval(chordInterval);
+setTimeout(function(){chordIntervalHandler(); }, 500);
+
+
+}
+
+  }, chordIntervalRepeat);
+
+  
+}
+
+chordIntervalHandler();
+}
+ window.addEventListener("keydown", function (event) {
+ 
+  
+  if (event.defaultPrevented) {
+    return; // Do nothing if the event was already processed
+  }
+
+  switch (event.key) {
+      case "a":
+  document.getElementById("maj0").click();
+      break;
+
+	      case "z":
+  document.getElementById("maj1").click();
+      break;
+    case "e":
+  document.getElementById("maj2").click();
+      break;
+    case "r":
+  document.getElementById("maj3").click();
+      break;
+    case "t":
+  document.getElementById("maj4").click();
+      break;
+    case "y":
+  document.getElementById("maj5").click();
+      break;
+    case "u":
+  document.getElementById("maj6").click();
+      break;
+    case "i":
+  document.getElementById("maj7").click();
+      break;
+    case "o":
+  document.getElementById("maj8").click();
+      break;
+    case "p":
+  document.getElementById("maj9").click();
+      break;
+    case "Dead"://REF: https://keycode.info/for/%24
+  document.getElementById("maj10").click();
+      break;
+    case "$":
+  document.getElementById("maj11").click();
+      break;
+
+	  
+	  
+	    case "q":
+  document.getElementById("min0").click();
+      break;
+
+	      case "s":
+  document.getElementById("min1").click();
+      break;
+    case "s":
+  document.getElementById("min2").click();
+      break;
+    case "d":
+  document.getElementById("min3").click();
+      break;
+    case "f":
+  document.getElementById("min4").click();
+      break;
+    case "g":
+  document.getElementById("min5").click();
+      break;
+    case "h":
+  document.getElementById("min6").click();
+      break;
+    case "j":
+  document.getElementById("min7").click();
+      break;
+    case "k":
+  document.getElementById("min8").click();
+      break;
+    case "l":
+  document.getElementById("min9").click();
+      break;
+    case "m": 
+  document.getElementById("min10").click();
+      break;
+    case "ù":
+  document.getElementById("min11").click();
+      break;
+	  
+	  
+	  
+	  
+	     case "<":
+  document.getElementById("7th0").click();
+      break;
+
+	      case "w":
+  document.getElementById("7th1").click();
+      break;
+    case "x":
+  document.getElementById("7th2").click();
+      break;
+    case "c":
+  document.getElementById("7th3").click();
+      break;
+    case "v":
+  document.getElementById("7th4").click();
+      break;
+    case "b":
+  document.getElementById("7th5").click();
+      break;
+    case "n":
+  document.getElementById("7th6").click();
+      break;
+    case ",":
+  document.getElementById("7th7").click();
+      break;
+    case ";":
+  document.getElementById("7th8").click();
+      break;
+    case ":":
+  document.getElementById("7th9").click();
+      break;
+    case "=": 
+  document.getElementById("7th10").click();
+      break;
+    case " ":
+  document.getElementById("7th11").click();
+      break;
+	  
+	   
+	  
+	  
+    case "0":
+  document.getElementById("sNote0").click();
+      break;
+	      case "1":
+  document.getElementById("sNote1").click();
+      break;
+
+	      case "2":
+  document.getElementById("sNote2").click();
+      break;
+
+	      case "3":
+  document.getElementById("sNote3").click();
+      break;
+
+	      case "4":
+  document.getElementById("sNote4").click();
+      break;
+
+	      case "5":
+  document.getElementById("sNote5").click();
+      break;
+
+	      case "6":
+  document.getElementById("sNote6").click();
+      break;
+    case "7":
+  document.getElementById("sNote7").click();
+      break;
+    case "8":
+  document.getElementById("sNote8").click();
+      break;
+    case "9":
+  document.getElementById("sNote9").click();
+      break;
+    case "+":
+  document.getElementById("sNote10").click();
+      break;
+    case "-":
+  document.getElementById("sNote11").click();
+      break;
+
+    default:
+      return; // Quit when this doesn't handle the key event.
+  }
+
+  // Cancel the default action to avoid it being handled twice
+  //event.preventDefault(); => allow other actions like 
+  
+   
+}, true);
+
+</script>
+
+</body>
+</html>

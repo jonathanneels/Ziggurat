@@ -60,17 +60,21 @@ const server = http.createServer((req, res) => {
         res.writeHead(200, {'Content-Type': 'text/html'});
               fs.createReadStream('synth.html').pipe(res);//  fs.createReadStream('selectionMenu.html').pipe(res);
     }     
-	 else   if (feedbackUrl.trim() === '/po') {
+		else   if (feedbackUrl.trim() === '/po') {
 		    res.writeHead(302, {
       location: "/static/PocketOperator555LF0/index.html",
     });
     res.end();
     } 	
-		 else   if (feedbackUrl.trim() === '/drum') {
+	 else   if (feedbackUrl.trim() === '/drum') {
 		    res.writeHead(302, {
       location: "/static/drumMachine/index.html",
     });
     res.end();
+    } 	
+	 else   if (feedbackUrl.trim().toLowerCase().includes( '/chord')) {
+        res.writeHead(200, {'Content-Type': 'text/html'});
+              fs.createReadStream('chords.html').pipe(res);//  fs.createReadStream('selectionMenu.html').pipe(res);
     }
  else if (feedbackUrl.split('?')[0] === '/') {//REF: https://stackoverflow.com/questions/4720343/loading-basic-html-in-node-js
         res.writeHead(200, {'Content-Type': 'text/html'});
