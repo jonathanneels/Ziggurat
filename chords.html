@@ -165,11 +165,25 @@ function iframeRef( frameRef ) {
   insideFrameSynth.getElementById("btnClassicKeyboard").click();
     insideFrameSynth.getElementById("chPiano").click();
     insideFrameSynth.getElementById("chIgnoreOverload").click();
+	
+
+		//	insideFrameSynth.getElementById("feedback-control").value=0.4;
+		//insideFrameSynth.getElementById("delay-time-control").value=0.5;
+	 	//insideFrameSynth.getElementById("volume-control").value=0.05; => goes back to default after save, maybe solving this concern later.
+		
+	 
+				 insideFrameSynth.getElementById("note-length-control").value=0.5;
+ 	   document.getElementById('iFrameSynth').contentWindow.modifyInputs(true);  
+
 
   
   function chordIntervalHandler()
   {
   chordInterval=setInterval(function(){
+
+  	insideFrameSynth.getElementById("custom-patch-select").style.display = "none"; // even after load another patch, keep those ifrme items hidden
+		insideFrameSynth.getElementById("blocks-control").style.display = "none";
+		insideFrameSynth.querySelector ("label[for='blocks-control']").style.display = "none";
 
  
   if(typeof lastInteractionId!= "undefined" && document.querySelector('#chRepeatChord').checked)
@@ -179,7 +193,7 @@ function iframeRef( frameRef ) {
 console.log(document.getElementById('chRepeatChord').value)
 chordIntervalRepeat=document.getElementById('chRepeatChordRate').value;
 clearInterval(chordInterval);
-setTimeout(function(){chordIntervalHandler(); }, 500);
+setTimeout(function(){chordIntervalHandler();  }, 500);
 
 
 }
@@ -190,6 +204,8 @@ setTimeout(function(){chordIntervalHandler(); }, 500);
 }
 
 chordIntervalHandler();
+setTimeout(function(){  launchMidiConnect(); }, 1);
+
 }
  window.addEventListener("keydown", function (event) {
  
@@ -373,6 +389,89 @@ chordIntervalHandler();
    
 }, true);
 
+</script>
+<script>
+//REF: https://www.smashingmagazine.com/2018/03/web-midi-api/  & https://www.keithmcmillen.com/blog/making-music-in-the-browser-web-midi-api/   &     https://jsfiddle.net/KeithMcMillenInstruments/upae79bu/   &   https://codepen.io/Rumyra/pen/NxdbzL
+var midi, mididata, isMidiLaunched;
+  
+
+ function launchMidiConnect()
+{
+if(!isMidiLaunched && window.location === window.parent.location){ // not in iframe
+isMidiLaunched=true;
+// request MIDI access
+if (navigator.requestMIDIAccess) {
+    navigator.requestMIDIAccess({
+        sysex: false // this defaults to 'false' and we won't be covering sysex in this article. 
+    }).then(onMIDISuccess, onMIDIFailure);
+} else {
+    console.log("No MIDI support in your browser.");
+}
+function onMIDISuccess(midiAccess) {
+    // when we get a succesful response, run this code
+    console.log('MIDI Access Object', midiAccess);
+	
+	    midi = midiAccess; // this is our raw MIDI data, inputs, outputs, and sysex status
+
+    var inputs = midi.inputs.values();
+    // loop over all available inputs and listen for any MIDI input
+    for (var input = inputs.next(); input && !input.done; input = inputs.next()) {
+        // each time there is a midi message call the onMIDIMessage function
+        input.value.onmidimessage = onMIDIMessage;
+    }
+
+}
+
+function onMIDIFailure(e) {
+    // when we get a failed response, run this code
+    console.log("No access to MIDI devices or your browser doesn't support WebMIDI API. Please use WebMIDIAPIShim " + e);
+}
+
+function onMIDIMessage(message) {
+    mididata = message.data; // this gives us our [command/channel, note, velocity] data.
+     cmd = mididata[0] >> 4,
+    channel = mididata[0] & 0xf,
+    type = mididata[0] & 0xf0, // channel agnostic message type. Thanks, Phil Burk.
+    noteMidi = mididata[1]; // noteMidi here is the the notenumber (59, 60, ....)
+  
+    switch (type) {
+        case 144: // noteOn message 
+          //   important:  noteMidi, velocity ;
+		//  console.log(mididata);
+		  
+ var tableTr = document.querySelectorAll("td:not(.infoTd)");
+for (var i = 0; i< tableTr.length; i++) {
+
+
+    tableTr[i].style.border = "2px solid #C0C0C0";
+
+if( tableTr[i].classList.contains('infoTd')  )
+   {
+   continue;
+	}
+   if(  i == noteMidi)
+   {
+ //  console.log(tableTr[i]);
+   tableTr[i].click();
+    tableTr[i].style.border = "2px solid green";
+	
+
+
+	}
+   }  
+ 
+
+             break;
+        case 128: // noteOff message 
+
+            break;
+    }
+
+    //console.log('data', data, 'cmd', cmd, 'channel', channel);
+    // console.log('MIDI data', mididata); // MIDI data [144, 63, 73]
+}
+}
+}
 </script>
 
 </body>

@@ -817,6 +817,8 @@ var customWaveSelected ;
 var customWaveSelectedLfo1;
 var customWaveSelectedLfo2;
 
+var restoreLayoutTimeout;
+
 function customWavesFiller()
 { 
 try{// allow to continue the app without network
@@ -3968,6 +3970,7 @@ function onMIDIFailure(e) {
     // when we get a failed response, run this code
     console.log("No access to MIDI devices or your browser doesn't support WebMIDI API. Please use WebMIDIAPIShim " + e);
 }
+
 function onMIDIMessage(message) {
     mididata = message.data; // this gives us our [command/channel, note, velocity] data.
      cmd = mididata[0] >> 4,
@@ -3991,10 +3994,16 @@ function onMIDIMessage(message) {
 		  		  var locVelocity =velocity/100; 
 			if(locVelocity <0.01){locVelocity=0.01;}
 			else if(locVelocity >0.9){locVelocity=0.9;}// maybe better 1.0?=> really loud!
-
-masterVolume.gain.value= locVelocity;
-					document.getElementById('volume-control').value= locVelocity;
-		   modifyInputs(true);    
+			if(!isPlaying){
+			masterVolume.gain.value= locVelocity;
+								document.getElementById('volume-control').value= locVelocity;
+			}
+			
+					
+					clearTimeout(restoreLayoutTimeout);
+					if(!isPlaying){
+				restoreLayoutTimeout=	setTimeout(function(){ modifyInputs(true);}, (noteLength*1000)+100); // if this is not disabled or timed multi notes are not able and it will stutter (heavy processing).
+				}
  			  	playCurrentNote(frequencyFromNoteNumber(noteMidi));
 
              break;
