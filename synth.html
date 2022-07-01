@@ -2543,7 +2543,8 @@ return noise;
 function playCurrentNote(customFrequency) { 
 
 delete document["mainOscFreqAtTime"];
- 
+  colorChangedKeyboard={}; // line added on 01/07/2022. Otherwise keys won't be activated after a while. To be continued.
+
 if(masterVolume.gain.value <0.009){return;}// otherwise pulse wave will pulse (bugfix req. ?)
 
 
