@@ -3991,8 +3991,7 @@ function onMIDIMessage(message) {
           //   important:  noteMidi, velocity ;
 		//  console.log(mididata);
 		  
-		  
-		  		  var locVelocity =velocity/100; 
+		  	/*  var locVelocity =velocity/100;  => disabled on 01/07/2022, starts to stutters otherwise quit fast... Idea to be press sensitive is nice, but not so practical.
 			if(locVelocity <0.01){locVelocity=0.01;}
 			else if(locVelocity >0.9){locVelocity=0.9;}// maybe better 1.0?=> really loud!
 			if(!isPlaying){
@@ -4003,8 +4002,8 @@ function onMIDIMessage(message) {
 					
 					clearTimeout(restoreLayoutTimeout);
 					if(!isPlaying){
-				restoreLayoutTimeout=	setTimeout(function(){ modifyInputs(true);}, (noteLength*1000)+100); // if this is not disabled or timed multi notes are not able and it will stutter (heavy processing).
-				}
+				restoreLayoutTimeout=	setTimeout(function(){ modifyInputs(true);}, (noteLength*1000)+100); // --- see higher, if this is not disabled or timed multi notes are not able and it will stutter (heavy processing).
+				}*/
  			  	playCurrentNote(frequencyFromNoteNumber(noteMidi));
 
              break;
