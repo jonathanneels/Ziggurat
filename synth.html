@@ -810,6 +810,8 @@ function generateRandomIntegerInRange(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+ var timeoutRemoveOverloadOscs;// added on 01/07/2022 to remove overload.
+
 var audioContextSources = [];
 var  customWaves ;
 var  customWaveSelectedGet  ;
@@ -1390,6 +1392,8 @@ catch(err){console.log(err);}
 }
 function setPatchformSubThroughSelect() {
 
+clearTimeout(timeoutRemoveOverloadOscs);// added on 01/07/2022 to remove overload.
+
 removeAudioSources();
 
   try// app is allowed to go on without the network.
@@ -1490,7 +1494,7 @@ context.suspend();
 		   }
 		        audioContextSources.splice(i, 1);
 				}
-				catch(err){console.log(err)}
+				catch(err){console.log(err);audioContextSources.pop();continue;} // pop is an acceptable solution for now. Has to do with silent osc0? => cleared now?
 
 		 
 		  }
@@ -1716,6 +1720,9 @@ setWaveform2fo1();
 
 
 document.getElementById("custom-patch-select").addEventListener('change', function() { 
+
+clearTimeout(timeoutRemoveOverloadOscs);// added on 01/07/2022 to remove overload.
+stopButton.click();
 
 switchToLoadingScreen();
  if(document.getElementById("custom-patch-select").selectedIndex ==0)
@@ -2539,17 +2546,19 @@ function generateNoise(bandHz,time)
 return noise;
 }
 
- 
 function playCurrentNote(customFrequency) { 
 
 delete document["mainOscFreqAtTime"];
-  colorChangedKeyboard={}; // line added on 01/07/2022. Otherwise keys won't be activated after a while. To be continued.
+ colorChangedKeyboard={}; // line added on 01/07/2022. Otherwise keys won't be activated after a while. To be continued.
 
 if(masterVolume.gain.value <0.009){return;}// otherwise pulse wave will pulse (bugfix req. ?)
 
 
 
 if( (typeof customFrequency == "undefined"  ) && (typeof Object.values(notes)[`${currentNotes[currentNoteIndex]}`] === "undefined")){return;}
+
+clearTimeout(timeoutRemoveOverloadOscs);timeoutRemoveOverloadOscs= setTimeout(function(){removeAudioSources()}, noteLength*1000);// added on 01/07/2022 to remove overload.
+
 //console.log( Object.values(notes)[`${currentNotes[currentNoteIndex]}`])
 //console.log( currentNoteIndex)
 
@@ -2561,7 +2570,9 @@ var isOtherOscsLinkedToMainOsc =true;
   isOtherOscsLinkedToMainOsc = document.getElementById("chNoLinkToOtherSignals1").checked  || document.getElementById("chNoLinkToOtherSignals2").checked
 }
  	var osc = context.createOscillator();
- audioContextSources.push(osc); 
+	 if(!document.getElementById("chMainMute").checked){     
+ audioContextSources.push(osc); }
+ 
 			  osc.onended = function() { 
 		  try{
 	 for(let i =audioContextSources.length; i >0 ; i--)
@@ -3991,7 +4002,8 @@ function onMIDIMessage(message) {
           //   important:  noteMidi, velocity ;
 		//  console.log(mididata);
 		  
-		  	/*  var locVelocity =velocity/100;  => disabled on 01/07/2022, starts to stutters otherwise quit fast... Idea to be press sensitive is nice, but not so practical.
+		  
+		  		/*  var locVelocity =velocity/100;  => disabled on 01/07/2022, starts to stutters otherwise quit fast... Idea to be press sensitive is nice, but not so practical.
 			if(locVelocity <0.01){locVelocity=0.01;}
 			else if(locVelocity >0.9){locVelocity=0.9;}// maybe better 1.0?=> really loud!
 			if(!isPlaying){
